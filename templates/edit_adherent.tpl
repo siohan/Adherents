@@ -1,7 +1,26 @@
 <div class="pageoverflow">
 {$formstart}
-{$licence}
 
+{if $edition == 1}
+{$edit}
+<div class="pageoverflow">
+  <p class="pagetext">Licencié(e) FFTT ? :</p>
+  <p class="pageinput">{$fftt}</p>
+</div><div class="pageoverflow">
+  <p class="pagetext">Licence :</p>
+  <p class="pageinput">{$licence}</p>
+</div>
+<div class="pageoverflow">
+  <p class="pagetext">Nom :</p>
+  <p class="pageinput">{$nom}</p>
+</div>
+<div class="pageoverflow">
+  <p class="pagetext">Prénom :</p>
+  <p class="pageinput">{$prenom}</p>
+</div>
+{else}
+{$licence}
+{/if}
 <div class="pageoverflow">
   <p class="pagetext">Adresse :</p>
   <p class="pageinput">{$adresse}</p>
@@ -19,5 +38,6 @@
     <p class="pagetext">&nbsp;</p>
     <p class="pageinput">{$submit}{$cancel}</p>
   </div>
+
 {$formend}
 </div>

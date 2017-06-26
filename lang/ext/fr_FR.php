@@ -2,8 +2,14 @@
 
 $lang['friendlyname'] = 'T2T Adhérents';
 $lang['resultsfoundtext'] = 'Résultats trouvés';
-$lang['moddescription'] = 'Entrez tous vos résultats de ping pour analyse rapide.';
+$lang['moddescription'] = 'Les adhérents de votre club de Ping.';
 $lang['welcome_text'] = '<p>Bienvenue dans le module de gestion des résultats de votre club de ping</p>';
+$lang['postinstall'] = 'Merci d\avoir installer ce module. Deux permissions ajoutées';
+$lang['postuninstall'] = 'Module désinstallé.';
+$lang['really_uninstall'] = 'Etes-vous certain de vouloir désinstaller ce module ?';
+$lang['delete'] = 'Supprimer';
+$lang['edit'] = 'Modifier';
+$lang['add'] = 'Ajouter ';
 $lang['submit'] = 'Envoyer';
 $lang['cancel'] = 'Annuler';
 
@@ -11,8 +17,6 @@ $lang['help'] = '<h3>Que fait ce module ?</h3>
 <h3>Première utilisation</h3>
 <p>Dans l\'onglet "Compte", renseignez l\'identifiant et mot de passe fournis par la FFTT ainsi que votre numéro de club</p>
 <p>Ce module vous permet de récupérer les adhérents de votre club depuis le SPID. Vous pouvez ensuite y ajouter leurs adresses et contacts.</p>
-<h3>Espace privé</h3>
-<p>Côté Front (internaute), vous devez créer une page avec le code suivant dans le contenu {}</p>
 <ul>
 <li>Pour obtenir la dernière version en cours (avant release officielle)
 <a href="https://github.com/siohan/adherents">Version github</a>.</li>

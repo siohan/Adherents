@@ -50,8 +50,17 @@ $dict = NewDataDictionary( $db );
 
 $sqlarray = $dict->DropTableSQL( cms_db_prefix()."module_adherents_contacts" );
 $dict->ExecuteSQLArray($sqlarray);
+
+$sqlarray = $dict->DropTableSQL( cms_db_prefix()."module_adherents_groupes" );
+$dict->ExecuteSQLArray($sqlarray);
+
+
+$sqlarray = $dict->DropTableSQL( cms_db_prefix()."module_adherents_groupes_belongs" );
+$dict->ExecuteSQLArray($sqlarray);
+
 // remove the permissions
-$this->RemovePermission('Adherents Use');
+$this->RemovePermission('Adherents use');
+$this->RemovePermission('Adherents prefs');
 
 
 // remove the preference

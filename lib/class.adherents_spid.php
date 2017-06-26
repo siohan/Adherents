@@ -50,8 +50,7 @@ function liste_adherents_spid ()
 		if($lignes == 0)
 		{
 			$message = "Pas de lignes à récupérer !";
-			//$this->SetMessage("$message");
-			//$this->RedirectToAdminTab('joueurs');
+			return FALSE;
 		}
 		else
 		{
@@ -83,26 +82,17 @@ function liste_adherents_spid ()
 							if($i %2)
 							{
 								sleep(1);
-							}//$this->
+							}
 					}
-					/*
-					else
-					{
-						$this->maj_adherent_spid($licence,$nom, $prenom);
-						if($i %2)
-						{
-							sleep(1);
-						}
-					}		
-					*/
+				
 
 				}// fin du foreach
-
+			return TRUE;
 		
 	}
 }//fin de la fonction
 
-function ajouter_adherent_spid ($licence,$nom, $prenom, $nclub, $clast)
+function ajouter_adherent_spid ($licence,$nom, $prenom)
 {
 	global $gCms;
 	$db = cmsms()->GetDb();
@@ -132,7 +122,7 @@ function maj_adherent_spid ($licence,$nom, $prenom)
 function infos_adherent_spid ($licence)
 {
 	global $gCms;
-	$ping = cms_utils::get_module('Ping'); 
+	//$ping = cms_utils::get_module('Ping'); 
 	$db = cmsms()->GetDb();
 	$now = trim($db->DBTimeStamp(time()), "'");
 	//$club_number = $ping->GetPreference('club_number');
@@ -227,12 +217,21 @@ function maj_adherent_spid2 ($licence, $sexe, $type,$certif,$actif,$validation, 
 	$dbresult = $db->Execute($query, array($sexe, $type, $certif,$actif,$validation, $echelon, $place, $point, $cat, $licence));
 }
 
-function edit_adherent($licence,$adresse, $code_postal, $ville)
+function edit_adherent($edit,$fftt,$licence,$nom,$prenom,$adresse, $code_postal, $ville)
 {
 	global $gCms;
 	$db = cmsms()->GetDb();
-	$query = "UPDATE ".cms_db_prefix()."module_adherents_adherents SET adresse = ?, code_postal = ?, ville = ? WHERE licence = ?";
-	$dbresult = $db->Execute($query, array($adresse, $code_postal, $ville, $licence));
+	if($edit == '1')
+	{
+		$query = "INSERT INTO ".cms_db_prefix()."module_adherents_adherents (fftt,licence, nom, prenom, adresse, code_postal, ville) VALUES (?, ?, ?, ?, ?, ?, ?)";
+		$dbresult = $db->Execute($query, array($fftt,$licence,$nom, $prenom,$adresse, $code_postal, $ville));
+	}
+	else
+	{
+		$query = "UPDATE ".cms_db_prefix()."module_adherents_adherents SET adresse = ?, code_postal = ?, ville = ? WHERE licence = ?";
+		$dbresult = $db->Execute($query, array($adresse, $code_postal, $ville, $licence));
+	}
+	
 }
 function random_serie($car) {
 $string = "";
@@ -243,11 +242,18 @@ $string .= $chaine[rand()%strlen($chaine)];
 }
 return $string;
 }
+function maj_seq()
+{
+	global $gCms;
+	$db = cmsms()->GetDb();
+	$query = "UPDATE ".cms_db_prefix()."module_adherents_adherents_seq SET id = LAST_INSERT_ID(id+1)";
+	$dbresult = $db->Execute($query);
+}
 function refresh()
 {
 	global $gCms;
 	$db = cmsms()->GetDb();
-	$query = "SELECT licence FROM ".cms_db_prefix()."module_adherents_adherents WHERE actif = 1 AND certif IS NULL";
+	$query = "SELECT licence FROM ".cms_db_prefix()."module_adherents_adherents WHERE actif = 1 AND fftt = 1 AND certif IS NULL";
 	$dbresult = $db->Execute($query);
 	
 	if($dbresult && $dbresult->RecordCount() >0)

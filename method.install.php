@@ -34,6 +34,7 @@ $dict = NewDataDictionary( $db );
 $flds = "
 	id I(11) AUTO KEY,
 	actif I(1) DEFAULT 1,
+	fftt I(1) DEFAULT 1,
 	licence I(11),
 	nom C(255),
 	prenom C(255),
@@ -66,6 +67,44 @@ $flds = "
 	description C(255)";
 	$sqlarray = $dict->CreateTableSQL( cms_db_prefix()."module_adherents_contacts", $flds, $taboptarray);
 	$dict->ExecuteSQLArray($sqlarray);			
+//
+// mysql-specific, but ignored by other database
+$taboptarray = array( 'mysql' => 'ENGINE=MyISAM' );
+
+$dict = NewDataDictionary( $db );
+
+// table schema description
+$flds = "
+	id I(11) AUTO KEY,
+	nom C(100),
+	description C(255),
+	actif I(1)";
+	$sqlarray = $dict->CreateTableSQL( cms_db_prefix()."module_adherents_groupes", $flds, $taboptarray);
+	$dict->ExecuteSQLArray($sqlarray);			
+//
+// mysql-specific, but ignored by other database
+$taboptarray = array( 'mysql' => 'ENGINE=MyISAM' );
+
+$dict = NewDataDictionary( $db );
+
+// table schema description
+$flds = "
+	id I(11) AUTO KEY,
+	id_group I(11),
+	licence I(11)";
+	$sqlarray = $dict->CreateTableSQL( cms_db_prefix()."module_adherents_groupes_belongs", $flds, $taboptarray);
+	$dict->ExecuteSQLArray($sqlarray);			
+//
+// mysql-specific, but ignored by other database
+$taboptarray = array( 'mysql' => 'ENGINE=MyISAM' );
+
+$dict = NewDataDictionary( $db );
+
+// table schema description
+$flds = "
+	id I(11)";
+	$sqlarray = $dict->CreateTableSQL( cms_db_prefix()."module_adherents_adherents_seq", $flds, $taboptarray);
+	$dict->ExecuteSQLArray($sqlarray);			
 //			
 //
 //les index
@@ -88,6 +127,7 @@ $this->SetPreference('email_activation_subject', 'Votre compte T2T est activé')
 //$this->SetPreference('mail_activation_body', );
 //Permissions
 $this->CreatePermission('Adherents use', 'Utiliser le module Adhérents');
+$this->CreatePermission('Adherents prefs', 'Modifier les données du compte');
 
 
 // put mention into the admin log

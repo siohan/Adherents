@@ -15,9 +15,13 @@ if (FALSE == empty($params['active_tab']))
   $tab = 'Adherents';
  }	
 	echo $this->SetTabHeader('adherents', 'Adhérents', ('adherents' == $tab)?true:false);
-//	echo $this->SetTabHeader('feu', 'Espace privé' , ('feu' == $tab)?true:false);
-//	echo $this->SetTabHeader('email', 'Emails' , ('email' == $tab)?true:false);
+	echo $this->SetTabHeader('groups', 'Groupes', ('groups' == $tab)?true:false);
+	echo $this->SetTabHeader('feu', 'Espace privé' , ('feu' == $tab)?true:false);
+	echo $this->SetTabHeader('email', 'Emails' , ('email' == $tab)?true:false);
+if ($this->CheckPermission('Adherents prefs'))
+{
 	echo $this->SetTabHeader('compte', 'Compte' , ('compte' == $tab)?true:false);
+}
 
 
 echo $this->EndTabHeaders();
@@ -29,7 +33,12 @@ echo $this->StartTabContent();
     	include(dirname(__FILE__).'/action.admin_adherents_tab.php');
    	echo $this->EndTab();
 
-	/*
+
+	echo $this->StartTab('groups', $params);
+    	include(dirname(__FILE__).'/action.admin_groups_tab.php');
+   	echo $this->EndTab();
+
+	/**/
 	echo $this->StartTab('feu', $params);
     	include(dirname(__FILE__).'/action.admin_feu_tab.php');
    	echo $this->EndTab();
@@ -37,10 +46,13 @@ echo $this->StartTabContent();
 	echo $this->StartTab('email', $params);
     	include(dirname(__FILE__).'/action.admin_emails_tab.php');
    	echo $this->EndTab();
-	*/
+/*	*/
+if ($this->CheckPermission('Adherents prefs'))
+{
 	echo $this->StartTab('compte' , $params);
 	include(dirname(__FILE__).'/action.admin_compte_tab.php');
 	echo $this->EndTab();
+}	
 
 echo $this->EndTabContent();
 //on a refermé les onglets

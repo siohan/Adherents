@@ -11,6 +11,7 @@ $db =& $this->GetDb();
 global $themeObject;
 $aujourdhui = date('Y-m-d');
 $class_ops = new adherents_spid();
+$group_ops = new groups();
 if(isset($params['obj']) && $params['obj'] != '')
 {
 	$obj = $params['obj'];
@@ -44,6 +45,17 @@ switch($obj)
 {
 	case "all":
 		$adherents_spid = $class_ops->liste_adherents_spid();
+		var_dump($adherents_spid);
+		if(TRUE === $adherents_spid)
+		{
+			$this->SetMessag('Adhérent(s) inséré(s)');
+		}
+		else
+		{
+			$this->SetMessag('Erreur');
+		}
+		
+		$this->RedirectToAdminTab('adherents');
 	break;
 	
 	case "refresh" :
@@ -76,6 +88,13 @@ switch($obj)
 	
 	case "refresh_all"  :
 		$adherents_spid = $class_ops->refresh();
+		$this->RedirectToAdminTab('adherents');
+	break;
+	
+	case "delete_group" :
+		$del_group = $group_ops->delete_group($record_id);
+		$del_group_belongs = $group_ops->delete_group_belongs($record_id);
+		$this->Redirect($id, 'defaultadmin',$returnid, array("active_tab"=>"group"));
 	break;
 }
 

@@ -10,10 +10,10 @@ if(!$this->CheckPermission('Adherents use'))
 $db =& $this->GetDb();
 global $themeObject;
 $aujourdhui = date('Y-m-d');
-$ping = new Ping();
+
 $send_email = '<img src="../modules/Adherents/images/email-16.png" class="systemicon" title="Renvoyer un nouvel email" alt="Renvoyer un nouvel email"/>';
 $query = "SELECT ad.id, ad.licence, ad.nom, ad.prenom, ct.contact FROM ".cms_db_prefix()."module_adherents_adherents AS ad, ".cms_db_prefix()."module_adherents_contacts AS ct WHERE ad.licence = ct.licence AND ct.type_contact = 1";//" WHERE actif = 1";
-$query.=" AND actif = 1";
+$query.=" AND ad.actif = 1";
 $dbresult = $db->Execute($query);
 $rowarray = array();
 $rowclass = 'row1';
