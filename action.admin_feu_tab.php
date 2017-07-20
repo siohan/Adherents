@@ -44,7 +44,7 @@ if($dbresult && $dbresult->RecordCount() >0)
 		else
 		{
 			$onerow->push_customer=  $themeObject->DisplayImage('icons/system/true.gif', $this->Lang('compte_actif'), '', '', 'systemicon');
-			$onerow->send_another_email = $this->CreateLink($id, 'chercher_adherents_spid', $returnid, $send_email, array("obj"=>"send_another_email","licence"=>$row['licence'], "email"=>$row['contact'], "nom"=>$row['nom'], "prenom"=>$row['prenom']));
+			$onerow->delete_user_feu = $this->CreateLink($id, 'chercher_adherents_spid', $returnid, $themeObject->DisplayImage('icons/system/delete.gif', $this->Lang('delete'), '', '', 'systemicon'), array("obj"=>"delete_user_feu","licence"=>$row['licence'], "email"=>$row['contact'], "nom"=>$row['nom'], "prenom"=>$row['prenom']));
 		}
 		($rowclass == "row1" ? $rowclass= "row2" : $rowclass= "row1");
 		$rowarray[]= $onerow;

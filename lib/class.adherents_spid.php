@@ -174,10 +174,9 @@ function infos_adherent_spid ($licence)
 					$certif = (isset($tab->certif)?"$tab->certif":"");
 					
 					$validation1 = (isset($tab->validation)?"$tab->validation":"");
+					//var_dump($validation1);
 					//on modifie la date pour la rendre compatible avec MySQL
-					$validation2 = array();
-					$validation2 = explode('/', $validation1);
-					$validation = $validation2[2].'-'.$validation2[1].'-'.$validation2[0];
+					
 					$echelon = (isset($tab->echelon)?"$tab->echelon":"");
 					$place = (isset($tab->place)?"$tab->place":"");
 					$point = (isset($tab->point)?"$tab->point":"");
@@ -187,18 +186,23 @@ function infos_adherent_spid ($licence)
 					{
 						$actif = 0;
 						$validation = '';
+						return false;
 					}
 					else
 					{
+						$validation2 = array();
+						$validation2 = explode('/', $validation1);
+						$validation = $validation2[2].'-'.$validation2[1].'-'.$validation2[0];
 						$actif = 1;
-					}
-
-
-					//$designation = 'récupération des joueurs';
-
-					
-					{
-						$this->maj_adherent_spid2($licence, $sexe, $type,$certif,$actif,$validation, $echelon, $place, $point, $cat);
+						$add = $this->maj_adherent_spid2($licence, $sexe, $type,$certif,$actif,$validation, $echelon, $place, $point, $cat);
+						if(true === $add)
+						{
+							return true;
+						}
+						else
+						{
+							return false;
+						}
 						
 					}		
 
@@ -215,6 +219,14 @@ function maj_adherent_spid2 ($licence, $sexe, $type,$certif,$actif,$validation, 
 	$db = cmsms()->GetDb();
 	$query = "UPDATE ".cms_db_prefix()."module_adherents_adherents SET sexe = ?, type = ?, certif = ?,actif = ?, validation = ?, echelon = ?, place = ?, points = ?, cat = ? WHERE licence = ?";
 	$dbresult = $db->Execute($query, array($sexe, $type, $certif,$actif,$validation, $echelon, $place, $point, $cat, $licence));
+	if($dbresult)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 function edit_adherent($edit,$fftt,$licence,$nom,$prenom,$adresse, $code_postal, $ville)

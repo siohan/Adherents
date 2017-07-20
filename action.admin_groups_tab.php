@@ -20,6 +20,7 @@ $query = "SELECT * FROM ".cms_db_prefix()."module_adherents_groupes";
 	$rowarray= array();
 	$rowclass = '';
 	$group_ops = new groups();
+	$contact_ops = new contact();
 	
 		if ($dbresult && $dbresult->RecordCount() > 0)
   		{
@@ -30,11 +31,14 @@ $query = "SELECT * FROM ".cms_db_prefix()."module_adherents_groupes";
 
 				//les champs disponibles : 
 				$actif = $row['actif'];
+				//$licence = $row['licence'];
 				$onerow->id= $row['id'];
 				$nb = $group_ops->count_users_in_group($row['id']);
 				$onerow->nom = $row['nom'];
+				
+				//$onerow->nom = $row['nom'];
 				$onerow->description = $row['description'];
-				$onerow->nb_users = $this->CreateLink($id, 'view_group_users',$returnid,$nb, array("group"=>$row['id']));
+				$onerow->nb_users = $this->CreateLink($id, 'view_group_users',$returnid,'Voir les '.$nb.' utilisateurs', array("group"=>$row['id']));
 				if($actif == 1)
 				{
 					$onerow->actif = $themeObject->DisplayImage('icons/system/true.gif', $this->Lang('delete'), '', '', 'systemicon');

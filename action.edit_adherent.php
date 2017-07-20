@@ -23,7 +23,7 @@ if(isset($params['record_id']) && $params['record_id'] != '')
 	$edition = 0;
 	$record_id = $params['record_id'];
 	
-	$query  = "SELECT licence,actif, nom, prenom, adresse, code_postal, ville FROM ".cms_db_prefix()."module_adherents_adherents WHERE id = ?";
+	$query  = "SELECT licence,actif,fftt, nom, prenom, adresse, code_postal, ville FROM ".cms_db_prefix()."module_adherents_adherents WHERE id = ?";
 	$dbresult = $db->Execute($query, array($record_id));
 	if($dbresult)
 	{

@@ -1,4 +1,4 @@
-<div class="pageoptions"><p class="pageoptions">{$itemcount}&nbsp;{$itemsfound}&nbsp;&nbsp;|{$add_users} | {if $act ==0}{$actifs}{else} {$inactifs}{/if} | &nbsp;{$chercher_adherents_spid} | {$refresh}</p></div>
+<div class="pageoptions"><p class="pageoptions">{$itemcount}&nbsp;{$itemsfound}.&nbsp;&nbsp;| {$add_users} | {if $act ==0}{$actifs}{else} {$inactifs}{/if} | &nbsp;{$chercher_adherents_spid} | {$refresh}</p></div>
 {if $itemcount > 0}
 	<table border="0" cellspacing="0" cellpadding="0" class="pagetable tablesorter">
 	 <thead>
@@ -12,9 +12,9 @@
 			<th>Points</th> 
 			<th>Cat</th> 
 			<th>Adresse</th>
-			<th>Code Postal</th>
+			<th>Code Postal</th> 
 			<th>Ville</th>
-			<th colspan="4">Actions</th>
+			<th colspan="5">Actions</th>
 			
 		</tr>
 	</thead>

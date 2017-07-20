@@ -46,27 +46,27 @@ $rowarray = array();
 $rowclass = 'row1';
 if($dbresult && $dbresult->RecordCount() >0)
 {
-	
+	$contact_ops = new contact();
 	while($row = $dbresult->FetchRow())
 	{
 	
 		$onerow = new StdClass();
 		$onerow->rowclass = $rowclass;
 		$onerow->licence= $row['licence'];
+		$has_email = $contact_ops->has_email($row['licence']);
+		if(TRUE === $has_email)
+		{
+			$onerow->has_email = $themeObject->DisplayImage('icons/system/true.gif', $this->Lang('delete'), '', '', 'systemicon');
+		}
+		else
+		{
+			$onerow->has_email = $themeObject->DisplayImage('icons/system/false.gif', $this->Lang('delete'), '', '', 'systemicon');
+		}
 		$onerow->nom= $row['nom'];
 		$onerow->prenom= $row['prenom'];
 		$onerow->actif= $row['actif'];
-		$onerow->sexe= $row['sexe'];
-		$onerow->certif= $row['certif'];
-		$onerow->points = $row['points'];
-		$onerow->date_validation = $row['validation'];
-		$onerow->cat = $row['cat'];
-		$onerow->adresse = $row['adresse'];
-		$onerow->code_postal = $row['code_postal'];
-		$onerow->ville = $row['ville'];
-		$onerow->edit = $this->CreateLink($id, 'edit_adherent',$returnid,$themeObject->DisplayImage('icons/system/edit.gif', $this->Lang('edit'), '', '', 'systemicon'), array("record_id"=>$row['id']));
-		$onerow->refresh= $this->CreateLink($id, 'chercher_adherents_spid', $returnid,'<img src="../modules/Adherents/images/refresh.png" class="systemicon" alt="Rafraichir" title="Rafraichir">',array("obj"=>"refresh","licence"=>$row['licence']));//$row['closed'];
-		$onerow->view_contacts= $this->CreateLink($id, 'view_contacts', $returnid,'<img src="../modules/Adherents/images/contact.jpg" class="systemicon" alt="Contacts" title="Contacts">',array("licence"=>$row['licence']));//$row['closed'];
+		$onerow->deletefromgroup = $this->CreateLink($id, 'chercher_adherents_spid',$returnid,$themeObject->DisplayImage('icons/system/delete.gif', $this->Lang('delete'), '', '', 'systemicon'), array("obj"=>"delete_user_from_group","licence"=>$row['licence'], "record_id"=>$group));
+		
 		
 		($rowclass == "row1" ? $rowclass= "row2" : $rowclass= "row1");
 		$rowarray[]= $onerow;

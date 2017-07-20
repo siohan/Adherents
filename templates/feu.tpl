@@ -18,7 +18,7 @@
 		<td>{$entry->nom}</td>
 		<td>{$entry->prenom}</td>
 		<td>{$entry->email}</td>
-		<td>{$entry->push_customer} {$entry->send_another_email}</td>
+		<td>{$entry->push_customer} {$entry->delete_user_feu}</td>
 	   </tr>
 	{/foreach}
 	 </tbody>

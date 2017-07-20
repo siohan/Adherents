@@ -33,6 +33,21 @@ class contact
 		$query = "UPDATE ".cms_db_prefix()."module_adherents_contacts SET type_contact = ?, contact =?, description = ? WHERE id = ?";
 		$dbresult = $db->Execute($query, array($type_contact,$contact,$description,$record_id));
 	}
+	function has_email($licence)
+	{
+		$db = cmsms()->GetDb();
+		$query = "SELECT contact FROM ".cms_db_prefix()."module_adherents_contacts WHERE licence = ? AND type_contact = 1";
+		$dbresult = $db->Execute($query, array($licence));
+		if($dbresult && $dbresult->RecordCount()>0)
+		{
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+		
+	}
 ##
 ##
 #

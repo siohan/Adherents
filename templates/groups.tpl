@@ -7,7 +7,7 @@
  <thead>
 	<tr>
 		<th>Id</th>
-		<th>Catalogue</th>
+		<th>Groupe</th>
 		<th>Description</th>
 		<th>Nb utilisateurs</th>
 		<th>Actif</th>

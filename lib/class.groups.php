@@ -146,6 +146,21 @@ function count_users_in_group($id_group)
 	$nb = $row['nb'];
 	return $nb;
 }
+function delete_user_from_group($record_id, $licence)
+{
+	$db = cmsms()->GetDb();
+	$query = "DELETE FROM ".cms_db_prefix()."module_adherents_groupes_belongs WHERE id_group = ? AND licence = ?";
+	$dbresult = $db->Execute($query, array($record_id,$licence));
+	if($dbresult)
+	{
+		return TRUE;
+	}
+	else
+	{
+		return FALSE;
+	}
+	
+}
 
 
 #

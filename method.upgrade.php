@@ -62,9 +62,25 @@ case "0.1" :
 		
 	}
 		
+
+
+case "0.1.1" :
+	{
+		# Mails templates
+		$fn = cms_join_path(dirname(__FILE__),'templates','orig_activationemailtemplate.tpl');
+		if( file_exists( $fn ) )
+		{
+			$template = file_get_contents( $fn );
+			$this->SetTemplate('newactivationemail_Sample',$template);
+		}
+		$dict = NewDataDictionary( $db );
+		$flds = "fftt I(1) DEFAULT 1 NOTNULL";
+		$sqlarray = $dict->AddColumnSQL( cms_db_prefix()."module_adherents_adherents", $flds);
+		$dict->ExecuteSQLArray($sqlarray);
+
+	}
+
 }
-
-
 // put mention into the admin log
 $this->Audit( 0, 
 	      $this->Lang('friendlyname'), 

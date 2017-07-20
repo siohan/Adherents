@@ -20,7 +20,7 @@ class Adherents extends CMSModule
   
   function GetName() { return 'Adherents'; }   
   function GetFriendlyName() { return $this->Lang('friendlyname'); }   
-  function GetVersion() { return '0.1.1'; }  
+  function GetVersion() { return '0.2'; }  
   function GetHelp() { return $this->Lang('help'); }   
   function GetAuthor() { return 'Claude SIOHAN'; } 
   function GetAuthorEmail() { return 'claude.siohan@gmail.com'; }
@@ -41,7 +41,7 @@ class Adherents extends CMSModule
   
   function GetDependencies()
   {
-	return array('Commandes'=>'0.2.2', 'Cotisation'=>'0.1beta1', 'Paiements'=>'0.1beta1');
+	return array('FrontEndUsers'=>'2.4.4');
   }
 
   

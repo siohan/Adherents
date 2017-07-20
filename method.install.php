@@ -123,7 +123,7 @@ if( file_exists( $fn ) )
 }
 
 $this->SetPreference('admin_email', 'root@localhost.com');
-$this->SetPreference('email_activation_subject', 'Votre compte T2T est activé');
+$this->SetPreference('email_activation_subject', 'Votre compte T2T est actif');
 //$this->SetPreference('mail_activation_body', );
 //Permissions
 $this->CreatePermission('Adherents use', 'Utiliser le module Adhérents');
