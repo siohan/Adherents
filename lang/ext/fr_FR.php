@@ -4,9 +4,11 @@ $lang['friendlyname'] = 'T2T Adhérents';
 $lang['resultsfoundtext'] = 'Résultats trouvés';
 $lang['moddescription'] = 'Les adhérents de votre club de Ping.';
 $lang['welcome_text'] = '<p>Bienvenue dans le module de gestion des résultats de votre club de ping</p>';
-$lang['postinstall'] = 'Merci d\avoir installer ce module. Deux permissions ajoutées';
+$lang['postinstall'] = 'Merci d\avoir installer ce module. Deux permissions ajoutées. Remplissez les données du compte !';
 $lang['postuninstall'] = 'Module désinstallé.';
 $lang['really_uninstall'] = 'Etes-vous certain de vouloir désinstaller ce module ?';
+$lang['needpermission'] = 'Une permission est nécessaire';
+$lang['push']= 'Ajouter l\'utilisatuer l\'espace privé';
 $lang['delete'] = 'Supprimer';
 $lang['edit'] = 'Modifier';
 $lang['add'] = 'Ajouter ';
@@ -17,9 +19,13 @@ $lang['help'] = '<h3>Que fait ce module ?</h3>
 <h3>Première utilisation</h3>
 <p>Dans l\'onglet "Compte", renseignez l\'identifiant et mot de passe fournis par la FFTT ainsi que votre numéro de club</p>
 <p>Ce module vous permet de récupérer les adhérents de votre club depuis le SPID. Vous pouvez ensuite y ajouter leurs adresses et contacts.</p>
-<ul>
+<h3>Fonctionnement optimal</h3>
+<p>T2T modules est conçu pour fonctionner en relation avec les autres modules de la suite. Il vous faudra donc installer Commandes, Cotisations, Paiements.</p>
+<p>Le module Ping et Livescoring fonctionnent uniquement avec le module Adherents.</p>
+<h3>Bogues et Github</h3>
+<p>Certaines corrections de bogues mineurs ne font pas l\'objet d\'une version officielle mais peuvent toutefois se trouver sur le github dont l\'adresse figure ci-dessous.<br />Il vous suffit alors de télécharger le fichier zip disponible(via le bouton vert "Clone or download") et de le déployer si votre serveur.</p><ul>
 <li>Pour obtenir la dernière version en cours (avant release officielle)
-<a href="https://github.com/siohan/adherents">Version github</a>.</li>
+<a href="https://github.com/siohan/adherents" target="_blank">Version github</a>.</li>
 <li>L\'auteur peut aussi être contacté via skype sous le pseudo agiwebconseil.</li>
 <li>Enfin, vous pouvez aussi m\'envoyer un mail.</li>  
 </ul>
