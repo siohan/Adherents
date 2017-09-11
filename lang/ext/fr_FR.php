@@ -17,7 +17,7 @@ $lang['cancel'] = 'Annuler';
 
 $lang['help'] = '<h3>Que fait ce module ?</h3>
 <h3>Première utilisation</h3>
-<p>Dans l\'onglet "Compte", renseignez l\'identifiant et mot de passe fournis par la FFTT ainsi que votre numéro de club</p>
+<p>Dans l\'onglet "Compte", renseignez l\'identifiant et mot de passe fournis par la FFTT ainsi que votre numéro de club<br /><strong>ATTENTION !</strong> La connexion peut se montrer instable et il faut recommencer parfois plusieurs fois l\'opération</p>
 <p>Ce module vous permet de récupérer les adhérents de votre club depuis le SPID. Vous pouvez ensuite y ajouter leurs adresses et contacts.</p>
 <h3>Fonctionnement optimal</h3>
 <p>T2T modules est conçu pour fonctionner en relation avec les autres modules de la suite. Il vous faudra donc installer Commandes, Cotisations, Paiements.</p>

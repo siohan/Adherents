@@ -28,6 +28,10 @@ $alert = 0;//pour savoir si certains champs doivent contenir une valeur ou non
 		{
 			$edit = $params['edit'];
 		}
+		else
+		{
+			$edit = 0;
+		}
 		$fftt = 1;		
 		if (isset($params['fftt']) && $params['fftt'] !='')
 		{
@@ -47,6 +51,11 @@ $alert = 0;//pour savoir si certains champs doivent contenir une valeur ou non
 		if (isset($params['nom']) && $params['nom'] !='')
 		{
 			$nom = strtoupper($params['nom']);
+		}
+		$anniversaire = '';
+		if (isset($params['anniversaire']) && $params['anniversaire'] !='')
+		{
+			$anniversaire = $params['anniversaire'];
 		}
 		$prenom = '';
 		if (isset($params['prenom']) && $params['prenom'] !='')
@@ -82,7 +91,7 @@ $alert = 0;//pour savoir si certains champs doivent contenir une valeur ou non
 			$service = new adherents_spid();
 			
 			
-				$update_adherent = $service->edit_adherent($edit,$fftt,$licence,$nom, $prenom,$adresse,$code_postal,$ville);
+				$update_adherent = $service->edit_adherent($edit,$fftt,$licence,$nom, $prenom,$anniversaire,$adresse,$code_postal,$ville);
 			
 			
 		

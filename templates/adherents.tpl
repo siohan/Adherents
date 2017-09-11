@@ -1,4 +1,4 @@
-<div class="pageoptions"><p class="pageoptions">{$itemcount}&nbsp;{$itemsfound}.&nbsp;&nbsp;| {$add_users} | {if $act ==0}{$actifs}{else} {$inactifs}{/if} | &nbsp;{$chercher_adherents_spid} | {$refresh}</p></div>
+<div class="pageoptions"><p class="pageoptions">{if $alert == "1"}<p class="warning">{$link_alert}</p>{/if}{$itemcount}&nbsp;{$itemsfound}.&nbsp;&nbsp;| {$add_users} | {if $act ==0}{$actifs}{else} {$inactifs}{/if} | &nbsp;{$chercher_adherents_spid} | {$refresh}</p></div>
 {if $itemcount > 0}
 	<table border="0" cellspacing="0" cellpadding="0" class="pagetable tablesorter">
 	 <thead>
@@ -10,7 +10,8 @@
 			<th>Sexe</th> 
 			<th>Certif(date)</th> 
 			<th>Points</th> 
-			<th>Cat</th> 
+			<th>Cat</th>
+			<th>Naissance</th> 
 			<th>Adresse</th>
 			<th>Code Postal</th> 
 			<th>Ville</th>
@@ -29,6 +30,7 @@
 		<td>{$entry->certif}({$entry->date_validation|date_format:"%d-%m-%Y"})</td>
 		<td>{$entry->points}</td>
 		<td>{$entry->cat}</td>
+		<td>{$entry->anniversaire|date_format:"%d-%m-%Y"}</td>
 		<td>{$entry->adresse}</td>
 		<td>{$entry->code_postal}</td>
 		<td>{$entry->ville}</td>

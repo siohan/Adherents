@@ -11,6 +11,7 @@ $motdepasse = '';
 $tm = '';//le timestamp non crypté
 $error = 0;//on initialise un compteur d'erreurs 
 $designation = '';//on initialise les messages d'erreurs
+$ops = new adherents_spid();
 
 if(isset($params['idAppli']) && $params['idAppli'] !='')
 {
@@ -36,27 +37,18 @@ else
 	
 }
 
+//echo $this->GetPreference('serie');
+if($this->GetPreference('serie') =='' || $this->GetPreference('serie') == '0')
+{
+	
+	$serie = $ops->random_serie(15);
+}
+else
+{
+	$serie = $this->GetPreference('serie');		
+}
 
-if($this->GetPreference('serie') =='')
-{
-	
-	$serie = $this->random_serie(15);
-}
-else
-{
-		$serie = $this->GetPreference('serie');	
-	
-}
-if(isset($params['club_number']) && $params['club_number'] !='')
-{
-	$club_number = $params['club_number'];
-	
-}
-else
-{
-	$error++;
-	$designation.="Il manque le numéro de votre club.";
-}
+//echo 'le numéro de série est : '.$serie;
 if($error>0)
 {
 	$this->SetMessage($designation);
@@ -69,9 +61,11 @@ else
 	$this->SetPreference('idAppli',$idAppli);
 	$this->SetPreference('motdepasse',$cde);
 	$this->SetPreference('serie',$serie);
-	$this->SetPreference('club_number',$club_number);
-	$this->Redirect($id, 'getInitialisation',$returnid);//, array("install"=>"1", "step"=>"1"));
+//	$this->SetPreference('club_number', $club_number);
+	//on va d'abord tester si le numéro de club correspond à qqch
 	
+	
+$this->Redirect($id, 'getInitialisation',$returnid);//, array("install"=>"1", "step"=>"1"));	
 }
 #
 #EOF

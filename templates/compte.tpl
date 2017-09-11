@@ -10,10 +10,10 @@
 		<p class="pagetext">Mot de passe:</p>
 		<p class="pageinput">{$motdepasse}</p>
 	</div>
-	<div class="pageoverflow">
+<!--	<div class="pageoverflow">
 		<p class="pagetext">Numéro de votre club:</p>
 		<p class="pageinput">{$club_number}</p>
-	</div>
+	</div>-->
 	</fieldset>
 	<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>

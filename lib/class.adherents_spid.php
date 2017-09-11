@@ -212,7 +212,68 @@ function infos_adherent_spid ($licence)
 		
 	}
 }//fin de la fonction
+function VerifyClub($club_number)
+    {
+		global $gCms;
+		$db = cmsms()->GetDb();
+		$now = trim($db->DBTimeStamp(time()), "'");
+		$adherents = cms_utils::get_module('Adherents'); 
+		$servicen = new Servicen();
+		$page = "xml_club_detail";
+		$var = "club=".$club_number;
+		$lien = $servicen->GetLink($page,$var);
+		//echo $lien;
+		$xml = simplexml_load_string($lien, 'SimpleXMLElement', LIBXML_NOCDATA);
+		var_dump($xml);
+		
+		if($xml === FALSE)
+		{
+			return FALSE;
+		}
+		else
+		{
+			
+			
+			$array = json_decode(json_encode((array)$xml), TRUE);
+			$lignes = count($array['club']);
+			echo $lignes;
+			//return TRUE;
+			
+			///on initialise un compteur général $i
+			$i=0;
+			//on initialise un deuxième compteur
+			$compteur=0;
 
+				foreach($xml as $cle =>$tab)
+				{
+
+					$i++;
+					$idclub = (isset($tab->idclub)?"$tab->idclub":"");
+					$numero  = (isset($tab->numero)?"$tab->numero":"");
+					if($numero == $club_number)
+					{
+						return true;
+					}
+					else
+					{
+						return false;
+					}
+					/*
+					$nomsalle = (isset($tab->nomsalle)?"$tab->nomsalle":"");
+					$adressesalle1 = (isset($tab->adressesalle1)?"$tab->adressesalle1":"");
+					$libelle = (isset($tab->libelle)?"$tab->libelle":"");
+					$libelle = (isset($tab->libelle)?"$tab->libelle":"");
+					$libelle = (isset($tab->libelle)?"$tab->libelle":"");
+					$libelle = (isset($tab->libelle)?"$tab->libelle":"");
+					$libelle = (isset($tab->libelle)?"$tab->libelle":"");
+					$libelle = (isset($tab->libelle)?"$tab->libelle":"");
+					$libelle = (isset($tab->libelle)?"$tab->libelle":"");
+					$libelle = (isset($tab->libelle)?"$tab->libelle":"");
+					*/
+				}
+		}
+		
+    }
 function maj_adherent_spid2 ($licence, $sexe, $type,$certif,$actif,$validation, $echelon, $place, $point, $cat)
 {
 	global $gCms;
@@ -229,19 +290,19 @@ function maj_adherent_spid2 ($licence, $sexe, $type,$certif,$actif,$validation, 
 	}
 }
 
-function edit_adherent($edit,$fftt,$licence,$nom,$prenom,$adresse, $code_postal, $ville)
+function edit_adherent($edit,$fftt,$licence,$nom,$prenom,$anniversaire,$adresse, $code_postal, $ville)
 {
 	global $gCms;
 	$db = cmsms()->GetDb();
-	if($edit == '1')
+	if($edit == '0')
 	{
-		$query = "INSERT INTO ".cms_db_prefix()."module_adherents_adherents (fftt,licence, nom, prenom, adresse, code_postal, ville) VALUES (?, ?, ?, ?, ?, ?, ?)";
-		$dbresult = $db->Execute($query, array($fftt,$licence,$nom, $prenom,$adresse, $code_postal, $ville));
+		$query = "INSERT INTO ".cms_db_prefix()."module_adherents_adherents (fftt,licence, nom, prenom,anniversaire, adresse, code_postal, ville) VALUES (?, ?, ?, ?,?, ?, ?, ?)";
+		$dbresult = $db->Execute($query, array($fftt,$licence,$nom, $prenom,$anniversaire,$adresse, $code_postal, $ville));
 	}
 	else
 	{
-		$query = "UPDATE ".cms_db_prefix()."module_adherents_adherents SET adresse = ?, code_postal = ?, ville = ? WHERE licence = ?";
-		$dbresult = $db->Execute($query, array($adresse, $code_postal, $ville, $licence));
+		$query = "UPDATE ".cms_db_prefix()."module_adherents_adherents SET anniversaire = ?, adresse = ?, code_postal = ?, ville = ? WHERE licence = ?";
+		$dbresult = $db->Execute($query, array($anniversaire,$adresse, $code_postal, $ville, $licence));
 	}
 	
 }

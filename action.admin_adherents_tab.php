@@ -10,6 +10,16 @@ if(!$this->CheckPermission('Adherents use'))
 $db =& $this->GetDb();
 global $themeObject;
 //debug_display($params, 'Parameters');
+//on va vérifier que les données du compte sont renseignées et le n° du club aussi.
+$numero_club = $this->GetPreference('club_number');
+//echo $numero_club;
+if(!isset($numero_club) || $numero_club == '')
+{
+	$smarty->assign('alert', '1');
+	$smarty->assign('link_alert', 
+			$this->CreateLink($id, 'add_edit_club_number', $returnid, 'Votre numéro de club est manquant !'));
+}
+
 $aujourdhui = date('Y-m-d');
 //$ping = new Ping();
 $act = 1;//par defaut on affiche les actifs (= 1 )
@@ -95,6 +105,7 @@ if($dbresult && $dbresult->RecordCount() >0)
 		$onerow->points = $row['points'];
 		$onerow->date_validation = $row['validation'];
 		$onerow->cat = $row['cat'];
+		$onerow->anniversaire = $row['anniversaire'];
 		$onerow->adresse = $row['adresse'];
 		$onerow->code_postal = $row['code_postal'];
 		$onerow->ville = $row['ville'];

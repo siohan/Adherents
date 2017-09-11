@@ -20,7 +20,7 @@ $edition = 0;
 $OuiNon = array("Oui"=>"1","Non"=>"0");
 if(isset($params['record_id']) && $params['record_id'] != '')
 {
-	$edition = 0;
+	$edition = 1;
 	$record_id = $params['record_id'];
 	
 	$query  = "SELECT licence,actif,fftt, nom, prenom, adresse, code_postal, ville FROM ".cms_db_prefix()."module_adherents_adherents WHERE id = ?";
@@ -31,6 +31,7 @@ if(isset($params['record_id']) && $params['record_id'] != '')
 		{
 			//$compt++;
 			
+			$licence = $row['licence'];
 			$nom = $row['nom'];
 			$prenom = $row['prenom'];
 			$fftt = $row['fftt'];
@@ -48,7 +49,7 @@ if(isset($params['record_id']) && $params['record_id'] != '')
 
 		$smarty->assign('licence',
 					$this->CreateInputHidden($id,'licence',$licence));
-
+		$smarty->assign('anniversaire',$this->CreateInputDate($id, 'anniversaire'));
 		$smarty->assign('adresse',
 				$this->CreateInputText($id,'adresse',$adresse, 100, 250));
 		$smarty->assign('code_postal',
@@ -76,7 +77,7 @@ if(isset($params['record_id']) && $params['record_id'] != '')
 }
 else
 {
-	$valeur = 1;
+	$valeur = 0;
 	$smarty->assign('edition',$valeur);
 	$smarty->assign('edit',$this->CreateInputHidden($id, 'edit',$valeur, 15, 25));
 	//on renvoie à un formulaire vierge
@@ -91,7 +92,8 @@ else
 			$this->CreateInputText($id,'prenom','', 15,30));
 	$smarty->assign('fftt',
 			$this->CreateInputDropdown($id,'fftt',$OuiNon, '',''));
-
+	$smarty->assign('anniversaire',
+			$this->CreateInputDate($id, 'anniversaire'));
 	$smarty->assign('adresse',
 			$this->CreateInputText($id,'adresse','', 100, 250));
 	$smarty->assign('code_postal',
