@@ -89,7 +89,7 @@ function liste_adherents_spid ()
 				}// fin du foreach
 			return TRUE;
 		
-	}
+		}
 }//fin de la fonction
 
 function ajouter_adherent_spid ($licence,$nom, $prenom)
@@ -163,7 +163,7 @@ function infos_adherent_spid ($licence)
 
 				$i =0;//compteur pour les nouvelles inclusions
 				$a = 0;//compteur pour les mises à jour
-				foreach($xml as $tab)
+				foreach($xml as $cle=> $tab)
 				{
 					//$idlicence = (isset($tab->licence)?"$tab->licence":"");
 					$licence = (isset($tab->licence)?"$tab->licence":"");
@@ -224,7 +224,7 @@ function VerifyClub($club_number)
 		$lien = $servicen->GetLink($page,$var);
 		//echo $lien;
 		$xml = simplexml_load_string($lien, 'SimpleXMLElement', LIBXML_NOCDATA);
-		var_dump($xml);
+		//var_dump($xml);
 		
 		if($xml === FALSE)
 		{

@@ -74,7 +74,7 @@ case "0.1.1" :
 			$this->SetTemplate('newactivationemail_Sample',$template);
 		}
 		$dict = NewDataDictionary( $db );
-		$flds = "fftt I(1) DEFAULT 1 NOTNULL";
+		$flds = "fftt I(1) DEFAULT 1 NOT NULL";
 		$sqlarray = $dict->AddColumnSQL( cms_db_prefix()."module_adherents_adherents", $flds);
 		$dict->ExecuteSQLArray($sqlarray);
 

@@ -13,6 +13,7 @@ if (!isset($gCms)) exit;
 //pour l'instant pas d'erreur
 $aujourdhui = date('Y-m-d ');
 $error = 0;
+$message = '';
 		
 		
 		if (isset($params['club_number']) && $params['club_number'] !='')

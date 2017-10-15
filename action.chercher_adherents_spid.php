@@ -45,7 +45,7 @@ switch($obj)
 {
 	case "all":
 		$adherents_spid = $class_ops->liste_adherents_spid();
-		var_dump($adherents_spid);
+		//var_dump($adherents_spid);
 		if(TRUE === $adherents_spid)
 		{
 			$this->SetMessag('Adhérent(s) inséré(s)');
