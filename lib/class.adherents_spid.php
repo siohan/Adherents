@@ -142,25 +142,15 @@ function infos_adherent_spid ($licence)
 		{
 			$array = 0;
 			$lignes = 0;
+			echo "le xml renvoie faux";
 			return FALSE;
+		//	$this->active_desactive($licence,$sens="0");
 		}
 		else
 		{
 			$array = json_decode(json_encode((array)$xml), TRUE);
 			$lignes = count($array['licence']);
-		}
-		//echo "le nb de lignes est : ".$lignes;
-		if($lignes == 0)
-		{
-			$message = "Pas de lignes à récupérer !";
-			//$this->SetMessage("$message");
-			//$this->RedirectToAdminTab('joueurs');
-		}
-		else
-		{
-			//on supprime l'existant ? Oui.
-			
-
+		
 				$i =0;//compteur pour les nouvelles inclusions
 				$a = 0;//compteur pour les mises à jour
 				foreach($xml as $cle=> $tab)
@@ -181,12 +171,13 @@ function infos_adherent_spid ($licence)
 					$place = (isset($tab->place)?"$tab->place":"");
 					$point = (isset($tab->point)?"$tab->point":"");
 					$cat = (isset($tab->cat)?"$tab->cat":"");
-					
+					var_dump($certif);
 					if($certif=='')
 					{
+						echo "renvoie vide";
 						$actif = 0;
 						$validation = '';
-						return false;
+						//return false;
 					}
 					else
 					{
@@ -194,8 +185,21 @@ function infos_adherent_spid ($licence)
 						$validation2 = explode('/', $validation1);
 						$validation = $validation2[2].'-'.$validation2[1].'-'.$validation2[0];
 						$actif = 1;
-						$add = $this->maj_adherent_spid2($licence, $sexe, $type,$certif,$actif,$validation, $echelon, $place, $point, $cat);
-						if(true === $add)
+					}
+					
+					$query = "UPDATE ".cms_db_prefix()."module_adherents_adherents SET sexe = ?, type = ?, certif = ?,actif = ?, validation = ?, echelon = ?, place = ?, points = ?, cat = ? WHERE licence = ?";
+					echo $query;
+					$dbresult = $db->Execute($query, array($sexe, $type, $certif,$actif,$validation, $echelon, $place, $point, $cat, $licence));
+					if($dbresult)
+					{
+						return true;
+					}
+					else
+					{
+						return false;
+					}
+					/*$add = $this->maj_adherent_spid2($licence, $sexe, $type,$certif,$actif,$validation, $echelon, $place, $point, $cat);
+						if($add === true)
 						{
 							return true;
 						}
@@ -204,7 +208,7 @@ function infos_adherent_spid ($licence)
 							return false;
 						}
 						
-					}		
+					*/
 
 
 				}// fin du foreach
@@ -326,18 +330,22 @@ function refresh()
 {
 	global $gCms;
 	$db = cmsms()->GetDb();
-	$query = "SELECT licence FROM ".cms_db_prefix()."module_adherents_adherents WHERE actif = 1 AND fftt = 1 AND certif IS NULL";
+	$query = "SELECT licence FROM ".cms_db_prefix()."module_adherents_adherents WHERE fftt = 1 AND certif IS NULL";
 	$dbresult = $db->Execute($query);
 	
-	if($dbresult && $dbresult->RecordCount() >0)
+	if($dbresult)
 	{
-		while($row = $dbresult->FetchRow())
+		if($dbresult->RecordCount() >0)
 		{
-			$licence = $row['licence'];
-			$maj_joueurs = $this->infos_adherent_spid($licence);
+			while($row = $dbresult->FetchRow())
+			{
+				$licence = $row['licence'];
+				$maj_joueurs = $this->infos_adherent_spid($licence);
+			}
 		}
-	}
+	} 
 }
+
 #
 #
 #
