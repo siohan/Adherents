@@ -14,6 +14,8 @@ $lang['edit'] = 'Modifier';
 $lang['add'] = 'Ajouter ';
 $lang['submit'] = 'Envoyer';
 $lang['cancel'] = 'Annuler';
+$lang['apply_to_selection'] = 'Appliquer à la sélection ?';
+$lang['areyousure_actionmultiple'] = 'Appliquer cette action à toute la sélection ?';
 
 $lang['help'] = '<h3>Que fait ce module ?</h3>
 <h3>Première utilisation</h3>

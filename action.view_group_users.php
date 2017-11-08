@@ -7,7 +7,7 @@ if(!$this->CheckPermission('Adherents use'))
 	echo $this->ShowErrors($this->Lang('needpermission'));
 	return;
 }
-$db =& $this->GetDb();
+$db = cmsms()->GetDb();
 global $themeObject;
 //debug_display($params, 'Parameters');
 $aujourdhui = date('Y-m-d');
@@ -17,30 +17,22 @@ $shopping = '<img src="../modules/Adherents/images/shopping.jpg" class="systemic
 $smarty->assign('add_users', 
 		$this->CreateLink($id, 'edit_adherent',$returnid, 'Ajouter'));
 $smarty->assign('shopping', $shopping);
-
+$query = "SELECT adh.id, adh.licence, adh.nom, adh.prenom, adh.actif, adh.anniversaire, adh.sexe, adh.type, adh.certif, adh.validation, adh.echelon, adh.place, adh.points, adh.cat, adh.adresse, adh.code_postal, adh.ville FROM ".cms_db_prefix()."module_adherents_adherents AS adh, ".cms_db_prefix()."module_adherents_groupes_belongs AS be WHERE adh.licence = be.licence";//" AND be.id_group = ?";//" WHERE actif = 1";
 if(isset($params['group']) && $params['group'] != '')
 {
 	$group = $params['group'];
-	$req = 1;
-	$query = "SELECT adh.id, adh.licence, adh.nom, adh.prenom, adh.actif, adh.anniversaire, adh.sexe, adh.type, adh.certif, adh.validation, adh.echelon, adh.place, adh.points, adh.cat, adh.adresse, adh.code_postal, adh.ville FROM ".cms_db_prefix()."module_adherents_adherents AS adh, ".cms_db_prefix()."module_adherents_groupes_belongs AS be WHERE adh.licence = be.licence AND be.id_group = ?";//" WHERE actif = 1";
-}
-
-
-if(isset($params['actif']) && $params['actif'] == 0)
-{
-
-		$query.=" AND adh.actif = 0";
-	
+	$query.=" AND be.id_group = ?";
 }
 else
 {
-	
-		$query.=" AND adh.actif = 1";
-
+	//un groupe doit être précisé
+	$this->SetMessage('Un groupe doit être précisé !');
+	$this->RedirectToAdminTab('groupes');
 }
+
 $query.=" ORDER BY adh.nom ASC ";
 $smarty->assign('act', $act);
-	$dbresult = $db->Execute($query,array($group));
+$dbresult = $db->Execute($query,array($group));
 
 $rowarray = array();
 $rowclass = 'row1';
@@ -75,10 +67,20 @@ if($dbresult && $dbresult->RecordCount() >0)
 	$smarty->assign('itemsfound', $this->Lang('resultsfoundtext'));
 	$smarty->assign('itemcount', count($rowarray));
 	$smarty->assign('items', $rowarray);
+	$smarty->assign('form2start',
+			$this->CreateFormStart($id,'mass_action',$returnid));
+	$smarty->assign('form2end',
+			$this->CreateFormEnd());
+	$articles = array("Envoyer un email"=>"email");
+	$smarty->assign('actiondemasse',
+			$this->CreateInputDropdown($id,'actiondemasse',$articles));
+	$smarty->assign('submit_massaction',
+			$this->CreateInputSubmit($id,'submit_massaction',$this->Lang('apply_to_selection'),'','',$this->Lang('areyousure_actionmultiple')));
 }
 elseif(!$dbresult)
 {
 	echo $db->ErrorMsg();
+	echo 'pb';
 }
 
 //$query.=" ORDER BY date_compet";
