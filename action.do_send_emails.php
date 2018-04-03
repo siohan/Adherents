@@ -61,7 +61,7 @@ else
 {
 	// on commence le traitement
 	$tab = explode(',', $destinataires);
-	var_dump($tab);
+	//var_dump($tab);
 	
 
 	foreach($tab as $item=>$v)
@@ -84,4 +84,4 @@ else
                 }
 	}
 }
-
+$this->Redirect($id, 'defaultadmin', $returnid);

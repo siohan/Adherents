@@ -23,7 +23,7 @@ if(isset($params['record_id']) && $params['record_id'] != '')
 	$edition = 1;
 	$record_id = $params['record_id'];
 	
-	$query  = "SELECT licence,actif,fftt, nom, prenom, adresse, code_postal, ville FROM ".cms_db_prefix()."module_adherents_adherents WHERE id = ?";
+	$query  = "SELECT licence,actif,fftt, nom, prenom, adresse, code_postal, anniversaire, ville FROM ".cms_db_prefix()."module_adherents_adherents WHERE id = ?";
 	$dbresult = $db->Execute($query, array($record_id));
 	if($dbresult)
 	{
@@ -38,7 +38,7 @@ if(isset($params['record_id']) && $params['record_id'] != '')
 			$adresse = $row['adresse'];
 			$code_postal = $row['code_postal'];
 			$ville = $row['ville'];
-			//$description = $row['description'];
+			$anniversaire = $row['anniversaire'];
 			
 				
 			
@@ -49,7 +49,7 @@ if(isset($params['record_id']) && $params['record_id'] != '')
 
 		$smarty->assign('licence',
 					$this->CreateInputHidden($id,'licence',$licence));
-		$smarty->assign('anniversaire',$this->CreateInputDate($id, 'anniversaire'));
+		$smarty->assign('anniversaire',$this->CreateInputDate($id, 'anniversaire', $anniversaire));
 		$smarty->assign('adresse',
 				$this->CreateInputText($id,'adresse',$adresse, 100, 250));
 		$smarty->assign('code_postal',

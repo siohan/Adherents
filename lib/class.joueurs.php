@@ -1,5 +1,5 @@
 <?php
-       class Contacts
+       class joueurs
        {
            private $_data = array('id'=>null,'licence'=>null,'actif'=>null,'nom'=>null,
                                   'prenom'=>null,'club'=>null, 'nclub'=>null, 'clast'=>null);
@@ -59,14 +59,14 @@ protected function update()
     if( !$dbr ) return FALSE;
     return TRUE;
 }
-public function delete()
+public function delete($this->licence)
 {
-    if( !$this->id ) return FALSE;
+    if( !$this->licence ) return FALSE;
     $db = \cms_utils::get_db();
-    $sql = 'DELETE FROM '.CMS_DB_PREFIX.'module_ping_joueurs WHERE id = ?';
-    $dbr = $db->Execute($sql,array($this->id));
+    $sql = 'DELETE FROM '.CMS_DB_PREFIX.'module_ping_joueurs WHERE licence = ?';
+    $dbr = $db->Execute($sql,array($this->licence));
     if( !$dbr ) return FALSE;
-    $this->_data['id'] = null;
+    $this->_data['licence'] = null;
     return TRUE;
 }
 /** internal */

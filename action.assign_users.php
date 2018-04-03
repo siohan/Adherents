@@ -23,7 +23,7 @@ $rowarray = array();
 
 	
 $db = $this->GetDb();
-$query = "SELECT j.licence, CONCAT_WS(' ',j.nom, j.prenom ) AS joueur FROM ".cms_db_prefix()."module_adherents_adherents AS j ORDER BY nom ASC ";
+$query = "SELECT j.licence, CONCAT_WS(' ',j.nom, j.prenom ) AS joueur FROM ".cms_db_prefix()."module_adherents_adherents AS j WHERE actif = 1 ORDER BY nom ASC ";
 //echo $query;
 $dbresult = $db->Execute($query);
 

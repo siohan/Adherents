@@ -2,7 +2,7 @@
 
 #-------------------------------------------------------------------------
 # Module : Adherents - 
-# Version : 0.2.2, Sc
+# Version : 0.2.6, Sc
 # Auteur : Claude SIOHAN
 #-------------------------------------------------------------------------
 /**
@@ -20,7 +20,7 @@ class Adherents extends CMSModule
   
   function GetName() { return 'Adherents'; }   
   function GetFriendlyName() { return $this->Lang('friendlyname'); }   
-  function GetVersion() { return '0.2.3'; }  
+  function GetVersion() { return '0.2.6'; }  
   function GetHelp() { return $this->Lang('help'); }   
   function GetAuthor() { return 'Claude SIOHAN'; } 
   function GetAuthorEmail() { return 'claude.siohan@gmail.com'; }
@@ -41,7 +41,7 @@ class Adherents extends CMSModule
   
   function GetDependencies()
   {
-	return array('FrontEndUsers'=>'2.5.2');
+	return array('FrontEndUsers'=>'2.9');
   }
 
   
@@ -56,9 +56,38 @@ class Adherents extends CMSModule
   { 
   	$this->RegisterModulePlugin();
 	$this->RestrictUnknownParams();
+	$this->SetParameterType('display',CLEAN_STRING);
+	$this->SetParameterType('action',CLEAN_STRING);
+	$this->SetParameterType('record_id', CLEAN_INT);
+	$this->SetParameterType('licence', CLEAN_INT);
+	$this->SetParameterType('phase', CLEAN_INT);
+	//$this->SetParameterType('record_id', CLEAN_INT);
+	//$this->SetParameterType('record_id', CLEAN_INT);
+	$this->SetParameterType('anniversaire',CLEAN_STRING);
+	$this->SetParameterType('ville',CLEAN_STRING);
+	$this->SetParameterType('code_postal',CLEAN_STRING);
+	$this->SetParameterType('adresse',CLEAN_STRING);
+	$this->SetParameterType('saison',CLEAN_STRING);
+	$this->SetParameterType('retrieve',CLEAN_STRING);
+	$this->SetParameterType('type_contact',CLEAN_STRING);
+	$this->SetParameterType('contact',CLEAN_STRING);
+	$this->SetParameterType('description',CLEAN_STRING);
+	$this->SetParameterType('commande_number',CLEAN_STRING);
+	$this->SetParameterType('fournisseur',CLEAN_STRING);
+	$this->SetParameterType('libelle_selected',CLEAN_STRING);
+	$this->SetParameterType('ep_manche_taille',CLEAN_STRING);
+	$this->SetParameterType('couleur',CLEAN_STRING);
+	$this->SetParameterType('produits',CLEAN_STRING);
+	$this->SetParameterType('commande_id',CLEAN_INT);
+	$this->SetParameterType('quantite',CLEAN_INT);
+	$this->SetParameterType('destinataires',CLEAN_INT);//id du groupe 
+	$this->SetParameterType('priority',CLEAN_INT);
+	$this->SetParameterType('message',CLEAN_STRING);
+	$this->SetParameterType('sujet',CLEAN_STRING);
+	
 	
 	//form parameters
-	//$this->SetParameterType('submit',CLEAN_STRING);
+	$this->SetParameterType('submit',CLEAN_STRING);
 	//$this->SetParameterType('tourlist',CLEAN_INT);
 	
 
@@ -79,9 +108,9 @@ public function HasCapability($capability, $params = array())
 public function get_tasks()
 {
    $obj = array();
-	//$obj[0] = new PingRecupFfttTask();
-   	//$obj[1] = new PingRecupSpidTask();  
-	//$obj[2] = new PingRecupRencontresTask();
+	//$obj[0] = new RecupAdherentsTask();
+   	$obj[0] = new VerifAdherentsTask();  
+	
 return $obj; 
 }
 

@@ -61,14 +61,13 @@ $edit = 0;//pour savoir si on fait un update ou un insert; 0 = insert
 		else // pas d'erreurs on continue
 		{
 			
-			
+			$feu = cms_utils::get_module('FrontEndUsers');
 			
 			
 			if($edit == 0)
 			{
 				$query = "INSERT INTO ".cms_db_prefix()."module_adherents_groupes (nom, description, actif) VALUES ( ?, ?, ?)";
 				$dbresult = $db->Execute($query, array($nom, $description, $actif));
-
 			}
 			else
 			{

@@ -7,7 +7,7 @@
 {/literal}<div class="pageoverflow">
 {$formstart}
 
-{if $edition == 0}
+{if $edition == '0'}
 {$edit}
 <div class="pageoverflow">
   <p class="pagetext">Licencié(e) FFTT ? :</p>

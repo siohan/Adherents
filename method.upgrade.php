@@ -1,6 +1,6 @@
 <?php
 #-------------------------------------------------------------------------
-# Module: Ping
+# Module: Adhérents
 # Version: 0.4.6
 # Method: Upgrade
 #-------------------------------------------------------------------------
@@ -30,7 +30,7 @@ switch($current_version)
   // we are now 1.0 and want to upgrade to latest
  
 	
-case "0.1" : 	
+	case "0.1" : 	
 	
 	{
 		
@@ -64,7 +64,7 @@ case "0.1" :
 		
 
 
-case "0.1.1" :
+	case "0.1.1" :
 	{
 		# Mails templates
 		$fn = cms_join_path(dirname(__FILE__),'templates','orig_activationemailtemplate.tpl');
@@ -79,6 +79,31 @@ case "0.1.1" :
 		$dict->ExecuteSQLArray($sqlarray);
 
 	}
+	
+	case "0.2":
+	case "0.2.1":
+	case "0.2.2" :
+	case "0.2.3" :
+	case "0.2.4" :
+	case "0.2.4.1" :
+	{
+		$idxoptarray = array('UNIQUE');
+		$sqlarray = $dict->CreateIndexSQL(cms_db_prefix().'adherents',
+			    cms_db_prefix().'module_adherents_adherents', 'licence',$idxoptarray);
+		$dict->ExecuteSQLArray($sqlarray);
+	}
+	case "0.2.5" :
+	{
+		//on rajoute une colonne maj pour savoir qd le joueur a été mis à jour
+		$dict = NewDataDictionary( $db );
+		$flds = "maj ". CMS_ADODB_DT ."";
+		$sqlarray = $dict->AddColumnSQL( cms_db_prefix()."module_adherents_adherents", $flds);
+		$dict->ExecuteSQLArray($sqlarray);
+		
+		//on ajoute une préférence pour la vérification des adhérents
+		$this->SetPreference('LastVerifAdherents', time());
+	}
+	
 
 }
 // put mention into the admin log

@@ -37,16 +37,11 @@ $db = $this->GetDb();
 
 // remove the database tables
 $dict = NewDataDictionary( $db );
-
-
-
 $sqlarray = $dict->DropTableSQL( cms_db_prefix()."module_adherents_adherents" );
 $dict->ExecuteSQLArray($sqlarray);
 
-
-$dict = NewDataDictionary( $db );
-
-
+$sqlarray = $dict->DropTableSQL( cms_db_prefix()."module_adherents_adherents_seq" );
+$dict->ExecuteSQLArray($sqlarray);
 
 $sqlarray = $dict->DropTableSQL( cms_db_prefix()."module_adherents_contacts" );
 $dict->ExecuteSQLArray($sqlarray);

@@ -1,4 +1,4 @@
-<div class="pageoptions"><p class="pageoptions">{if $alert == "1"}<p class="warning">{$link_alert}</p>{/if}{$itemcount}&nbsp;{$itemsfound}.&nbsp;&nbsp;| {$add_users} | {if $act ==0}{$actifs}{else} {$inactifs}{/if} | &nbsp;{$chercher_adherents_spid} | {$refresh}</p></div>
+<div class="pageoptions"><p class="pageoptions">{if $alert == "1"}<p class="warning">{$link_alert}</p>{elseif $alert == "2"}<p class="warning">{$link_alert}</p>{/if}{$itemcount}&nbsp;{$itemsfound}.&nbsp;&nbsp;| {$add_users} | {if $act ==0}{$actifs}{else} {$inactifs}{/if} | &nbsp;{$chercher_adherents_spid} | {$refresh}</p></div>
 {if $itemcount > 0}
 	<table border="0" cellspacing="0" cellpadding="0" class="pagetable tablesorter">
 	 <thead>
@@ -15,6 +15,7 @@
 			<th>Adresse</th>
 			<th>Code Postal</th> 
 			<th>Ville</th>
+			<th>Email ?</th>
 			<th colspan="5">Actions</th>
 			
 		</tr>
@@ -34,6 +35,7 @@
 		<td>{$entry->adresse}</td>
 		<td>{$entry->code_postal}</td>
 		<td>{$entry->ville}</td>
+		<td>{$entry->has_email}</td>
 		<td>{$entry->refresh}</td>
 		<td>{$entry->edit}</td>		
 		<td><a href="{root_url}/admin/moduleinterface.php?mact=Commandes,m1_,view_client_orders,0&amp;m1_licence={$entry->licence}&amp;_sk_={$smarty.cookies._sk_}">{$shopping}</a></td>

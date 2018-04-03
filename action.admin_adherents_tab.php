@@ -11,15 +11,22 @@ $db =& $this->GetDb();
 global $themeObject;
 //debug_display($params, 'Parameters');
 //on va vérifier que les données du compte sont renseignées et le n° du club aussi.
+
 $numero_club = $this->GetPreference('club_number');
 //echo $numero_club;
 if(!isset($numero_club) || $numero_club == '')
 {
-	$smarty->assign('alert', '1');
+	$smarty->assign('alert', '2');
 	$smarty->assign('link_alert', 
 			$this->CreateLink($id, 'add_edit_club_number', $returnid, 'Votre numéro de club est manquant !'));
 }
-
+$idAppli = $this->GetPreference('idAppli');
+if(!isset($idAppli) || $idAppli == "")
+{
+	$smarty->assign('alert', '1');
+	$smarty->assign('link_alert', 
+			$this->CreateLink($id, 'defautadmin', $returnid, 'Votre compte n\'est pas renseigné !', array("activetab"=>"config")));
+}
 $aujourdhui = date('Y-m-d');
 //$ping = new Ping();
 $act = 1;//par defaut on affiche les actifs (= 1 )
@@ -88,6 +95,8 @@ else
 }
 $rowarray = array();
 $rowclass = 'row1';
+$contact_ops = new contact;
+$adh_ops = new adherents_spid;
 if($dbresult && $dbresult->RecordCount() >0)
 {
 	
@@ -99,7 +108,15 @@ if($dbresult && $dbresult->RecordCount() >0)
 		$onerow->licence= $row['licence'];
 		$onerow->nom= $row['nom'];
 		$onerow->prenom= $row['prenom'];
-		$onerow->actif= $row['actif'];
+		$actif= $row['actif'];
+		if($actif == 1)
+		{
+			$onerow->actif = $this->CreateLink($id, 'chercher_adherents_spid',$returnid,$themeObject->DisplayImage('icons/system/true.gif', $this->Lang('true'), '', '', 'systemicon'), array("obj"=>"desactivate", "licence"=>$row['licence']));
+		}
+		else
+		{
+			$onerow->actif = $this->CreateLink($id, 'chercher_adherents_spid',$returnid,$themeObject->DisplayImage('icons/system/false.gif', $this->Lang('false'), '', '', 'systemicon'), array("obj"=>"activate", "licence"=>$row['licence']));
+		}
 		$onerow->sexe= $row['sexe'];
 		$onerow->certif= $row['certif'];
 		$onerow->points = $row['points'];
@@ -109,6 +126,17 @@ if($dbresult && $dbresult->RecordCount() >0)
 		$onerow->adresse = $row['adresse'];
 		$onerow->code_postal = $row['code_postal'];
 		$onerow->ville = $row['ville'];
+		$email = $contact_ops->has_email($row['licence']);
+		//var_dump($email);
+		if(TRUE === $email)
+		{
+			$onerow->has_email = $themeObject->DisplayImage('icons/system/true.gif', $this->Lang('true'), '', '', 'systemicon');
+		}
+		elseif(FALSE === $email)
+		{
+			$onerow->has_email = $themeObject->DisplayImage('icons/system/false.gif', $this->Lang('false'), '', '', 'systemicon');
+		}
+		
 		$onerow->edit = $this->CreateLink($id, 'edit_adherent',$returnid,$themeObject->DisplayImage('icons/system/edit.gif', $this->Lang('edit'), '', '', 'systemicon'), array("record_id"=>$row['id']));
 		$onerow->refresh= $this->CreateLink($id, 'chercher_adherents_spid', $returnid,'<img src="../modules/Adherents/images/refresh.png" class="systemicon" alt="Rafraichir" title="Rafraichir">',array("obj"=>"refresh","licence"=>$row['licence']));//$row['closed'];
 		$onerow->view_contacts= $this->CreateLink($id, 'view_contacts', $returnid,'<img src="../modules/Adherents/images/contact.jpg" class="systemicon" alt="Contacts" title="Contacts">',array("licence"=>$row['licence']));//$row['closed'];

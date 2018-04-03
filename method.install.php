@@ -1,7 +1,7 @@
 <?php
 #-------------------------------------------------------------------------
 # Module: Adherents
-# Version: 0.1, Claude SIOHAN Agi webconseil
+# Version: 0.2.6, Claude SIOHAN
 # Method: Install
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2008 by Ted Kulp (wishy@cmsmadesimple.org)
@@ -33,6 +33,7 @@ $dict = NewDataDictionary( $db );
 // table schema description
 $flds = "
 	id I(11) AUTO KEY,
+	maj D,
 	actif I(1) DEFAULT 1,
 	fftt I(1) DEFAULT 1,
 	licence I(11),
@@ -49,7 +50,8 @@ $flds = "
 	cat C(20),
 	adresse C(255),
 	code_postal C(5),
-	ville C(200)";
+	ville C(200),
+	maj D";
 	$sqlarray = $dict->CreateTableSQL( cms_db_prefix()."module_adherents_adherents", $flds, $taboptarray);
 	$dict->ExecuteSQLArray($sqlarray);			
 //
@@ -108,12 +110,11 @@ $flds = "
 //			
 //
 //les index
-/*
 $idxoptarray = array('UNIQUE');
-$sqlarray = $dict->CreateIndexSQL(cms_db_prefix().'compos',
-	    cms_db_prefix().'module_livescoring_compositions', 'renc_id, id_joueur',$idxoptarray);
+$sqlarray = $dict->CreateIndexSQL(cms_db_prefix().'adherents',
+	    cms_db_prefix().'module_adherents_adherents', 'licence',$idxoptarray);
 	       $dict->ExecuteSQLArray($sqlarray);
-*/
+
 # Mails templates
 $fn = cms_join_path(dirname(__FILE__),'templates','orig_activationemailtemplate.tpl');
 if( file_exists( $fn ) )
@@ -124,6 +125,7 @@ if( file_exists( $fn ) )
 
 $this->SetPreference('admin_email', 'root@localhost.com');
 $this->SetPreference('email_activation_subject', 'Votre compte T2T est actif');
+$this->SetPreference('LastVerifAdherents', 'Votre compte T2T est actif', time());
 //$this->SetPreference('mail_activation_body', );
 //Permissions
 $this->CreatePermission('Adherents use', 'Utiliser le module Adhérents');

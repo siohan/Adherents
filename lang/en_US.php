@@ -1,7 +1,8 @@
 <?php
 $lang['friendlyname'] = 'T2T Adhérents';
-
-
+$lang['submit'] = 'Submit';
+$lang['cancel'] = 'Cancel';
+$lang['resultsfoundtext'] = 'Found results';
 $lang['moddescription'] = 'Ce module gère les adhérents de votre club de ping.';
 $lang['welcome_text'] = '<p>Bienvenue dans le module T2T Adhérents</p>';
 $lang['changelog'] = '<ul>

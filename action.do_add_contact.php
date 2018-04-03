@@ -46,7 +46,7 @@ $alert = 0;//pour savoir si certains champs doivent contenir une valeur ou non
 		}
 		
 		
-		if($type_contact == "email")
+		if($type_contact == "1")
 		{
 			$alert = 1;
 		}
@@ -55,7 +55,22 @@ $alert = 0;//pour savoir si certains champs doivent contenir une valeur ou non
 		$contact = '';
 		if (isset($params['contact']) && $params['contact'] !='')
 		{
-			$contact = $params['contact'];
+			if($alert == "1")//le type de contact est un email, on vérifie la conformité
+			{
+				//var_dump($params['contact']);
+				if(TRUE ===is_email($params['contact']))
+				{
+					$contact = $params['contact'];
+				}
+				else
+				{
+					$error++;
+				}
+			}
+			else
+			{
+				$contact = $params['contact'];
+			}
 		}
 		elseif($params['contact'] =='' )
 		{
@@ -92,7 +107,7 @@ $alert = 0;//pour savoir si certains champs doivent contenir une valeur ou non
 		//on calcule le nb d'erreur
 		if($error>0)
 		{
-			$this->Setmessage('Parametres requis manquants !');
+			$this->Setmessage('Parametres requis manquants ou email invalide !');
 			$this->Redirect($id, 'add_edit_contact',$returnid, array("licence"=>$licence, "edit"=>$edit));//ToAdminTab('commandesclients');
 		}
 		else // pas d'erreurs on continue

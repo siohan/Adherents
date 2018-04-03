@@ -1,16 +1,11 @@
 <?php
 if (!isset($gCms)) exit;
-//debug_display($params, 'Parameters');
+debug_display($params, 'Parameters');
 
-if (!$this->CheckPermission('Adherents use'))
-{
-	$designation .=$this->Lang('needpermission');
-	$this->SetMessage("$designation");
-	$this->RedirectToAdminTab('adherents');
-}
+
 if( isset($params['cancel']) )
 {
-	$this->RedirectToAdminTab('adherents');
+	$this->Redirect($i, 'default', $returnid);
 	return;
 }
 
@@ -24,43 +19,15 @@ $alert = 0;//pour savoir si certains champs doivent contenir une valeur ou non
 		
 		
 	
-		if (isset($params['edit']) && $params['edit'] !='')
-		{
-			$edit = $params['edit'];
-		}
-		else
-		{
-			$edit = 0;
-		}
-		$fftt = 1;		
-		if (isset($params['fftt']) && $params['fftt'] !='')
-		{
-			$fftt = $params['fftt'];
-		}
 		$licence = '';
 		if (isset($params['licence']) && $params['licence'] !='')
 		{
 			$licence = $params['licence'];
 		}
-		if($licence == '' && $fftt == 0)
-		{
-			//il faut donner un numéro de licence bidon
-			$licence = $db->GenID(CMS_DB_PREFIX . "module_news_seq");
-		}
-		$nom = '';
-		if (isset($params['nom']) && $params['nom'] !='')
-		{
-			$nom = strtoupper($params['nom']);
-		}
 		$anniversaire = '';
 		if (isset($params['anniversaire']) && $params['anniversaire'] !='')
 		{
 			$anniversaire = $params['anniversaire'];
-		}
-		$prenom = '';
-		if (isset($params['prenom']) && $params['prenom'] !='')
-		{
-			$prenom = $params['prenom'];
 		}
 		$adresse = '';
 		if (isset($params['adresse']) && $params['adresse'] !='')
@@ -91,7 +58,7 @@ $alert = 0;//pour savoir si certains champs doivent contenir une valeur ou non
 			$service = new adherents_spid();
 			
 			
-				$update_adherent = $service->edit_adherent($edit,$fftt,$licence,$nom, $prenom,$anniversaire,$adresse,$code_postal,$ville);
+				$update_adherent = $service->fe_edit_adherent($licence,$anniversaire,$adresse,$code_postal,$ville);
 			
 			
 		
@@ -105,6 +72,6 @@ $alert = 0;//pour savoir si certains champs doivent contenir une valeur ou non
 		
 
 $this->SetMessage('Adhérent modifié');
-$this->Redirect($id,'defaultadmin', $returnid);
+$this->Redirect($id,'default', $returnid);
 
 ?>

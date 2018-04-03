@@ -1,5 +1,5 @@
 <?php
-
+set_time_limit(300);
 if(!isset($gCms)) exit;
 //on vérifie les permissions
 if(!$this->CheckPermission('Adherents use'))
@@ -52,10 +52,10 @@ switch($obj)
 		}
 		else
 		{
-			$this->SetMessag('Erreur');
+			$this->SetMessage('Erreur');
 		}
-		
-		$this->RedirectToAdminTab('adherents');
+		$this->Redirect($id, 'details_adherents', $returnid);
+		//$this->RedirectToAdminTab('adherents');
 	break;
 	
 	case "refresh" :
@@ -144,6 +144,7 @@ switch($obj)
 	
 	case "refresh_all"  :
 		$adherents_spid = $class_ops->refresh();
+		//$class_ops->info_adherents
 		$this->RedirectToAdminTab('adherents');
 	break;
 	case "delete_user_from_group" :
@@ -156,12 +157,24 @@ switch($obj)
 		{
 			$this->SetMessage('Adhérent supprimé du groupe');
 		}
-		$this->Redirect($id, 'view_group_users', $returnid, array("active_tab"=>"feu"));
+		$this->Redirect($id, 'view_group_users', $returnid, array("group"=>$record_id));
 	break;
 	case "delete_group" :
 		$del_group = $group_ops->delete_group($record_id);
 		$del_group_belongs = $group_ops->delete_group_belongs($record_id);
 		$this->Redirect($id, 'defaultadmin',$returnid, array("active_tab"=>"group"));
+	break;
+	
+	case "activate" :
+		$class_ops->activate($licence);
+		$this->SetMessage('Adhérent activé');
+		$this->Redirect($id, 'defaultadmin', $returnid);
+	break;
+	
+	case "desactivate" : 
+		$class_ops->desactivate($licence);
+		$this->SetMessage('Adhérent désactivé');
+		$this->Redirect($id, 'defaultadmin', $returnid);
 	break;
 }
 
