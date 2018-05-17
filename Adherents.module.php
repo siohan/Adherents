@@ -20,7 +20,7 @@ class Adherents extends CMSModule
   
   function GetName() { return 'Adherents'; }   
   function GetFriendlyName() { return $this->Lang('friendlyname'); }   
-  function GetVersion() { return '0.2.6'; }  
+  function GetVersion() { return '0.2.7'; }  
   function GetHelp() { return $this->Lang('help'); }   
   function GetAuthor() { return 'Claude SIOHAN'; } 
   function GetAuthorEmail() { return 'claude.siohan@gmail.com'; }
@@ -61,7 +61,7 @@ class Adherents extends CMSModule
 	$this->SetParameterType('record_id', CLEAN_INT);
 	$this->SetParameterType('licence', CLEAN_INT);
 	$this->SetParameterType('phase', CLEAN_INT);
-	//$this->SetParameterType('record_id', CLEAN_INT);
+	$this->SetParameterType('edition', CLEAN_INT);
 	//$this->SetParameterType('record_id', CLEAN_INT);
 	$this->SetParameterType('anniversaire',CLEAN_STRING);
 	$this->SetParameterType('ville',CLEAN_STRING);
@@ -75,6 +75,7 @@ class Adherents extends CMSModule
 	$this->SetParameterType('commande_number',CLEAN_STRING);
 	$this->SetParameterType('fournisseur',CLEAN_STRING);
 	$this->SetParameterType('libelle_selected',CLEAN_STRING);
+	$this->SetParameterType('libelle_commande',CLEAN_STRING);
 	$this->SetParameterType('ep_manche_taille',CLEAN_STRING);
 	$this->SetParameterType('couleur',CLEAN_STRING);
 	$this->SetParameterType('produits',CLEAN_STRING);
@@ -84,6 +85,7 @@ class Adherents extends CMSModule
 	$this->SetParameterType('priority',CLEAN_INT);
 	$this->SetParameterType('message',CLEAN_STRING);
 	$this->SetParameterType('sujet',CLEAN_STRING);
+	$this->SetParameterType('produit_id',CLEAN_INT);
 	
 	
 	//form parameters

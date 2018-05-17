@@ -20,7 +20,8 @@ $(document).ready(function(){
   {/if}
 });
 //]]>
-</script><div class="pageoptions"><p class="pageoptions">{$itemcount}&nbsp;{$itemsfound}&nbsp;&nbsp;</p></div>
+</script>
+<div class="pageoptions"><p class="pageoptions">{$itemcount}&nbsp;{$itemsfound}&nbsp;&nbsp;</p></div>
 {if $itemcount > 0}
 {$form2start}
 	<table border="0" cellspacing="0" cellpadding="0" class="pagetable tablesorter">

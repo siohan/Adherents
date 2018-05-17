@@ -1,9 +1,9 @@
-<div class="pageoptions"><p class="pageoptions">{$itemcount}&nbsp;{$itemsfound}</p></div>
+
 <p>{$rafraichir}</p>
 {if $affiche=='1'}
 <h3>Résumé de mes résultats : </h3>
 <p>{$phase1} | {$phase2}</p>
-<table border="0" cellspacing="0" cellpadding="0" class="pagetable">
+<table class="table table-responsive table-bordered">
  <tbody>
 	<thead>
 		<tr>

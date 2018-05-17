@@ -30,7 +30,7 @@ if(isset($params['display']) && $params['display'] !='')
 switch($display)
 {
 	case 'infos' :
-	require(__DIR__.'/action.infos_perso.php');
+	require(__DIR__.'/action.fe_edit_adherent.php');
 	break;
 	
 	case 'sportif' :
@@ -68,6 +68,14 @@ switch($display)
 	
 	case 'fe_envoi_message' : 
 	require(__DIR__.'/action.fe_envoi_message.php');
+	break;
+	
+	case 'delete' :
+	require(__DIR__.'/action.fe_delete.php');
+	break;
+	
+	case 'validate' :
+	require(__DIR__.'/action.fe_validate.php');
 	break;
 	
 	case 'default' :

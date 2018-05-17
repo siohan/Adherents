@@ -8,7 +8,7 @@ $username = $feu->GetUsername($userid);
 require_once(dirname(__FILE__).'/include/fe_menu.php');
 $email = $feu->LoggedInEmail();
 //var_dump($email);
-debug_display($params, 'Parameters');
+//debug_display($params, 'Parameters');
 $db =& $this->GetDb();
 $error = 0;//on instancie un compteur d'erreurs
 if(isset($params['record_id']) && $params['record_id'] !='')
@@ -16,33 +16,19 @@ if(isset($params['record_id']) && $params['record_id'] !='')
 	$record_id = $params['record_id'];
 	//echo "le record_id est :".$record_id;
 }
-
-if(isset($params['fournisseur']) && $params['fournisseur'] !='')
-{
-	$fournisseur = $params['fournisseur'];
-	//echo "le record_id est :".$record_id;
-}
 else
 {
 	$error++;
 }
-if(isset($params['commande_number']) && $params['commande_number'] !='')
-{
-	$commande_number = $params['commande_number'];
-	//echo "le record_id est :".$record_id;
-}
-else
-{
-	$error++;
-}
-
+$modify = '<img src="modules/Adherents/images/edit.gif" class="systemicon" alt="Modifier" title="Modifier">';
+$del = '<img src="modules/Adherents/images/delete.gif" class="systemicon" alt="Supprimer" title="Supprimer">';
 $result= array ();
-$query1 = "SELECT cc.id,cc.user_validation,cc.commande_number,it.id AS item_id, it.fk_id , it.date_created,it.libelle_commande,it.ep_manche_taille, it.couleur, it.categorie_produit, it.fournisseur,it.quantite, it.prix_total, it.statut_item,it.commande FROM ".cms_db_prefix()."module_commandes_cc as cc, ".cms_db_prefix()."module_commandes_cc_items AS it WHERE cc.commande_number = it.commande_number AND cc.commande_number = ? ";
+$query1 = "SELECT it.id AS item_id, it.fk_id , it.date_created,it.libelle_commande,it.ep_manche_taille, it.couleur, it.categorie_produit, it.fournisseur,it.quantite, it.prix_total, it.statut_item,it.commande FROM ".cms_db_prefix()."module_commandes_cc_items AS it WHERE id = ? AND fk_id = ? ";
 
 
 	//$query .=" ORDER BY id DESC";
 	//echo $query1;
-	$dbresult= $db->Execute($query1,array($commande_number));
+	$dbresult= $db->Execute($query1,array($record_id,$username));
 	
 	//echo $query;
 	$rowarray= array();
@@ -56,7 +42,7 @@ $query1 = "SELECT cc.id,cc.user_validation,cc.commande_number,it.id AS item_id, 
 				$onerow->rowclass= $rowclass;
 				$onerow->item_id= $row['item_id'];
 				$id_commandes = $row['fk_id'];
-				$user_validation = $row['user_validation'];
+				//$user_validation = $row['user_validation'];
 				//$commande_number = $row['commande_number'];
 				$commande = $row['commande']; //gère si l'item doit être modifiable ou non
 				//$fournisseur = $row['fournisseur'];
@@ -75,8 +61,8 @@ $query1 = "SELECT cc.id,cc.user_validation,cc.commande_number,it.id AS item_id, 
 				
 				if($user_validation == 0)
 				{
-					$onerow->edit = $this->CreateLink($id, 'default', $returnid,'Modifier', array("display"=>"add_cc_items","record_id"=>$row['item_id'], "commande_number"=>$commande_number,"edit"=>"1" ));
-					$onerow->delete = $this->CreateLink($id, 'default', $returnid,'Supprimer', array("display"=>"delete","record_id"=>$row['item_id'], "commande_number"=>$commande_number ));
+					$onerow->edit = $this->CreateLink($id, 'default', $returnid,$modify, array("display"=>"add_cc_items","record_id"=>$row['item_id'], "commande_number"=>$commande_number,"edit"=>"1" ));
+					$onerow->delete = $this->CreateLink($id, 'default', $returnid,$del, array("display"=>"delete","record_id"=>$row['item_id'], "commande_number"=>$commande_number ));
 				}
 				
 				($rowclass == "row1" ? $rowclass= "row2" : $rowclass= "row1");

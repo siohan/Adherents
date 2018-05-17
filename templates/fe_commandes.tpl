@@ -1,15 +1,13 @@
-<div class="pageoptions"><p class="pageoptions">{$fe_add_cc}</p></div>
-<div class="pageoptions"><p class="pageoptions">{$itemcount}&nbsp;{$itemsfound}</p></div>
-{if $itemcount > 0}
-<h3>Mes Commandes</h3>
-<table border="0" cellspacing="0" cellpadding="0" class="pagetable">
+<p class="info">{$fe_add_cc}</p>
+{*if $itemcount > 0*}
+<h3>Mes articles en cours</h3>
+<table class="table table-bordered pagetable">
  <thead>
 	<tr>
 		<th>Date</th>
+		<th>Article</th>
 		<th>Statut</th>
 		<th>Prix</th>
-		<th>Paiement</th>
-		<th>Mode paiement</th>
 		<th>Détails</th>
 	</tr>
  </thead>
@@ -17,17 +15,17 @@
 {foreach from=$items item=entry}
   <tr class="{$entry->rowclass}">
 	<td>{$entry->date_created|date_format:"%d-%m-%Y"}</td>
-    <td>{$entry->statut_commande}</td>
-	<td>{$entry->prix_total}</td>
-	<td>{$entry->paiement}</td>
-	<td>{$entry->mode_paiement}</td>		
-	<td>{$entry->view}</td>
-	<td>{$entry->fe_delete}</td>
+	<td>{$entry->fournisseur}/{$entry->quantite}*{$entry->libelle_commande}/{$entry->ep_manche_taille}/{$entry->couleur}</td>
+    <td>{if $entry->statut_commande == '0'}Non envoyé {elseif $entry->statut_commande == '1'}Envoyé{elseif $entry->statut_commande == '2'}Reçu{elseif $entry->statut_commande == '3'}Payé{elseif $entry->statut_commande == '4'}Payée et déstocké{/if}</td>
+	<td>{$entry->prix_total}</td>	
+	{if $entry->statut_commande < 1}
+	<td>{$entry->fe_edit} {$entry->fe_delete} {$entry->fe_confirm}</td>
+	{/if}
   </tr>
 {/foreach}
  </tbody>
 </table>
-{/if}
+{*/if*}
 {if isset($url_logout)}
 <p><a href="{$url_logout}" title="{$mod->Lang('info_logout')}">{$mod->Lang('logout')}</a></p>
 {/if}

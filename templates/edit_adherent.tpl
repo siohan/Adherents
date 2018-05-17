@@ -4,7 +4,9 @@
    $( "#m1_anniversaire" ).datepicker({ dateFormat: "yy-mm-dd" });
  });
  </script>
-{/literal}<div class="pageoverflow">
+{/literal}
+<!-- Content Column -->
+        <div class="col-lg-9 mb-4">
 {$formstart}
 
 {if $edition == '0'}

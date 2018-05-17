@@ -1,8 +1,6 @@
 <div class="pageoverflow">
 {form_start}
 <input type="hidden" name="{$actionid}libelle_selected" value="{$actionid}{$libelle_selected}"/>
-<input type="hidden" name="{$actionid}commande_number" value="{$commande_number}"/>
-
 <input type="hidden" name="{$actionid}fournisseur" value="{$fournisseur}"/>
 <input type="hidden" name="{$actionid}display" value="{$display}"/>
 <input type="hidden" name="{$actionid}record_id" value="{$record_id}"/>

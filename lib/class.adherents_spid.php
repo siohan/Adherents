@@ -373,6 +373,26 @@ function desactivate ($licence)
 	$db->Execute($query, array($licence));
 	
 }
+function liste_adherents()
+{
+	$db = cmsms()->GetDb();
+	//on fait une requete pour completer l'input dropdown du formulaire
+	$query = "SELECT licence as client_id, CONCAT_WS(' ',nom, prenom) AS joueur FROM ".cms_db_prefix()."module_adherents_adherents WHERE actif = 1 ORDER BY nom ASC, prenom ASC";
+	$dbresult = $db->Execute($query);
+
+		if($dbresult && $dbresult->RecordCount() >0)
+		{
+			while($row= $dbresult->FetchRow())
+			{
+				$nom[$row['joueur']] = $row['client_id'];
+				//$indivs = $row['indivs'];
+			}
+		return $nom;	
+		}
+	
+	
+	
+}
 #
 #
 #

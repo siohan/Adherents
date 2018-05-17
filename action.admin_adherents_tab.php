@@ -42,8 +42,7 @@ $smarty->assign('actifs',
 				$this->CreateLink($id, 'defaultadmin', $returnid, 'Actifs', array("active_tab"=>"adherents")));
 $smarty->assign('chercher_adherents_spid',
 				$this->CreateLink($id, 'chercher_adherents_spid', $returnid, $contents='Importer les adhérents depuis le Spid',array("obj"=>"all"),$warn_message='Attention, ce script peut être long. Merci de patienter'));
-$smarty->assign('refresh',
-		$this->CreateLink($id, 'chercher_adherents_spid', $returnid, '<img src="../modules/Adherents/images/refresh.png" class="systemicon" alt="Tout rafraichir" title="Tout rafraichir">Tout rafraichir',array("obj"=>"refresh_all"),$warn_message='Attention, ce script peut être long. Merci de patienter'));
+
 
 if(isset($params['group']) && $params['group'] != '')
 {
@@ -148,6 +147,15 @@ if($dbresult && $dbresult->RecordCount() >0)
 	$smarty->assign('itemsfound', $this->Lang('resultsfoundtext'));
 	$smarty->assign('itemcount', count($rowarray));
 	$smarty->assign('items', $rowarray);
+	$smarty->assign('form2start',
+			$this->CreateFormStart($id,'mass_action',$returnid));
+	$smarty->assign('form2end',
+			$this->CreateFormEnd());
+	$articles = array("Activer"=>"activate", "Désactiver"=>"desactivate", "Rafraichir les données"=>"refresh");
+	$smarty->assign('actiondemasse',
+			$this->CreateInputDropdown($id,'actiondemasse',$articles));
+	$smarty->assign('submit_massaction',
+			$this->CreateInputSubmit($id,'submit_massaction',$this->Lang('apply_to_selection'),'','',$this->Lang('areyousure_actionmultiple')));
 }
 elseif(!$dbresult)
 {

@@ -1,7 +1,7 @@
 <?php
 #-------------------------------------------------------------------------
 # Module: Adherents
-# Version: 0.2.6, Claude SIOHAN
+# Version: 0.2.7, Claude SIOHAN
 # Method: Install
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2008 by Ted Kulp (wishy@cmsmadesimple.org)

@@ -1,5 +1,28 @@
-<div class="pageoptions"><p class="pageoptions">{if $alert == "1"}<p class="warning">{$link_alert}</p>{elseif $alert == "2"}<p class="warning">{$link_alert}</p>{/if}{$itemcount}&nbsp;{$itemsfound}.&nbsp;&nbsp;| {$add_users} | {if $act ==0}{$actifs}{else} {$inactifs}{/if} | &nbsp;{$chercher_adherents_spid} | {$refresh}</p></div>
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(){
+  $('#selectall').click(function(){
+    var v = $(this).attr('checked');
+    if( v == 'checked' ) {
+      $('.select').attr('checked','checked');
+    } else {
+      $('.select').removeAttr('checked');
+    }
+  });
+  $('.select').click(function(){
+    $('#selectall').removeAttr('checked');
+  });
+  $('#toggle_filter').click(function(){
+    $('#filter_form').toggle();
+  });
+  {if isset($tablesorter)}
+  $('#articlelist').tablesorter({ sortList:{$tablesorter} });
+  {/if}
+});
+//]]>
+</script><div class="pageoptions"><p class="pageoptions">{if $alert == "1"}<p class="warning">{$link_alert}</p>{elseif $alert == "2"}<p class="warning">{$link_alert}</p>{/if}{$itemcount}&nbsp;{$itemsfound}.&nbsp;&nbsp;| {$add_users} | {if $act ==0}{$actifs}{else} {$inactifs}{/if} | &nbsp;{$chercher_adherents_spid}</p></div>
 {if $itemcount > 0}
+{$form2start}
 	<table border="0" cellspacing="0" cellpadding="0" class="pagetable tablesorter">
 	 <thead>
 		<tr>
@@ -17,6 +40,7 @@
 			<th>Ville</th>
 			<th>Email ?</th>
 			<th colspan="5">Actions</th>
+			<th><input type="checkbox" id="selectall" name="selectall"></th>
 			
 		</tr>
 	</thead>
@@ -42,10 +66,16 @@
 		<td><a href="{root_url}/admin/moduleinterface.php?mact=Cotisations,m1_,view_adherent,0&amp;m1_licence={$entry->licence}&amp;_sk_={$smarty.cookies._sk_}">{$cotis}</a></td>
 		
 		<td>{$entry->view_contacts}</td>
+		<td><input type="checkbox" name="{$actionid}sel[]" value="{$entry->licence}" class="select"></td>
 	   </tr>
 	{/foreach}
 	 </tbody>
 	</table>
+	<!-- SELECT DROPDOWN -->
+	<div class="pageoptions" style="float: right;">
+	<br/>{$actiondemasse}{$submit_massaction}
+	  </div>
+	{$form2end}
 	
 {/if}
 	
