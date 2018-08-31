@@ -48,12 +48,12 @@ if(isset($params['group']) && $params['group'] != '')
 {
 	$group = $params['group'];
 	$req = 1;
-	$query = "SELECT adh.id, adh.licence, adh.nom, adh.prenom, adh.actif, adh.anniversaire, adh.sexe, adh.type, adh.certif, adh.validation, adh.echelon, adh.place, adh.points, adh.cat, adh.adresse, adh.code_postal, adh.ville FROM ".cms_db_prefix()."module_adherents_adherents AS adh, ".cms_db_prefix()."module_adherents_groupes_belongs AS be WHERE adh.licence = be.licence AND be.id_group = ?";//" WHERE actif = 1";
+	$query = "SELECT adh.id, adh.licence, adh.nom, adh.prenom, adh.actif, adh.anniversaire, adh.sexe, adh.type, adh.certif, adh.validation, adh.echelon, adh.place, adh.points, adh.cat, adh.adresse, adh.code_postal, adh.ville, adh.maj FROM ".cms_db_prefix()."module_adherents_adherents AS adh, ".cms_db_prefix()."module_adherents_groupes_belongs AS be WHERE adh.licence = be.licence AND be.id_group = ?";//" WHERE actif = 1";
 }
 else
 {
 	$req = 2;
-	$query = "SELECT id, licence, nom, prenom, actif, anniversaire, sexe, type, certif, validation, echelon, place, points, cat, adresse, code_postal, ville FROM ".cms_db_prefix()."module_adherents_adherents AS adh";
+	$query = "SELECT id, licence, nom, prenom, actif, anniversaire, sexe, type, certif, validation, echelon, place, points, cat, adresse, code_postal, ville, maj FROM ".cms_db_prefix()."module_adherents_adherents AS adh";
 }
 
 
@@ -122,6 +122,7 @@ if($dbresult && $dbresult->RecordCount() >0)
 		$onerow->date_validation = $row['validation'];
 		$onerow->cat = $row['cat'];
 		$onerow->anniversaire = $row['anniversaire'];
+		$onerow->maj = $row['maj'];
 		$onerow->adresse = $row['adresse'];
 		$onerow->code_postal = $row['code_postal'];
 		$onerow->ville = $row['ville'];
@@ -135,7 +136,15 @@ if($dbresult && $dbresult->RecordCount() >0)
 		{
 			$onerow->has_email = $themeObject->DisplayImage('icons/system/false.gif', $this->Lang('false'), '', '', 'systemicon');
 		}
-		
+		$mobile = $contact_ops->has_mobile($row['licence']);
+		if(TRUE === $mobile)
+		{
+			$onerow->has_mobile = $themeObject->DisplayImage('icons/system/true.gif', $this->Lang('true'), '', '', 'systemicon');
+		}
+		elseif(FALSE === $mobile)
+		{
+			$onerow->has_mobile = $themeObject->DisplayImage('icons/system/false.gif', $this->Lang('false'), '', '', 'systemicon');
+		}
 		$onerow->edit = $this->CreateLink($id, 'edit_adherent',$returnid,$themeObject->DisplayImage('icons/system/edit.gif', $this->Lang('edit'), '', '', 'systemicon'), array("record_id"=>$row['id']));
 		$onerow->refresh= $this->CreateLink($id, 'chercher_adherents_spid', $returnid,'<img src="../modules/Adherents/images/refresh.png" class="systemicon" alt="Rafraichir" title="Rafraichir">',array("obj"=>"refresh","licence"=>$row['licence']));//$row['closed'];
 		$onerow->view_contacts= $this->CreateLink($id, 'view_contacts', $returnid,'<img src="../modules/Adherents/images/contact.jpg" class="systemicon" alt="Contacts" title="Contacts">',array("licence"=>$row['licence']));//$row['closed'];

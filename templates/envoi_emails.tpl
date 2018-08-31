@@ -1,5 +1,5 @@
 {$formstart}
-{$destinataires}
+{$group}
 	<div class="pageoverflow">
 		<p class="pagetext">Expéditeur</p>
 		<p class="pageinput">{$from}</p>

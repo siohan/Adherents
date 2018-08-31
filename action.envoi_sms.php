@@ -9,7 +9,7 @@ if(!$this->CheckPermission('Adherents use'))
 }
 $db = cmsms()->GetDb();
 global $themeObject;
-//debug_display($params, 'Parameters');
+debug_display($params, 'Parameters');
 $aujourdhui = date('Y-m-d');
 //$ping = new Ping();
 $act = 1;//par defaut on affiche les actifs (= 1 )
@@ -29,7 +29,7 @@ $destinataires = array();
 /*
 foreach($tab as $sels)
 {
-	$query = "SELECT contact FROM ".cms_db_prefix()."module_adherents_contacts WHERE licence = ? AND type_contact = 1";
+	$query = "SELECT contact FROM ".cms_db_prefix()."module_adherents_contacts WHERE licence = ? AND type_contact = 2";
 	$dbresult = $db->Execute($query, array($sels));
 	$row = $dbresult->FetchRow();
 	$contact = $row['contact'];
@@ -40,28 +40,51 @@ foreach($tab as $sels)
 	
 }
 $adresses  = implode(',',$destinataires);
-//var_dump($adresses);
 */
 $smarty->assign('formstart',
-		    $this->CreateFormStart( $id, 'do_send_emails', $returnid ) );
-$smarty->assign('endform', $this->CreateFormEnd());
+		    $this->CreateFormStart( $id, 'do_send_sms', $returnid ) );
+
+$smarty->assign('sender',
+		$this->CreateInputText($id, 'sender',(isset($sender)?$sender:"Expéditeur"),50, 350));
+		//$recipients = '33650579764';
 $smarty->assign('group',
-		$this->CreateInputHidden($id,'group',$group, 100, 200));
-$smarty->assign('from', 
-		$this->CreateInputText($id, 'from', $this->GetPreference('admin_email'), 50, 200));
-$array_priorities = array("Normale"=>"3","Haute"=>"1","Basse"=>"5");
-$smarty->assign('priority', $this->CreateInputDropdown($id, 'priority', $array_priorities));
-$smarty->assign('sujet',
-		$this->CreateInputText($id, 'sujet','', 50, 200));		
-$smarty->assign('message',
-		$this->CreateSyntaxArea($id,$text='','message','', '', '', '', 80, 7));
+		$this->CreateInputHidden($id,'group',$group));
+//$smarty->assign('senddate', $this->CreateInputDate())	;
+
+//$smarty->assign('sendtime');	
+
+
+$parms = array(
+		'enablewysiwyg' => 0,
+		'name' => $id.'content',
+		    'text' => $content,
+		    'rows' => 4,
+		    'cols' => 40
+		);
+$smarty->assign('content',  CmsFormUtils::create_textarea($parms));		
+		
+/*		
+$smarty->assign('description',
+		$this->CreateInputTextArea($enablewysiwyg='false',$id,(isset($description)?$description:""),'description','','', '','', $cols='50', $rows='50'));
+*/
+					
+				
 $smarty->assign('submit',
 		$this->CreateInputSubmit($id, 'submit', $this->Lang('submit'), 'class="button"'));
 $smarty->assign('cancel',
 		$this->CreateInputSubmit($id,'cancel',
-					$this->Lang('cancel')));	
+					$this->Lang('cancel')));
 
-//$query.=" ORDER BY date_compet";
-echo $this->ProcessTemplate('envoi_emails.tpl');
+
+$smarty->assign('formend',
+		$this->CreateFormEnd());
+
+
+
+
+
+echo $this->ProcessTemplate('sendsms.tpl');
+
+
 
 ?>

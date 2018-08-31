@@ -1,5 +1,5 @@
 <?php
-class VerifAdherentsTask implements CmsRegularTask
+class VerifAdherentsTask implements \CmsRegularTask
 {
 
    public function get_name()

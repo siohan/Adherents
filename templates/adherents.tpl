@@ -26,6 +26,7 @@ $(document).ready(function(){
 	<table border="0" cellspacing="0" cellpadding="0" class="pagetable tablesorter">
 	 <thead>
 		<tr>
+			<th>Maj</th>
 			<th>Licence</th>
 			<th>Nom</th>
 			<th>Prénom</th> 
@@ -39,6 +40,7 @@ $(document).ready(function(){
 			<th>Code Postal</th> 
 			<th>Ville</th>
 			<th>Email ?</th>
+			<th>Portable ?</th>
 			<th colspan="5">Actions</th>
 			<th><input type="checkbox" id="selectall" name="selectall"></th>
 			
@@ -47,6 +49,8 @@ $(document).ready(function(){
 	 <tbody>
 	{foreach from=$items item=entry}
 	  <tr class="{$entry->rowclass}">
+		<td>{$entry->maj|date_format:"%d-%m-%Y"}</td>
+		
 		<td>{$entry->licence}</td>
 		<td>{$entry->nom}</td>
 		<td>{$entry->prenom}</td>
@@ -60,6 +64,7 @@ $(document).ready(function(){
 		<td>{$entry->code_postal}</td>
 		<td>{$entry->ville}</td>
 		<td>{$entry->has_email}</td>
+		<td>{$entry->has_mobile}</td>
 		<td>{$entry->refresh}</td>
 		<td>{$entry->edit}</td>		
 		<td><a href="{root_url}/admin/moduleinterface.php?mact=Commandes,m1_,view_client_orders,0&amp;m1_licence={$entry->licence}&amp;_sk_={$smarty.cookies._sk_}">{$shopping}</a></td>

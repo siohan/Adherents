@@ -121,7 +121,7 @@ if($error<1)
 	/*
 	$headers = 'From: claude.siohan@gmail.com' . "\r\n" . 'Reply-To: claude.siohan@gmail.com' . "\r\n" . 'X-Mailer: PHP/' . phpversion(); 
 	*/
-	$designation.= 'Compte actif ! '.$prenom. ' peut commander en ligne !';
+	$designation.= 'Compte actif pour ! '.$prenom;
 	if(mail($user_email, utf8_encode($subject), $body, $headers))
 	{
 	

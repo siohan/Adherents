@@ -17,6 +17,11 @@ if (isset($params['submit_massaction']) && isset($params['actiondemasse']) )
 				$this->Redirect($id,'envoi_emails',$returnid, array("sel"=>$id_sel));
 			break;
 			
+			case "sms" :
+				$id_sel = implode("-",$params['sel']);				
+				$this->Redirect($id,'envoi_sms',$returnid, array("sel"=>$id_sel));
+			break;
+			
 			case "activate" : 
 				$adh_ops = new adherents_spid;
 				//$id_sel = implode("-",$params['sel']);

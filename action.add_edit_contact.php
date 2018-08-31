@@ -28,7 +28,7 @@ if(isset($params['record_id']) && $params['record_id'] != '')
 	$record_id = $params['record_id'];
 }
 
-$libelle = array("Tél"=>0,"Mail"=>1);
+$libelle = array("Tél"=>0,"Mail"=>1, "Tél portable"=>2);
 //Deux cas : 
 // edit = 1 modification d'un contact existant ->On affiche le formulaire avec le contact à modifier
 // edit = 0 Ajout d'un nouveau contact -> on affiche un formulaire vierge

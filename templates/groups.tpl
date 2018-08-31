@@ -22,6 +22,8 @@
 	<td>{$entry->description}</td>
 	<td>{$entry->nb_users}</td>
 	<td>{$entry->actif}</td>
+	<td>{$entry->send_emails}</td>
+	<td>{$entry->send_sms}</td>
 	<td>{$entry->editlink}</td>
 	<td>{$entry->delete}</td>
 	<td>{$entry->add_users}</td>

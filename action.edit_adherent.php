@@ -21,6 +21,7 @@ $OuiNon = array("Oui"=>"1","Non"=>"0");
 if(isset($params['record_id']) && $params['record_id'] != '')
 {
 	$edition = 1;
+	$valeur = 1;
 	$record_id = $params['record_id'];
 	
 	$query  = "SELECT licence,actif,fftt, nom, prenom, adresse, code_postal, anniversaire, ville FROM ".cms_db_prefix()."module_adherents_adherents WHERE id = ?";
@@ -46,7 +47,7 @@ if(isset($params['record_id']) && $params['record_id'] != '')
 		}
 		$smarty->assign('formstart',
 				    $this->CreateFormStart( $id, 'do_edit_adherent', $returnid ) );
-
+		$smarty->assign('edit',$this->CreateInputHidden('edit',$edition));
 		$smarty->assign('licence',
 					$this->CreateInputHidden($id,'licence',$licence));
 		$smarty->assign('anniversaire',$this->CreateInputDate($id, 'anniversaire', $anniversaire));
@@ -79,7 +80,7 @@ else
 {
 	$valeur = 0;
 	$smarty->assign('edition',$valeur);
-	$smarty->assign('edit',$this->CreateInputHidden($id, 'edit',$valeur, 15, 25));
+	$smarty->assign('edit',$this->CreateInputHidden('edit',$valeur));
 	//on renvoie à un formulaire vierge
 	$smarty->assign('formstart',
 			    $this->CreateFormStart( $id, 'do_edit_adherent', $returnid ) );

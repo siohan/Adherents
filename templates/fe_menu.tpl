@@ -8,6 +8,7 @@
 			{$spid}
 			{$masitmens}
 			{$MesCommandes}
+			{*CGWebPush action=subscribe*}
 		  </div>
         </div>
 <!--					

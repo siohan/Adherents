@@ -49,6 +49,22 @@ class contact
 		}
 		
 	}
+	//vérifie si l'adhérent a un mobile répertorié
+	function has_mobile($licence)
+	{
+		$db = cmsms()->GetDb();
+		$query = "SELECT contact FROM ".cms_db_prefix()."module_adherents_contacts WHERE licence = ? AND type_contact = 2";
+		$dbresult = $db->Execute($query, array($licence));
+		if($dbresult && $dbresult->RecordCount()>0)
+		{
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+		
+	}
 	function email_address($licence)
 	{
 		$db = cmsms()->GetDb();
@@ -65,6 +81,68 @@ class contact
 			return FALSE;
 		}
 		
+	}
+	//récupère le N° de portable d'un licencié
+	function mobile($licence)
+	{
+		$db = cmsms()->GetDb();
+		$query = "SELECT contact FROM ".cms_db_prefix()."module_adherents_contacts WHERE licence = ? AND type_contact = 2";
+		$dbresult = $db->Execute($query, array($licence));
+		if($dbresult && $dbresult->RecordCount()>0)
+		{
+			$row = $dbresult->FetchRow();
+			$email = $row['contact'];
+			return $email;
+		}
+		else
+		{
+			return FALSE;
+		}
+		
+	}
+	//récupère tous les groupes actifs
+	function liste_groupes()
+	{
+		$db = cmsms()->GetDb();
+		$query = "SELECT id,nom  FROM ".cms_db_prefix()."module_adherents_groupes WHERE actif = 1";
+		$dbresult = $db->Execute($query);
+		if($dbresult && $dbresult->RecordCount()>0)
+		{
+			while($row = $dbresult->FetchRow())
+			{
+				$retour[$row['nom']] = $row['id'];				
+				
+			}
+			return $retour;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+
+	//récupère les détails d'un groupe
+	function details_group($id_group)
+	{
+		$db = cmsms()->GetDb();
+		$details = array();
+		$query = "SELECT id, nom, description, actif FROM ".cms_db_prefix()."module_adherents_groupes WHERE actif = 1";
+		$dbresult = $db->Execute($query);
+		if($dbresult && $dbresult->RecordCount()>0)
+		{
+			while($row = $dbresult->FetchRow())
+			{
+				$details['id'] = $row['id'];
+				$details['nom'] = $row['nom'];
+				$details['description'] = $row['description'];
+				$details['actif'] = $row['actif'];
+			}
+			return $details;
+		}
+		else
+		{
+			return FALSE;
+		}
 	}
 	//Cette fonction récupère les utilisateurs d'un groupe donné
 	function UsersFromGroup($id_group)
@@ -85,6 +163,8 @@ class contact
 			return FALSE;
 		}
 	}
+	
+	
 ##
 ##
 #

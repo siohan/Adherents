@@ -170,7 +170,7 @@ function infos_adherent_spid ($licence)
 					
 					}
 						
-						$query = "UPDATE ".cms_db_prefix()."module_adherents_adherents SET sexe = ?, type = ?, certif = ?, validation = ?, echelon = ?, place = ?, points = ?, cat = ? WHERE licence = ?";
+						$query = "UPDATE ".cms_db_prefix()."module_adherents_adherents SET sexe = ?, type = ?, certif = ?, validation = ?, echelon = ?, place = ?, points = ?, cat = ?, maj = NOW() WHERE licence = ?";
 						//echo $query;
 						$dbresult = $db->Execute($query, array($sexe, $type, $certif,$validation, $echelon, $place, $point, $cat, $licence));
 						if($dbresult)
@@ -373,6 +373,7 @@ function desactivate ($licence)
 	$db->Execute($query, array($licence));
 	
 }
+//retourne la liste des adhérents
 function liste_adherents()
 {
 	$db = cmsms()->GetDb();
@@ -392,6 +393,20 @@ function liste_adherents()
 	
 	
 	
+}
+//créé un choix de saison pour un dropdown de formulaire
+function saison_dropdown()
+{
+	$saisondropdown = array();
+	$an = date('Y');
+	for($i = 2016; $i<=$an; $i++)
+	{
+		$annee1 = $i;
+		$annee2 = $i+1;
+		$saison = $annee1.'-'.$annee2;
+		$saisondropdown[$saison]=$saison;
+	}
+	return $saisondropdown;
 }
 #
 #

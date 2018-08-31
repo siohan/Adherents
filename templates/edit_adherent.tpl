@@ -28,7 +28,7 @@
   <p class="pageinput">{$prenom}</p>
 </div>
 {else}
-{$licence}
+{$licence} {$edit}
 {/if}
 <div class="pageoverflow">
   <p class="pagetext">Date naissance :</p>

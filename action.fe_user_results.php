@@ -192,7 +192,7 @@ $phase = (isset($params['phase']))?$params['phase']:$this->GetPreference('phase_
 		
 		$dbresult3 = $db->Execute($query3, $parms);
 		
-		$rowarray= array ();
+		$rowarray= array();
 
 		if ($dbresult3 && $dbresult3->RecordCount() > 0)
 		{

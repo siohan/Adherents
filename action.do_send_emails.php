@@ -9,11 +9,11 @@ if(!$this->CheckPermission('Adherents use'))
 }
 $db = cmsms()->GetDb();
 global $themeObject;
-//debug_display($params, 'Parameters');
+debug_display($params, 'Parameters');
 $error = 0;
-if(isset($params['destinataires']) && $params['destinataires'])
+if(isset($params['group']) && $params['group'])
 {
-	$destinataires = $params['destinataires'];
+	$group = $params['group'];
 }
 else
 {
@@ -60,10 +60,33 @@ if($error >0)
 else
 {
 	// on commence le traitement
-	$tab = explode(',', $destinataires);
-	//var_dump($tab);
+	//on extrait les utilisateurs (licence) du groupe sélectionné
+	$contacts_ops = new contact;
+	$adherents = $contacts_ops->UsersFromGroup($group);
+	
+	var_dump($adherents);
+	foreach($adherents as $sels)
+	{
+		$query = "SELECT contact FROM ".cms_db_prefix()."module_adherents_contacts WHERE licence = ? AND type_contact = 1";
+		$dbresult = $db->Execute($query, array($sels));
+		$row = $dbresult->FetchRow();
+		$contact = $row['contact'];
+		if(!is_null($contact))
+		{
+			$destinataires[] = $contact;
+		}
+		else
+		{
+			//on indique l'erreur : pas d'email disponible !
+		}
+
+	}
+	$adresses  = implode(',',$destinataires);
+	//$tab = explode(',', $destinataires);
+	var_dump($tab);
 	
 
+/*
 	foreach($tab as $item=>$v)
 	{
 	
@@ -83,5 +106,6 @@ else
                     
                 }
 	}
+*/
 }
 $this->Redirect($id, 'defaultadmin', $returnid);

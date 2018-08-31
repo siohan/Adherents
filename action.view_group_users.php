@@ -71,7 +71,7 @@ if($dbresult && $dbresult->RecordCount() >0)
 			$this->CreateFormStart($id,'mass_action',$returnid));
 	$smarty->assign('form2end',
 			$this->CreateFormEnd());
-	$articles = array("Envoyer un email"=>"email");
+	$articles = array("Envoyer un email"=>"email", "Envoyer un SMS"=>"sms");
 	$smarty->assign('actiondemasse',
 			$this->CreateInputDropdown($id,'actiondemasse',$articles));
 	$smarty->assign('submit_massaction',
