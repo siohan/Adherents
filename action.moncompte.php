@@ -3,6 +3,8 @@ if(!isset($gCms) ) exit;
 $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
 $username = $feu->GetUserName($userid);
+
+
 //um menu ?
 require_once(dirname(__FILE__).'/include/fe_menu.php');
 //avec un contenu par défaut !
@@ -17,6 +19,11 @@ $mois_courant = date('m');
 //un lien pour récupérer mes parties spid ? Go !
 
 $db =& $this->GetDb();
+//on fait les requetes pour extraire les infos dont on a besoin dans la page d'accueil de l'espace privé
+//un lien de retour à l'accueil du compte
+$smarty->assign('Retour',
+$this->CreateLink($id, 'default', $returnid, array("display"=>"default","record_id"=>$username) ));
+
 
 $query= "SELECT nom, classement,pointres, victoire,date_event,epreuve,numjourn FROM ".cms_db_prefix()."module_ping_parties_spid WHERE saison = ? AND MONTH(date_event) = ? AND licence = ?";//" ORDER BY date_event ASC";
 $query.=" ORDER BY date_event DESC";
@@ -49,5 +56,5 @@ $smarty->assign('items', $rowarray);
 $smarty->assign('resultats',
 		$this->CreateLink($id,'user_results',$returnid, array('licence'=>$username)));
 
-echo $this->ProcessTemplate('fe-sportif.tpl');
+echo $this->ProcessTemplate('fe-sportif2.tpl');
 ?>

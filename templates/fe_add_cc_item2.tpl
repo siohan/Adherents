@@ -6,7 +6,7 @@
 {$fournisseur}
 {$edition}
 {$produit_id}
-
+<div class="alert alert-primary" role="alert">Il manque un article ?<a href="{cms_action_url action=fe_add_item record_id=$username}">Ajoutez-le !</a></div>
 <div class="pageoverflow">
   <p class="pagetext">Libellé:</p>
   <p class="pageinput">{$libelle_commande}</p>

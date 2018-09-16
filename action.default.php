@@ -57,6 +57,11 @@ switch($display)
 	require(__DIR__.'/action.fe_add_cc_items.php');
 	break;
 	
+	//un utilisateur connecté ajoute un nouvel article
+	case 'fe_add_item' :
+	require(__DIR__.'/action.fe_add_item.php');
+	break;
+	
 	//visualise mes commandes
 	case 'fe_commandes' :
 	require(__DIR__.'/action.fe_commandes.php');

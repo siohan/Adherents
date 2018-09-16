@@ -22,8 +22,10 @@ $lang['help'] = '<h3>Que fait ce module ?</h3>
 <p>Dans l\'onglet "Compte", renseignez l\'identifiant et mot de passe fournis par la FFTT ainsi que votre numéro de club<br /><strong>ATTENTION !</strong> La connexion peut se montrer instable et il faut recommencer parfois plusieurs fois l\'opération</p>
 <p>Ce module vous permet de récupérer les adhérents de votre club depuis le SPID. Vous pouvez ensuite y ajouter leurs adresses et contacts.</p>
 <h3>Fonctionnement optimal</h3>
-<p>T2T modules est conçu pour fonctionner en relation avec les autres modules de la suite. Il vous faudra donc installer Commandes, Cotisations, Paiements.</p>
+<p>T2T modules est conçu pour fonctionner en relation avec les autres modules de la suite. Il vous faudra donc installer Commandes, Cotisations, Paiements, etc...</p>
 <p>Le module Ping et Livescoring fonctionnent uniquement avec le module Adherents.</p>
+<h3>Espace privé</h3>
+<p>Un espace privé a été créé pour vous permettre de communiquer davantage avec chaque adhérent. Il sera étoffé au fil de l\'eau.<br />Pour l\'implémenter dans votre site, il suffit de mettre le tag suivant dans une de vos pages : {cms_module module=Adherents}
 <h3>Bogues et Github</h3>
 <p>Certaines corrections de bogues mineurs ne font pas l\'objet d\'une version officielle mais peuvent toutefois se trouver sur le github dont l\'adresse figure ci-dessous.<br />Il vous suffit alors de télécharger le fichier zip disponible(via le bouton vert "Clone or download") et de le déployer si votre serveur.</p><ul>
 <li>Pour obtenir la dernière version en cours (avant release officielle)

@@ -103,6 +103,28 @@ switch($current_version)
 		//on ajoute une préférence pour la vérification des adhérents
 		$this->SetPreference('LastVerifAdherents', time());
 	}
+	case "0.2.6" :
+	case "0.2.7" :
+	case "0.2.8" : 
+	{
+		//on installe un groupe par défaut
+		$insert_sql = "INSERT INTO ".cms_db_prefix()."module_adherents_groupes (`nom`, `description`, `actif`) VALUES (?, ?, ?)";
+		$dbresult = $db->execute($insert_sql, array('adherents', 'Les adhérents actifs du club', '1'));
+		if($dbresult)
+		{
+			$id_group = $db->Insert_ID();
+			$query = "SELECT licence FROM ".cms_db_prefix()."module_adherents_adherents WHERE actif = 1";
+			$dbresult1 = $db->Execute($query);
+			if($dbresult1 && $dbresult1->RecordCount()>0)
+			{
+				$gp_ops = new groups;
+				while($row = $dbresult1->FetchRow())
+				{
+					$gp_ops->assign_user_to_group($id_group, $row['licence']);
+				}
+			}
+		}
+	}
 	
 
 }

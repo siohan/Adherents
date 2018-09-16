@@ -1,7 +1,7 @@
 <p class="info">{$fe_add_cc}</p>
 {*if $itemcount > 0*}
 <h3>Mes articles en cours</h3>
-<table class="table table-bordered pagetable">
+<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
  <thead>
 	<tr>
 		<th>Date</th>
@@ -26,7 +26,3 @@
  </tbody>
 </table>
 {*/if*}
-{if isset($url_logout)}
-<p><a href="{$url_logout}" title="{$mod->Lang('info_logout')}">{$mod->Lang('logout')}</a></p>
-{/if}
-{*$deconn*}

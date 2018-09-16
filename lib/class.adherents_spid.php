@@ -59,6 +59,8 @@ function liste_adherents_spid ()
 
 				$i =0;//compteur pour les nouvelles inclusions
 				$a = 0;//compteur pour les mises à jour
+				$gp_ops = new groups;
+				$group_id = $gp_ops->assign_to_adherent();
 				foreach($xml as $tab)
 				{
 					//$licence = (isset($tab->licence)?"$tab->licence":"");
@@ -70,7 +72,11 @@ function liste_adherents_spid ()
 					$clast = (isset($tab->clast)?"$tab->clast":"");
 
 					
-					$this->ajouter_adherent_spid($licence, $nom, $prenom);
+					$add = $this->ajouter_adherent_spid($licence, $nom, $prenom);
+					if (true === $add && false !== $group_id)
+					{
+						$gp_ops->assign_user_to_group($group_id,$licence);
+					}
 			
 
 				}// fin du foreach
@@ -85,6 +91,14 @@ function ajouter_adherent_spid ($licence,$nom, $prenom)
 	$db = cmsms()->GetDb();
 	$query = "INSERT INTO ".cms_db_prefix()."module_adherents_adherents (licence, nom, prenom ) VALUES (?, ?, ?)";
 	$dbresultat = $db->Execute($query,array($licence,$nom, $prenom));
+	if($dbresultat)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 	
 }
 function maj_adherent_spid ($licence,$nom, $prenom)
@@ -151,7 +165,7 @@ function infos_adherent_spid ($licence)
 					//on modifie la date pour la rendre compatible avec MySQL
 
 					$echelon = (isset($tab->echelon)?"$tab->echelon":"");
-					$place = (isset($tab->place)?"$tab->place":"");
+					$place = (isset($tab->place)?"$tab->place":"0");
 					$point = (isset($tab->point)?"$tab->point":"");
 					$cat = (isset($tab->cat)?"$tab->cat":"");
 					//var_dump($certif);
@@ -164,9 +178,12 @@ function infos_adherent_spid ($licence)
 					}
 					else
 					{
-						$validation2 = array();
-						$validation2 = explode('/', $validation1);
-						$validation = $validation2[2].'-'.$validation2[1].'-'.$validation2[0];
+						if($validation1 !='')
+						{
+							$validation2 = array();
+							$validation2 = explode('/', $validation1);
+							$validation = $validation2[2].'-'.$validation2[1].'-'.$validation2[0];	
+						}
 					
 					}
 						

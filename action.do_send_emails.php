@@ -64,7 +64,7 @@ else
 	$contacts_ops = new contact;
 	$adherents = $contacts_ops->UsersFromGroup($group);
 	
-	var_dump($adherents);
+//	var_dump($adherents);
 	foreach($adherents as $sels)
 	{
 		$query = "SELECT contact FROM ".cms_db_prefix()."module_adherents_contacts WHERE licence = ? AND type_contact = 1";
@@ -81,13 +81,14 @@ else
 		}
 
 	}
+	var_dump($destinataires);
 	$adresses  = implode(',',$destinataires);
-	//$tab = explode(',', $destinataires);
-	var_dump($tab);
+	$tab = explode(',', $destinataires);
+	//var_dump($tab);
 	
 
-/*
-	foreach($tab as $item=>$v)
+
+	foreach($destinataires as $item=>$v)
 	{
 	
 	//var_dump($item);
@@ -106,6 +107,6 @@ else
                     
                 }
 	}
-*/
+/**/
 }
 $this->Redirect($id, 'defaultadmin', $returnid);

@@ -1,6 +1,5 @@
 <?php
 if( !isset($gCms) ) exit;
-echo 'Ok !';
 //debug_display($params, 'Parameters');
 $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
@@ -16,7 +15,7 @@ $mois_courant = date('m');
 $db =& $this->GetDb();
 $query= "SELECT nom, classement,pointres, victoire,date_event,epreuve,numjourn FROM ".cms_db_prefix()."module_ping_parties_spid WHERE saison = ? AND MONTH(date_event) = ? AND licence = ?";//" ORDER BY date_event ASC";
 $query.=" ORDER BY date_event DESC";
-echo $query;
+//echo $query;
 $dbresult = $db->Execute($query, array($saison,$mois_courant,$username));
 
 $rowarray= array();
@@ -37,8 +36,8 @@ if ($dbresult && $dbresult->RecordCount() > 0)
       }
   }
 $smarty->assign('resultats',
-		$this->CreateLink($id,'user_results',$returnid,$contents = 'Tous ses résultats', array('licence'=>$licence)));
-}//fin du else (if $licence isset)
+		$this->CreateLink($id,'user_results',$returnid,$contents = 'Tous ses résultats', array('licence'=>$username)));
+//}//fin du else (if $licence isset)
 
 $smarty->assign('itemsfound', $this->Lang('resultsfoundtext'));
 $smarty->assign('itemcount', count($rowarray));
@@ -47,7 +46,7 @@ $this->CreateReturnLink($id, $returnid,'Retour'));
 $smarty->assign('items', $rowarray);
 
 $smarty->assign('resultats',
-$this->CreateLink($id,'user_results',$returnid, array('licence'=>$licence)));
+$this->CreateLink($id,'user_results',$returnid, array('licence'=>$username)));
 /**/
 echo $this->ProcessTemplate('fe-sportif.tpl');
 //mon FFTT

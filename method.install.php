@@ -122,6 +122,9 @@ if( file_exists( $fn ) )
 	$template = file_get_contents( $fn );
 	$this->SetTemplate('newactivationemail_Sample',$template);
 }
+//on créé le premier groupe adherents
+$insert_sql = "INSERT INTO ".cms_db_prefix()."module_adherents_groupes (`nom`, `description`, `actif`) VALUES (?, ?, ?)";
+$db->execute($insert_sql, array('adherents', 'Les adhérents actifs du club', '1'));
 
 $this->SetPreference('admin_email', 'root@localhost.com');
 $this->SetPreference('email_activation_subject', 'Votre compte T2T est actif');

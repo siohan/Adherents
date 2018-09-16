@@ -161,7 +161,55 @@ function delete_user_from_group($record_id, $licence)
 	}
 	
 }
-
+//assigne un adhérent à un groupe
+function assign_user_to_group($id_group, $licence)
+{
+	$db = cmsms()->GetDb();
+	$query = "INSERT INTO ".cms_db_prefix()."module_adherents_groupes_belongs (id_group,licence) VALUES ( ?, ?)";
+	$dbresultat = $db->Execute($query, array($id_group,$licence));
+}
+//assigne un nouvel utilisateur au groupe adherents( groupe par défaut)
+function assign_to_adherent()
+{
+	$db = cmsms()->GetDb();
+	$query = "SELECT id FROM ".cms_db_prefix()."module_adherents_groupes WHERE nom LIKE 'adherents' LIMIT 1";
+	$dbresult = $db->Execute($query);
+	if($dbresult)
+	{
+		$row = $dbresult->fetchRow();
+		$id_group = $row['id'];
+		//$this->assign_user_to_group($id_group, $licence);
+		return $id_group;
+	}
+	else
+	{
+		return false;
+	}
+}
+//retire un adhérent de tous les groupes où il est présent
+function delete_user_from_all_groups($licence)
+{
+	$db = cmsms()->GetDb();
+	$query = "DELETE FROM ".cms_db_prefix()."module_adherents_groupes_belongs WHERE licence = ?";
+	$dbresult = $db->Execute($query, array($licence));
+	if($dbresult)
+	{
+		return TRUE;
+	}
+	else
+	{
+		return FALSE;
+	}
+	
+}
+//supprime l'accès à l'espace privé
+function delete_user_feu($licence)
+{
+	$feu = cms_utils::get_module('FrontEndUsers');
+	//on récupére le id de l'utilisateur
+	$id = $feu->GetUserId($licence);
+	$supp_user = $feu->DeleteUserFull($id);
+}
 
 #
 #

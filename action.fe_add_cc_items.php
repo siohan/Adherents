@@ -14,6 +14,7 @@ $error = 0; //on instancie un compteur d'erreurs
 $index = 0;
 $adh_ops = new adherents_spid;
 $liste_clients = $adh_ops->liste_adherents();
+
 if(isset($params['record_id']) && $params['record_id'] != '')
 {
 	$client = $params['record_id'];
@@ -100,7 +101,7 @@ $dbresult = $db->Execute($query);
 	*/
 	//on construit le formulaire
 	$smarty->assign('formstart',
-			    $this->CreateFormStart( $id, 'fe_do_add_cc_item', $returnid ) );
+			    $this->CreateFormStart( $id, 'fe_do_add_item', $returnid ) );
 	
 	$smarty->assign('record_id',
 			$this->CreateInputHidden($id,'record_id',$username));

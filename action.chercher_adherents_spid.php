@@ -167,13 +167,16 @@ switch($obj)
 	
 	case "activate" :
 		$class_ops->activate($licence);
-		$this->SetMessage('Adhérent activé');
+		$group_ops->assign_to_adherent($licence);
+		$this->SetMessage('Adhérent activé, ajouté au groupe des adhérents');
 		$this->Redirect($id, 'defaultadmin', $returnid);
 	break;
 	
 	case "desactivate" : 
 		$class_ops->desactivate($licence);
-		$this->SetMessage('Adhérent désactivé');
+		$group_ops->delete_user_from_all_groups($licence);
+		$group_ops->delete_user_feu($licence);
+		$this->SetMessage('Adhérent désactivé, retiré de tous les groupes et accès espace privé supprimé');
 		$this->Redirect($id, 'defaultadmin', $returnid);
 	break;
 }
