@@ -13,14 +13,14 @@ $aujourdhui = date('Y-m-d');
 
 $send_email = '<img src="../modules/Adherents/images/email-16.png" class="systemicon" title="Renvoyer un nouvel email" alt="Renvoyer un nouvel email"/>';
 $query = "SELECT ad.id, ad.licence, ad.nom, ad.prenom, ct.contact FROM ".cms_db_prefix()."module_adherents_adherents AS ad, ".cms_db_prefix()."module_adherents_contacts AS ct WHERE ad.licence = ct.licence AND ct.type_contact = 1";//" WHERE actif = 1";
-$query.=" AND ad.actif = 1";
+$query.=" AND ad.actif = 1 ORDER BY ad.nom ASC";
 $dbresult = $db->Execute($query);
 $rowarray = array();
 $rowclass = 'row1';
 $feu = cms_utils::get_module('FrontEndUsers');//on instancie le module FEU
 if($dbresult && $dbresult->RecordCount() >0)
 {
-	
+	$adh_feu = new AdherentsFeu;
 	while($row = $dbresult->FetchRow())
 	{
 	
@@ -34,16 +34,27 @@ if($dbresult && $dbresult->RecordCount() >0)
 		$onerow->edit = $this->CreateLink($id, 'edit_adherent',$returnid,'Modifier', array("licence"=>$row['licence']));
 		$onerow->refresh= $this->CreateLink($id, 'chercher_adherents_spid', $returnid,'<img src="../modules/Adherents/images/refresh.png" class="systemicon" alt="Rafraichir" title="Rafraichir">',array("obj"=>"refresh","licence"=>$row['licence']));//$row['closed'];
 		$onerow->view_contacts= $this->CreateLink($id, 'view_contacts', $returnid,'<img src="../modules/Adherents/images/contact.jpg" class="systemicon" alt="Contacts" title="Contacts">',array("licence"=>$row['licence']));//$row['closed'];
-		
 		$est_present = $feu->GetUserId($row['licence']);
 		//var_dump($est_present);
+		$last_connected = $adh_feu->last_logged($est_present);
+		
 		if($est_present == NULL )
 		{
+			
+			$onerow->last_logged = $themeObject->DisplayImage('icons/system/false.gif', $this->Lang('false'), '', '', 'systemicon');
 			$onerow->push_customer= $this->CreateLink($id, 'push_customer', $returnid, $themeObject->DisplayImage('icons/system/groupassign.gif', $this->Lang('push'), '', '', 'systemicon'), array("licence"=>$row['licence'], "email"=>$row['contact'], "nom"=>$row['nom'], "prenom"=>$row['prenom']));
 		}
 		else
 		{
 			$onerow->push_customer=  $themeObject->DisplayImage('icons/system/true.gif', $this->Lang('compte_actif'), '', '', 'systemicon');
+			if(FALSE !== $last_connected)
+			{
+				$onerow->last_logged = $adh_feu->last_logged($est_present);
+			}
+			else
+			{
+				$onerow->last_logged = $themeObject->DisplayImage('icons/system/false.gif', $this->Lang('false'), '', '', 'systemicon');
+			}
 			$onerow->delete_user_feu = $this->CreateLink($id, 'chercher_adherents_spid', $returnid, $themeObject->DisplayImage('icons/system/delete.gif', $this->Lang('delete'), '', '', 'systemicon'), array("obj"=>"delete_user_feu","licence"=>$row['licence'], "email"=>$row['contact'], "nom"=>$row['nom'], "prenom"=>$row['prenom']));
 		}
 		($rowclass == "row1" ? $rowclass= "row2" : $rowclass= "row1");

@@ -125,6 +125,22 @@ switch($current_version)
 			}
 		}
 	}
+	case "0.2.9" :
+	
+	{
+			//on rajoute une colonne maj pour savoir qd le joueur a été mis à jour
+			$dict = NewDataDictionary( $db );
+			$flds = "public I(1)";
+			$sqlarray = $dict->AddColumnSQL( cms_db_prefix()."module_adherents_groupes", $flds);
+			$dict->ExecuteSQLArray($sqlarray);
+			
+			$dict = NewDataDictionary( $db );
+			$flds = "externe I(1) DEFAULT 0";
+			$sqlarray = $dict->AddColumnSQL( cms_db_prefix()."module_adherents_adherents", $flds);
+			$dict->ExecuteSQLArray($sqlarray);
+			
+			
+	}
 	
 
 }

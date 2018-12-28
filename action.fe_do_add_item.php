@@ -94,19 +94,13 @@ $edit = 0;//pour savoir si on fait un update ou un insert; 0 = insert
 			{
 				//on envoie un événement pour prévenir l'admin des commandes
 				\CMSMS\HookManager::do_hook('Commandes::CommandesItemAdded',
-			                                        array('news_id' => $articleid,
-			                                              'category_id' => $usedcategory,
-			                                              'title' => $title,
-			                                              'content' => $content,
-			                                              'summary' => $summary,
-			                                              'status' => $status,
-			                                              'start_time' => $startdate,
-			                                              'end_time' => $enddate,
-			                                              'postdate' => $postdate,
-			                                              'useexp' => $useexp,
-			                                              'extra' => $extra ));
+			                                        array('category' => $category,
+			                                              'marque' => $marque,
+			                                              'prix' => $prix,
+			                                              'reduction' => $reduction,
+			                                              ));
 			            // put mention into the admin log
-			            audit($articleid, 'News: ' . $title, 'Article added');
+			            audit($articleid, 'Commandes: ' . $title, 'Article added');
 						$this->SetMessage($this->Lang('articleadded'));
 			}
 		}		

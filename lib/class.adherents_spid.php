@@ -121,7 +121,7 @@ function infos_adherent_spid ($licence)
 	$db = cmsms()->GetDb();
 	$now = trim($db->DBTimeStamp(time()), "'");
 	$club_number = $adherents->GetPreference('club_number');
-	//var_dump($club_number);
+//	var_dump($club_number);
 	
 		$page = "xml_licence";
 		$service = new Servicen();
@@ -130,7 +130,7 @@ function infos_adherent_spid ($licence)
 		$var="licence=".$licence;
 		$lien = $service->GetLink($page,$var);
 		$xml = simplexml_load_string($lien, 'SimpleXMLElement', LIBXML_NOCDATA);
-		//var_dump($xml);
+		var_dump($xml);
 		if($xml === FALSE)
 		{
 			$array = 0;
@@ -168,6 +168,8 @@ function infos_adherent_spid ($licence)
 					$place = (isset($tab->place)?"$tab->place":"0");
 					$point = (isset($tab->point)?"$tab->point":"");
 					$cat = (isset($tab->cat)?"$tab->cat":"");
+					$cat1 = substr($cat,0,1);
+					$categ = $cat1.$sexe;
 					//var_dump($certif);
 					if($numclub != $club_number)
 					{
@@ -187,9 +189,9 @@ function infos_adherent_spid ($licence)
 					
 					}
 						
-						$query = "UPDATE ".cms_db_prefix()."module_adherents_adherents SET sexe = ?, type = ?, certif = ?, validation = ?, echelon = ?, place = ?, points = ?, cat = ?, maj = NOW() WHERE licence = ?";
+						$query = "UPDATE ".cms_db_prefix()."module_adherents_adherents SET sexe = ?, type = ?, certif = ?, validation = ?, echelon = ?, points = ?, cat = ?, maj = NOW() WHERE licence = ?";
 						//echo $query;
-						$dbresult = $db->Execute($query, array($sexe, $type, $certif,$validation, $echelon, $place, $point, $cat, $licence));
+						$dbresult = $db->Execute($query, array($sexe, $type, $certif,$validation, $echelon, $point, $categ, $licence));
 						if($dbresult)
 						{
 							return true;
@@ -283,21 +285,22 @@ function maj_adherent_spid2 ($licence, $sexe, $type,$certif,$actif,$validation, 
 	}
 }
 
-function edit_adherent($edit,$fftt,$licence,$nom,$prenom,$anniversaire,$adresse, $code_postal, $ville)
+function edit_adherent($fftt,$licence,$nom,$prenom,$anniversaire,$adresse, $code_postal, $ville)
 {
 	global $gCms;
 	$db = cmsms()->GetDb();
-	if($edit == '1')
-	{
-		$query = "INSERT INTO ".cms_db_prefix()."module_adherents_adherents (fftt,licence, nom, prenom,anniversaire, adresse, code_postal, ville) VALUES (?, ?, ?, ?,?, ?, ?, ?)";
-		$dbresult = $db->Execute($query, array($fftt,$licence,$nom, $prenom,$anniversaire,$adresse, $code_postal, $ville));
-	}
-	else
-	{
-		$query = "UPDATE ".cms_db_prefix()."module_adherents_adherents SET anniversaire = ?, adresse = ?, code_postal = ?, ville = ? WHERE licence = ?";
-		$dbresult = $db->Execute($query, array($anniversaire,$adresse, $code_postal, $ville, $licence));
-	}
+	$query = "UPDATE ".cms_db_prefix()."module_adherents_adherents SET anniversaire = ?, adresse = ?, code_postal = ?, ville = ? WHERE licence = ?";
+	$dbresult = $db->Execute($query, array($anniversaire,$adresse, $code_postal, $ville, $licence));
 	
+	
+}
+//ajoute un nouveau joueur
+function add_adherent($fftt,$licence,$nom,$prenom,$anniversaire,$adresse, $code_postal, $ville)
+{
+	global $gCms;
+	$db = cmsms()->GetDb();
+	$query = "INSERT INTO ".cms_db_prefix()."module_adherents_adherents (fftt,licence, nom, prenom,anniversaire, adresse, code_postal, ville) VALUES (?, ?, ?, ?,?, ?, ?, ?)";
+	$dbresult = $db->Execute($query, array($fftt,$licence,$nom, $prenom,$anniversaire,$adresse, $code_postal, $ville));
 }
 function fe_edit_adherent($licence,$anniversaire,$adresse, $code_postal, $ville)
 {
@@ -306,6 +309,7 @@ function fe_edit_adherent($licence,$anniversaire,$adresse, $code_postal, $ville)
 	$query = "UPDATE ".cms_db_prefix()."module_adherents_adherents SET anniversaire = ?, adresse = ?, code_postal = ?, ville = ? WHERE licence = ?";
 	$dbresult = $db->Execute($query, array($anniversaire,$adresse, $code_postal, $ville, $licence));
 }
+//donne la catégorie d'un adhérent
 function get_cat($licence)
 {
 	global $gCms;
@@ -380,14 +384,28 @@ function activate ($licence)
 {
 	$db = cmsms()->GetDb();
 	$query = "UPDATE ".cms_db_prefix()."module_adherents_adherents SET actif = 1 WHERE licence = ?";
-	$db->Execute($query, array($licence));
+	$dbresult = $db->Execute($query, array($licence));
+	if($dbresult)
+	{
+		$gp_ops = new groups;
+		$id_group = $gp_ops->assign_to_adherent();
+		//maintenant on peut désactiver
+		$gp_ops->assign_user_to_group($id_group,$licence);
+	}
 	
 }
 function desactivate ($licence)
 {
 	$db = cmsms()->GetDb();
 	$query = "UPDATE ".cms_db_prefix()."module_adherents_adherents SET actif = 0 WHERE licence = ?";
-	$db->Execute($query, array($licence));
+	$dbresult = $db->Execute($query, array($licence));
+	if($dbresult)
+	{
+		$gp_ops = new groups;
+		$id_group = $gp_ops->assign_to_adherent();
+		//maintenant on peut désactiver
+		$gp_ops->delete_user_from_group($id_group,$licence);
+	}
 	
 }
 //retourne la liste des adhérents

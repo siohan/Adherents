@@ -10,8 +10,10 @@ if(!$this->CheckPermission('Adherents use'))
 $db =& $this->GetDb();
 global $themeObject;
 $aujourdhui = date('Y-m-d');
-$class_ops = new adherents_spid();
-$group_ops = new groups();
+$class_ops = new adherents_spid;
+$group_ops = new groups;
+$feu = cms_utils::get_module('FrontEndUsers');
+//$feu_ops = new FrontEndUsersManipulator;
 if(isset($params['obj']) && $params['obj'] != '')
 {
 	$obj = $params['obj'];
@@ -72,14 +74,14 @@ switch($obj)
 	break;
 	
 	case "delete_contact" : 
-		$del_contact = new contact();
+		$del_contact = new contact;
 		$adhrents_spid = $del_contact->delete_contact($record_id);
 		$this->Redirect($id, 'view_contacts',$returnid, array("licence"=>$licence));
 	break;
 	case "delete_user_feu" :
-		$feu = cms_utils::get_module('FrontEndUsers');
+		//cms_utils::get_module('FrontEndUsers');
 		//on récupére le id de l'utilisateur
-		$id = $feu->GetUserId($licence);
+		$id = $feu->GetUserID($licence);
 		$supp_user = $feu->DeleteUserFull($id);
 		
 		$this->RedirectToAdminTab('feu');

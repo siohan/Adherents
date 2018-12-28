@@ -2,15 +2,18 @@
 if (!isset($gCms)) exit;
 //require_once(dirname(__FILE__).'/include/prefs.php');
 //debug_display($params, 'Parameters');
-/*
 
-	if (!$this->CheckPermission('Ping Manage'))
-	{
-		$designation.=$this->Lang('needpermission');
-		$this->SetMessage("$designation");
-		$this->RedirectToAdminTab('situation');
-	}
-*/
+
+if (!$this->CheckPermission('Adherents use'))
+{
+	$designation.=$this->Lang('needpermission');
+	$this->SetMessage("$designation");
+	$this->RedirectToAdminTab('situation');
+}
+if(isset($params['cancel']))
+{
+	$this->RedirectToAdminTab('groups');
+}
 $annee = date('Y');
 //on récupère les valeurs
 //pour l'instant pas d'erreur

@@ -18,10 +18,10 @@
   <p class="pageinput">{$actif}</p>
 </div>
 
-<!--<div class="pageoverflow">
-	<p class="pagetext">Statut de l'article :</p>
-	<p class="pageinput">{$statut_item}</p>
-</div>-->
+<div class="pageoverflow">
+	<p class="pagetext">Groupe public ? :</p>
+	<p class="pageinput">{$public}</p>
+</div>
 <div class="pageoverflow">
     <p class="pagetext">&nbsp;</p>
     <p class="pageinput">{$submit}{$cancel}</p>

@@ -45,6 +45,7 @@ if($dbresult && $dbresult->RecordCount() >0)
 		$onerow = new StdClass();
 		$onerow->rowclass = $rowclass;
 		$onerow->licence= $row['licence'];
+		$actif = $row['actif'];
 		$has_email = $contact_ops->has_email($row['licence']);
 		if(TRUE === $has_email)
 		{
@@ -52,11 +53,28 @@ if($dbresult && $dbresult->RecordCount() >0)
 		}
 		else
 		{
-			$onerow->has_email = $themeObject->DisplayImage('icons/system/false.gif', $this->Lang('delete'), '', '', 'systemicon');
+			$onerow->has_email = $this->CreateLink($id, 'add_edit_contact', $returnid,$themeObject->DisplayImage('icons/system/false.gif', $this->Lang('delete'), '', '', 'systemicon'), array("licence"=>$row['licence']));
+		}
+		$mobile = $contact_ops->has_mobile($row['licence']);
+		if(TRUE === $mobile)
+		{
+			$onerow->has_mobile = $themeObject->DisplayImage('icons/system/true.gif', $this->Lang('true'), '', '', 'systemicon');
+		}
+		elseif(FALSE === $mobile)
+		{
+			$onerow->has_mobile = $this->CreateLink($id, 'add_edit_contact', $returnid,$themeObject->DisplayImage('icons/system/false.gif', $this->Lang('false'), '', '', 'systemicon'), array("licence"=>$row['licence']));
 		}
 		$onerow->nom= $row['nom'];
 		$onerow->prenom= $row['prenom'];
-		$onerow->actif= $row['actif'];
+		if($actif == 1)
+		{
+			$onerow->actif= $themeObject->DisplayImage('icons/system/true.gif', $this->Lang('true'), '', '', 'systemicon');
+		}
+		else
+		{
+			$onerow->actif= $themeObject->DisplayImage('icons/system/false.gif', $this->Lang('false'), '', '', 'systemicon');
+		}
+		
 		$onerow->deletefromgroup = $this->CreateLink($id, 'chercher_adherents_spid',$returnid,$themeObject->DisplayImage('icons/system/delete.gif', $this->Lang('delete'), '', '', 'systemicon'), array("obj"=>"delete_user_from_group","licence"=>$row['licence'], "record_id"=>$group));
 		
 		
@@ -67,6 +85,7 @@ if($dbresult && $dbresult->RecordCount() >0)
 	$smarty->assign('itemsfound', $this->Lang('resultsfoundtext'));
 	$smarty->assign('itemcount', count($rowarray));
 	$smarty->assign('items', $rowarray);
+	/*
 	$smarty->assign('form2start',
 			$this->CreateFormStart($id,'mass_action',$returnid));
 	$smarty->assign('form2end',
@@ -76,6 +95,7 @@ if($dbresult && $dbresult->RecordCount() >0)
 			$this->CreateInputDropdown($id,'actiondemasse',$articles));
 	$smarty->assign('submit_massaction',
 			$this->CreateInputSubmit($id,'submit_massaction',$this->Lang('apply_to_selection'),'','',$this->Lang('areyousure_actionmultiple')));
+	*/
 }
 elseif(!$dbresult)
 {

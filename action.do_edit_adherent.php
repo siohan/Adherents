@@ -1,6 +1,6 @@
 <?php
 if (!isset($gCms)) exit;
-//debug_display($params, 'Parameters');
+debug_display($params, 'Parameters');
 
 if (!$this->CheckPermission('Adherents use'))
 {
@@ -18,20 +18,12 @@ if( isset($params['cancel']) )
 //pour l'instant pas d'erreur
 $aujourdhui = date('Y-m-d ');
 $error = 0;
-$edit = 0;//pour savoir si on fait un update ou un insert; 0 = insert
 $alert = 0;//pour savoir si certains champs doivent contenir une valeur ou non
-	
+$edit = 1;	
 		
 		
+		
 	
-		if (isset($params['edit']) && $params['edit'] !='')
-		{
-			$edit = $params['edit'];
-		}
-		else
-		{
-			$edit = 0;
-		}
 		$fftt = 1;		
 		if (isset($params['fftt']) && $params['fftt'] !='')
 		{
@@ -42,17 +34,18 @@ $alert = 0;//pour savoir si certains champs doivent contenir une valeur ou non
 		{
 			$licence = $params['licence'];
 		}
-		if($licence == '' && $fftt == 0)
+		else
 		{
-			//il faut donner un numéro de licence bidon
-			$licence = $db->GenID(CMS_DB_PREFIX . "module_news_seq");
+			
+			$licence = $edit = 0;
 		}
+		
 		$nom = '';
 		if (isset($params['nom']) && $params['nom'] !='')
 		{
 			$nom = strtoupper($params['nom']);
 		}
-		$anniversaire = '';
+		$anniversaire = '1900-01-01';
 		if (isset($params['anniversaire']) && $params['anniversaire'] !='')
 		{
 			$anniversaire = $params['anniversaire'];
@@ -89,12 +82,14 @@ $alert = 0;//pour savoir si certains champs doivent contenir une valeur ou non
 		{
 			
 			$service = new adherents_spid();
-			
-			
+			if($edit == 1)
+			{
 				$update_adherent = $service->edit_adherent($edit,$fftt,$licence,$nom, $prenom,$anniversaire,$adresse,$code_postal,$ville);
-			
-			
-		
+			}
+			else
+			{
+				$add_adherent = $service->add_adherent($fftt,$licence,$nom,$prenom,$anniversaire,$adresse, $code_postal, $ville);
+			}
 			
 		}		
 		//echo "la valeur de edit est :".$edit;

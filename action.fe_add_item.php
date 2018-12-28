@@ -19,7 +19,7 @@ $liste_fournisseurs = $service->liste_fournisseurs();
 //var_dump($liste_fournisseurs);
 
 //$liste_fournisseurs = array("WACK SPORT"=>"WACK SPORT", "BUTTERFLY"=>"BUTTERFLY", "AUTRES"=>"AUTRES");
-$liste_categories = array("BOIS"=>"BOIS","REVETEMENTS"=>"REVETEMENTS","AUTRES"=>"AUTRES");
+$liste_categories = array("BOIS"=>"BOIS","REVETEMENTS"=>"REVETEMENTS","BALLES"=>"BALLES","TEXTILES"=>"TEXTILES","ACCESSOIRES"=>"ACCESSOIRES","AUTRES"=>"AUTRES");
 
 $liste_dispo = array("DISPONIBLE"=>"1","NON DISPONIBLE"=>"0");
 

@@ -23,16 +23,18 @@ $(document).ready(function(){
 </script>
 <div class="pageoptions"><p class="pageoptions">{$itemcount}&nbsp;{$itemsfound}&nbsp;&nbsp;</p></div>
 {if $itemcount > 0}
-{$form2start}
+{*$form2start*}
 	<table border="0" cellspacing="0" cellpadding="0" class="pagetable tablesorter">
 	 <thead>
 		<tr>
 			<th>Licence</th>
 			<th>Nom</th>
 			<th>Prénom</th> 
-			<th>Email enregistré ?</th> 
+			<th>Actif ?</th>
+			<th>Email ?</th> 
+			<th>Portable ?</th> 
 			<th>Action</th>
-			<th><input type="checkbox" id="selectall" name="selectall"></th>
+		<!--	<th><input type="checkbox" id="selectall" name="selectall"></th>-->
 			
 		</tr>
 	</thead>
@@ -42,17 +44,21 @@ $(document).ready(function(){
 		<td>{$entry->licence}</td>
 		<td>{$entry->nom}</td>
 		<td>{$entry->prenom}</td>
+		<td>{$entry->actif}</td>
 		<td>{$entry->has_email}</td>
+		<td>{$entry->has_mobile}</td>
 		<td>{$entry->deletefromgroup}</td>
-		<td><input type="checkbox" name="{$actionid}sel[]" value="{$entry->licence}" class="select"></td>
+		<!--<td><input type="checkbox" name="{$actionid}sel[]" value="{$entry->licence}" class="select"></td>-->
 	   </tr>
 	{/foreach}
 	 </tbody>
 	</table>
 	<!-- SELECT DROPDOWN -->
+	<!--
 	<div class="pageoptions" style="float: right;">
 	<br/>{$actiondemasse}{$submit_massaction}
 	  </div>
 	{$form2end}	
+	-->
 {/if}
 	

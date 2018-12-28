@@ -80,7 +80,7 @@ else
 {
 	$valeur = 0;
 	$smarty->assign('edition',$valeur);
-	$smarty->assign('edit',$this->CreateInputHidden('edit',$valeur));
+	$smarty->assign('edit',$this->CreateInputHidden($id,'edit',0));
 	//on renvoie à un formulaire vierge
 	$smarty->assign('formstart',
 			    $this->CreateFormStart( $id, 'do_edit_adherent', $returnid ) );
@@ -93,6 +93,8 @@ else
 			$this->CreateInputText($id,'prenom','', 15,30));
 	$smarty->assign('fftt',
 			$this->CreateInputDropdown($id,'fftt',$OuiNon, '',''));
+	$smarty->assign('externe',
+			$this->CreateInputDropdown($id,'externe',$OuiNon, '',''));
 	$smarty->assign('anniversaire',
 			$this->CreateInputDate($id, 'anniversaire'));
 	$smarty->assign('adresse',

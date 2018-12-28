@@ -1,6 +1,11 @@
-<p class="info">{$fe_add_cc}</p>
+<div class="card mb-3">
+	<div class="card-header">
+		<i class="fas fa-cart-plus"></i>
+              Mes articles en attente de commande</div>
+            <div class="card-body">
+              <div class="table-responsive"><p class="info">{$fe_add_cc}</p>
 {*if $itemcount > 0*}
-<h3>Mes articles en cours</h3>
+
 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
  <thead>
 	<tr>
@@ -26,3 +31,7 @@
  </tbody>
 </table>
 {*/if*}
+</div>
+</div>
+</div>
+</div>

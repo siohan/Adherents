@@ -11,42 +11,16 @@ $db = cmsms()->GetDb();
 global $themeObject;
 //debug_display($params, 'Parameters');
 $aujourdhui = date('Y-m-d');
-//$ping = new Ping();
+$cont_ops = new contact;// = new Ping();
+$group = $cont_ops->liste_groupes_publiques();
+var_dump($group);
 $act = 1;//par defaut on affiche les actifs (= 1 )
-if(isset($params['group']) && $params['group'] != '')
-{
-	$group = $params['group'];
-	//$tab = explode ('-', $sel);
-	//var_dump($tab);
-}
-else
-{
-	//une erreur s'est produite !
-	$this->SetMessage('Erreur ! Pas de sélection disponible');
-	$this->redirectToAdminTab('groupes');
-}
-$destinataires = array();
-/*
-foreach($tab as $sels)
-{
-	$query = "SELECT contact FROM ".cms_db_prefix()."module_adherents_contacts WHERE licence = ? AND type_contact = 1";
-	$dbresult = $db->Execute($query, array($sels));
-	$row = $dbresult->FetchRow();
-	$contact = $row['contact'];
-	if(!is_null($contact))
-	{
-		$destinataires[] = $contact;
-	}
-	
-}
-$adresses  = implode(',',$destinataires);
-//var_dump($adresses);
-*/
+
 $smarty->assign('formstart',
 		    $this->CreateFormStart( $id, 'do_send_emails', $returnid ) );
 $smarty->assign('endform', $this->CreateFormEnd());
 $smarty->assign('group',
-		$this->CreateInputHidden($id,'group',$group, 100, 200));
+		$this->CreateInputDropdown($id,'group',$group));
 $smarty->assign('from', 
 		$this->CreateInputText($id, 'from', $this->GetPreference('admin_email'), 50, 200));
 $array_priorities = array("Normale"=>"3","Haute"=>"1","Basse"=>"5");

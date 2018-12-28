@@ -11,6 +11,7 @@ $db =& $this->GetDb();
 global $themeObject;
 $licence = '';
 $edition = 0;
+$rowclass='row1';
 $OuiNon = array("Oui"=>"1","Non"=>"0");
 if(isset($params['record_id']) && $params['record_id'] != '' && $params['record_id'] == $username)
 {
@@ -40,7 +41,7 @@ if(isset($params['record_id']) && $params['record_id'] != '' && $params['record_
 		$smarty->assign('itemsfound', $this->Lang('resultsfoundtext'));
 		$smarty->assign('itemcount', count($rowarray));
 		$smarty->assign('items', $rowarray);			
-	
+		$smarty->assign('fe_edit', $this->CreateLink($id, 'fe_edit_adherent', $returnid, 'Modifier', array("record_id"=>$record_id)));
 				
 		//$query.=" ORDER BY date_compet";
 	echo $this->ProcessTemplate('adherent_infos.tpl');

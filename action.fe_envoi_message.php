@@ -4,6 +4,7 @@ if(!isset($gCms)) exit;
 $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
 $username = $feu->GetUsername($userid);
+require_once(dirname(__FILE__).'/include/fe_menu.php');
 $db = cmsms()->GetDb();
 global $themeObject;
 //debug_display($params, 'Parameters');
@@ -13,7 +14,7 @@ $aujourdhui = date('Y-m-d');
 $destinataires = array();
 $groupes = array();
 
-	$query = "SELECT id, nom,  CONCAT_WS('-',nom, description) AS gp_desc  FROM ".cms_db_prefix()."module_adherents_groupes WHERE actif = 1";
+	$query = "SELECT id, nom,  CONCAT_WS('-',nom, description) AS gp_desc  FROM ".cms_db_prefix()."module_adherents_groupes WHERE actif = 1 AND public = 1";
 	$dbresult = $db->Execute($query);
 	if($dbresult && $dbresult->RecordCount()>0)
 	{

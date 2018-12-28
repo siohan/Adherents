@@ -16,6 +16,10 @@
   <p class="pageinput">{$fftt}</p>
 </div>
 <div class="pageoverflow">
+  <p class="pagetext">Joueur externe ? :</p>
+  <p class="pageinput">{$externe}</p>
+</div>
+<div class="pageoverflow">
   <p class="pagetext">Licence :</p>
   <p class="pageinput">{$licence}</p>
 </div>

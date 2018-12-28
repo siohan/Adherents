@@ -34,7 +34,7 @@ $smarty->assign('fe_add_cc',
 		$row = $dbresult->FetchRow();
 		$client = $row['licence'];
 		$nom = $row['nom'];
-		echo "Salut ".$row['prenom'];
+		//echo "Salut ".$row['prenom'];
 		//le id est : ".$id_client;
 		//deuxième requete pour trouver les commandes
 		$query2 = "SELECT id AS commande_id, date_created, libelle_commande,quantite, ep_manche_taille, couleur, commande_number,fournisseur, prix_total, commande, user_validation FROM ".cms_db_prefix()."module_commandes_cc_items WHERE fk_id = ? AND commande <= '1'";
@@ -66,7 +66,7 @@ $smarty->assign('fe_add_cc',
 				{
 					$onerow->fe_edit = $this->CreateLink($id, 'default', $returnid,$modif,array("display"=>"add_cc_items","produit_id"=>$row['commande_id']),'',$onlyhref='',$inline='true');
 					$onerow->fe_delete = $this->CreateLink($id, 'default', $returnid,$delete,array("display"=>"delete","record_id"=>$row['commande_id']),$warn_message='Cet article sera supprimé',$onlyhref='',$inline='true');
-					$onerow->fe_confirm = $this->CreateLink($id, 'default', $returnid,'Confirmer',array("display"=>"validate","record_id"=>$row['commande_id']),$warn_message='Cet article sera confirmé et non modifiable',$onlyhref='',$inline='true');
+					$onerow->fe_confirm = $this->CreateLink($id, 'default', $returnid,'Confirmer',array("display"=>"validate","record_id"=>$row['commande_id']),$warn_message='Cet article sera confirmé, non modifiable et envoyé vers le responsable des commandes',$onlyhref='',$inline='true');
 				}
 				
 				

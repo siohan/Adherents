@@ -47,6 +47,10 @@ if ($dbresult && $dbresult->RecordCount() > 0)
 	$rowarray[]= $onerow;
       }
   }
+else
+{
+	//echo "pas de résultats disponibles ! ";
+}
 
 $smarty->assign('itemsfound', $this->Lang('resultsfoundtext'));
 $smarty->assign('itemcount', count($rowarray));

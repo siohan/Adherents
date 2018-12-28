@@ -101,7 +101,7 @@ $dbresult = $db->Execute($query);
 	*/
 	//on construit le formulaire
 	$smarty->assign('formstart',
-			    $this->CreateFormStart( $id, 'fe_do_add_item', $returnid ) );
+			    $this->CreateFormStart( $id, 'fe_do_add_cc_item', $returnid ) );
 	
 	$smarty->assign('record_id',
 			$this->CreateInputHidden($id,'record_id',$username));

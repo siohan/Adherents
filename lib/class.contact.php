@@ -120,6 +120,26 @@ class contact
 			return FALSE;
 		}
 	}
+	//récupère la liste des groupes contactables depuis l'espace privé (public =1)
+	function liste_groupes_publiques()
+	{
+		$db = cmsms()->GetDb();
+		$query = "SELECT id,nom  FROM ".cms_db_prefix()."module_adherents_groupes WHERE actif = 1 AND public = 1";
+		$dbresult = $db->Execute($query);
+		if($dbresult && $dbresult->RecordCount()>0)
+		{
+			while($row = $dbresult->FetchRow())
+			{
+				$retour[$row['nom']] = $row['id'];				
+				
+			}
+			return $retour;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
 
 	//récupère les détails d'un groupe
 	function details_group($id_group)
@@ -161,6 +181,22 @@ class contact
 		else
 		{
 			return FALSE;
+		}
+	}
+	function CountUsersFromGroup($id_group)
+	{
+		$db = cmsms()->GetDb();
+		$query = "SELECT count(*) AS nb FROM ".cms_db_prefix()."module_adherents_groupes_belongs WHERE id_group = ?";
+		$dbresult = $db->Execute($query, array($id_group));
+		if($dbresult)
+		{
+			$row = $dbresult->FetchRow();
+			$nb = $row['nb'];
+			return $nb;
+		}
+		else
+		{
+			return false;
 		}
 	}
 	

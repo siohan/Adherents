@@ -39,6 +39,7 @@ if(isset($params['record_id']) && $params['record_id'] !="")
 			//$commande_number = $row['commande_number'];
 			$description = $row['description'];
 			$actif = $row['actif'];
+			$public = $row['public'];
 			
 		}
 }
@@ -63,6 +64,9 @@ $OuiNon = array('Oui'=>'1', 'Non'=>'0');
 			
 	$smarty->assign('actif',
 			$this->CreateInputDropdown($id,'actif',$OuiNon,$selectedindex = $index, $selectedvalue=$actif));
+			
+	$smarty->assign('public',
+			$this->CreateInputDropdown($id,'public',$OuiNon,$selectedindex = $index, $selectedvalue=$public));
 	$smarty->assign('submit',
 			$this->CreateInputSubmit($id, 'submit', $this->Lang('submit'), 'class="button"'));
 	$smarty->assign('cancel',

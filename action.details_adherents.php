@@ -13,6 +13,8 @@ $record_id = 0;
 if(isset($params['record_id']) && $params['record_id'] != '')
 {
 	$record_id = (int) $params['record_id'];
+	
+
 }
 global $themeObject;
 $query = "SELECT licence FROM ".cms_db_prefix()."module_adherents_adherents WHERE fftt = '1' LIMIT ?,10 ";
@@ -31,7 +33,10 @@ if ($dbresult)
 			//ToAdminTab('adherents');
 		}
 		$record_id = $record_id + 10;
-		$this->Redirect($id, 'details_adherents' , $returnid, array("record_id"=>$record_id));
+		
+		$this->Redirect($id, 'details_adherents2' , $returnid, array("record_id"=>$record_id));
+	
+		
 	}
 	else
 	{

@@ -130,7 +130,7 @@ if($error<1)
 	}
 	
 	$this->SetMessage($designation);
-	$this->RedirectToAdminTab('clients');
+	$this->RedirectToAdminTab('feu');
 	
 }
 else
@@ -138,7 +138,7 @@ else
 	//les conditions ne sont pas remplis, on renvoit à la page précédente
 	//echo $error;
 	$this->SetMessage('parametres manquants');
-	$this->Redirect($id, 'defaultadmin',$returnid, array("active_tab"=>"feu"));
+	$this->Redirect($id, 'defaultadmin',$returnid, array("activetab"=>"feu"));
 }
 
 

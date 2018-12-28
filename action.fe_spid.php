@@ -67,7 +67,7 @@ $smarty->assign('items', $rowarray);
 $smarty->assign('resultats',
 		$this->CreateLink($id,'spid',$returnid,$contents = 'Tous ses résultats', array('record_id'=>$licence)));
 $smarty->assign('rafraichir',
-			$this->CreateLink($id,'retrieve',$returnid, 'Rafraichir mes données', array("retrieve"=>"spid",'record_id'=>$licence)));
+			$this->CreateLink($id,'retrieve',$returnid, 'Rafraichir mes données ou recalculer', array("retrieve"=>"spid",'record_id'=>$licence)));
 echo $this->ProcessTemplate('fe_spid.tpl');
 
 

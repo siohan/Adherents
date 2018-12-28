@@ -72,6 +72,6 @@ $alert = 0;//pour savoir si certains champs doivent contenir une valeur ou non
 		
 
 $this->SetMessage('Adhérent modifié');
-$this->Redirect($id,'default', $returnid);
+$this->Redirect($id,'fe_adherent_infos', $returnid, array("record_id"=>$licence));
 
 ?>

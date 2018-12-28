@@ -1,4 +1,6 @@
 <?php
+
+
 class VerifAdherentsTask implements \CmsRegularTask
 {
 
@@ -15,7 +17,7 @@ class VerifAdherentsTask implements \CmsRegularTask
    
 	public function test($time = '')
    {
-
+	debug_to_log(__METHOD__);
       // Instantiation du module
       $adh_ops = \cms_utils::get_module('Adherents');
 
@@ -47,13 +49,14 @@ class VerifAdherentsTask implements \CmsRegularTask
    public function execute($time = '')
    {
 
-      $db = \CmsApp::get_instance()->GetDb();
+      $adh_ops = \cms_utils::get_module('Adherents');
+	$db = cmsms()->GetDb();
       if (!$time)
       {
          $time = time();
       }
 
-      $adh_ops = \cms_utils::get_module('Adherents');
+      //$adh_ops = new adherents_spid;
         $mois = date('m');
 	$annee = date('Y');
 	if($mois >=1 && $mois <7) //2ème phase
@@ -72,19 +75,23 @@ class VerifAdherentsTask implements \CmsRegularTask
 
 		//on instancie la classe et on va commencer à boucler
 		
-
+		$ops = new adherents_spid;
 		while ($row= $dbresult->FetchRow())
 		{
 			$licence = $row['licence'];		
-			$verif = $adh_ops->infos_adherents_spid($licence);
+			$verif = $ops->infos_adherent_spid($licence);
 			sleep(1);
 
 		}//fin du while
-
+		return TRUE;
+	}
+	else
+	{
+		return FALSE; // Ou false si ça plante
 	}
 
       
-      return TRUE; // Ou false si ça plante
+      
 
    }
 
@@ -96,16 +103,17 @@ class VerifAdherentsTask implements \CmsRegularTask
          $time = time();
       }
       
-      $ping = cms_utils::get_module('Ping');
-      $ping->SetPreference('LastRecupSpid', $time);
-      $ping->Audit('','Ping','Récup Spid Ok');
+    $adh_ops = \cms_utils::get_module('Adherents');
+      $adh_ops->SetPreference('LastVerifAdherents', $time);
+      $adh_ops->Audit('','Adherents','Récup Adherents Ok');
       //$pong = cms_utils::get_module
       
    }
 
    public function on_failure($time = '')
    {
-      $ping->Audit('','Ping','Pas de récup SPID');
+      $adh_ops = \cms_utils::get_module('Adherents');
+	$adh_ops->Audit('','Adherents','Pas de récup ADHERENTS');
    }
 
 }

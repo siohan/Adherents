@@ -6,6 +6,7 @@
 			<th>Licence</th>
 			<th>Nom</th>
 			<th>Prénom</th> 
+			<th>Dernière connexion</th>
 			<th>Email</th>
 			<th colspan="4">Actions</th>
 			
@@ -17,6 +18,7 @@
 		<td>{$entry->licence}</td>
 		<td>{$entry->nom}</td>
 		<td>{$entry->prenom}</td>
+		<td>{$entry->last_logged}</td>
 		<td>{$entry->email}</td>
 		<td>{$entry->push_customer} {$entry->delete_user_feu}</td>
 	   </tr>

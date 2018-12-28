@@ -2,7 +2,7 @@
 if (!isset($gCms)) exit;
 //debug_display($params, 'Parameters');
 
-	if (!$this->CheckPermission('Adjerents use'))
+	if (!$this->CheckPermission('Adherents use'))
 	{
 		$designation .=$this->Lang('needpermission');
 		$this->SetMessage("$designation");
@@ -50,6 +50,12 @@ $edit = 0;//pour savoir si on fait un update ou un insert; 0 = insert
 			$actif = $params['actif'];
 		}
 		
+		$public = 0;
+		if (isset($params['public']) && $params['public'] !='')
+		{
+			$public = $params['public'];
+		}
+		
 		
 				
 		//on calcule le nb d'erreur
@@ -66,13 +72,13 @@ $edit = 0;//pour savoir si on fait un update ou un insert; 0 = insert
 			
 			if($edit == 0)
 			{
-				$query = "INSERT INTO ".cms_db_prefix()."module_adherents_groupes (nom, description, actif) VALUES ( ?, ?, ?)";
-				$dbresult = $db->Execute($query, array($nom, $description, $actif));
+				$query = "INSERT INTO ".cms_db_prefix()."module_adherents_groupes (nom, description, actif, public) VALUES ( ?, ?, ?, ?)";
+				$dbresult = $db->Execute($query, array($nom, $description, $actif, $public));
 			}
 			else
 			{
-				$query = "UPDATE ".cms_db_prefix()."module_adherents_groupes SET nom = ?, description = ?, actif = ? WHERE id = ?";
-				$dbresult = $db->Execute($query, array($nom, $description, $actif,$record_id));
+				$query = "UPDATE ".cms_db_prefix()."module_adherents_groupes SET nom = ?, description = ?, actif = ?, public = ? WHERE id = ?";
+				$dbresult = $db->Execute($query, array($nom, $description, $actif, $public, $record_id));
 				
 				
 			}

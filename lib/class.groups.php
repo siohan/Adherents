@@ -101,8 +101,8 @@ function add_group ()
 		
 	}
 }//fin de la fonction
-
-function delete_group ($record_id)
+//supprime un groupe completement
+function delete_group($record_id)
 {
 	global $gCms;
 	$db = cmsms()->GetDb();
@@ -120,6 +120,7 @@ function delete_group ($record_id)
 	
 	
 }
+//supprime tous les abonnements d'un groupe particulier
 function delete_group_belongs ($record_id)
 {
 	global $gCms;
@@ -136,6 +137,7 @@ function delete_group_belongs ($record_id)
 		return FALSE;
 	}
 }
+//compte le nb d'utilisateurs d'un groupe particulier
 function count_users_in_group($id_group)
 {
 	global $gCms;
@@ -146,6 +148,7 @@ function count_users_in_group($id_group)
 	$nb = $row['nb'];
 	return $nb;
 }
+//supprime un utilisateur d'un groupe particulier
 function delete_user_from_group($record_id, $licence)
 {
 	$db = cmsms()->GetDb();
@@ -206,11 +209,56 @@ function delete_user_from_all_groups($licence)
 function delete_user_feu($licence)
 {
 	$feu = cms_utils::get_module('FrontEndUsers');
+	//$feu_ops = new FrontEndUsersManipulator;//cms_utils::get_module('FrontEndUsers');
 	//on récupére le id de l'utilisateur
-	$id = $feu->GetUserId($licence);
+	$id = $feu->GetUserID($licence);
 	$supp_user = $feu->DeleteUserFull($id);
 }
-
+//créé une liste de tous les groupes actifs
+function liste_groupes()
+{
+	
+	$liste = array();
+	$db = cmsms()->GetDb();
+	$query = "SELECT id, nom FROM ".cms_db_prefix()."module_adherents_groupes WHERE actif = 1 ORDER BY nom ASC";
+	$dbresult = $db->Execute($query);
+	if($dbresult)
+	{
+		while($row = $dbresult->fetchRow())
+		{
+			$liste[$row['nom']] = $row['id'];
+		}
+		
+		//$this->assign_user_to_group($id_group, $licence);
+		return $liste;
+	}
+	else
+	{
+		return false;
+	}
+}
+//Fais la liste des licences d'un groupe donné'
+function liste_licences_from_group($id_group)
+{
+	$db = cmsms()->GetDb();
+	$query = "SELECT licence FROM ".cms_db_prefix()."module_adherents_groupes_belongs WHERE id_group = ?";
+	$dbresult = $db->Execute($query, array($id_group));
+	$liste_licences = array();
+	if($dbresult && $dbresult->RecordCount()>0)
+	{
+		while($row = $dbresult->FetchRow())
+		{
+			$licence = $row['licence'];
+			$liste_licences[] = $row['licence'];
+		}
+		return $liste_licences;
+	}
+	else
+	{
+		return false;
+	}
+	
+}
 #
 #
 #

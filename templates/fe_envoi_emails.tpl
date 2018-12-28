@@ -1,3 +1,10 @@
+<div class="card mb-3">
+	<div class="card-header">
+		<i class="fas fa-envelope-open"></i>
+              Envoi d'un message</div>
+            <div class="card-body">
+              
+
 {$formstart}
 
 	<div class="pageoverflow">
@@ -26,3 +33,7 @@
 
 
 {$endform}
+</div>
+</div>
+</div>
+</div>

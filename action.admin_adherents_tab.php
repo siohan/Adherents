@@ -32,6 +32,7 @@ $aujourdhui = date('Y-m-d');
 $act = 1;//par defaut on affiche les actifs (= 1 )
 $shopping = '<img src="../modules/Adherents/images/shopping.jpg" class="systemicon" alt="Commandes" title="Commandes">';
 $cotis = '<img src="../modules/Adherents/images/cotisations.png" class="systemicon" alt="Cotisations" title="Cotisations">';
+//$faux = 
 $smarty->assign('add_users', 
 		$this->CreateLink($id, 'edit_adherent',$returnid, 'Ajouter'));
 $smarty->assign('shopping', $shopping);
@@ -41,7 +42,7 @@ $smarty->assign('inactifs',
 $smarty->assign('actifs',
 				$this->CreateLink($id, 'defaultadmin', $returnid, 'Actifs', array("active_tab"=>"adherents")));
 $smarty->assign('chercher_adherents_spid',
-				$this->CreateLink($id, 'chercher_adherents_spid', $returnid, $contents='Importer les adhérents depuis le Spid',array("obj"=>"all"),$warn_message='Attention, ce script peut être long. Merci de patienter'));
+				$this->CreateLink($id, 'chercher_adherents_spid', $returnid, $contents='Importer les adhérents depuis le Spid',array("obj"=>"all"),$warn_message='Attention, ce script est long (1 min) et peut provoquer une erreur, il faut patienter. Merci de patienter'));
 
 
 if(isset($params['group']) && $params['group'] != '')
@@ -134,7 +135,7 @@ if($dbresult && $dbresult->RecordCount() >0)
 		}
 		elseif(FALSE === $email)
 		{
-			$onerow->has_email = $themeObject->DisplayImage('icons/system/false.gif', $this->Lang('false'), '', '', 'systemicon');
+			$onerow->has_email = $this->CreateLink($id, 'add_edit_contact', $returnid,$themeObject->DisplayImage('icons/system/false.gif', $this->Lang('false'), '', '', 'systemicon'), array("licence"=>$row['licence']));
 		}
 		$mobile = $contact_ops->has_mobile($row['licence']);
 		if(TRUE === $mobile)
@@ -143,7 +144,7 @@ if($dbresult && $dbresult->RecordCount() >0)
 		}
 		elseif(FALSE === $mobile)
 		{
-			$onerow->has_mobile = $themeObject->DisplayImage('icons/system/false.gif', $this->Lang('false'), '', '', 'systemicon');
+			$onerow->has_mobile = $this->CreateLink($id, 'add_edit_contact', $returnid,$themeObject->DisplayImage('icons/system/false.gif', $this->Lang('false'), '', '', 'systemicon'), array("licence"=>$row['licence']));
 		}
 		$onerow->edit = $this->CreateLink($id, 'edit_adherent',$returnid,$themeObject->DisplayImage('icons/system/edit.gif', $this->Lang('edit'), '', '', 'systemicon'), array("record_id"=>$row['id']));
 		$onerow->refresh= $this->CreateLink($id, 'chercher_adherents_spid', $returnid,'<img src="../modules/Adherents/images/refresh.png" class="systemicon" alt="Rafraichir" title="Rafraichir">',array("obj"=>"refresh","licence"=>$row['licence']));//$row['closed'];

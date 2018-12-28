@@ -1,6 +1,6 @@
 <?php
 if( !isset($gCms)) exit;
-//debug_display($params,'Parameters');
+debug_display($params,'Parameters');
 $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
 $username = $feu->GetUserName($userid);
@@ -31,26 +31,25 @@ if($dbresult)
 	{
 		while($row = $dbresult2->FetchRow())
 		{
-			$onerow= new StdClass();
-			$onerow->rowclass= $rowclass;
-			$onerow->fournisseur = $row['fournisseur'];		
-			$onerow->categorie_produit = $row['categorie_produit'];			
-			$onerow->libelle_commande = $row['libelle_commande'];		
-			$onerow->quantite = $row['quantite'];		
-			$onerow->ep_manche_taille = $row['ep_manche_taille'];		
-			$onerow->couleur = $row['couleur'];		
-			$onerow->prix_total = $row['prix_total'];
-			$rowarray[]= $onerow;
-		
+			$fournisseur = $row['fournisseur'];		
+			$categorie_produit = $row['categorie_produit'];			
+			$libelle_commande = $row['libelle_commande'];		
+			$quantite = $row['quantite'];		
+			$ep_manche_taille = $row['ep_manche_taille'];		
+			$couleur = $row['couleur'];		
+			$prix_total = $row['prix_total'];		
 		}
-		
-
 		
 	}
 	
-	$smarty->assign('items', $rowarray);
-	$smarty->assign('itemcount', count($rowarray));
+	
 	$smarty->assign('commande_number', $commande_number);
+	$smarty->assign('libelle_commande', $libelle_commande);
+	$smarty->assign('quantite', $quantite);
+	$smarty->assign('ep_manche_taille', $ep_manche_taille);
+	$smarty->assign('couleur', $couleur);
+	$smarty->assign('prix_total', $prix_total);
+	
 	$user_email = $feu->LoggedInEmail();
 	$admin_email = $commandes->GetPreference('admin_email'); 
 	//echo $to;
@@ -63,22 +62,44 @@ if($dbresult)
 
 	$cmsmailer = new \cms_mailer();
 	$cmsmailer->reset();
-	$cmsmailer->AddAddress($user_email);
+	$cmsmailer->AddAddress($admin_email);
+	$cmsmailer->AddAddress('claude@agi-webconseil.fr');
+	//$cmsmailer->AddAddress($admin_email);
+	//$cmsmailer->AddAddress($admin_email);
 	$cmsmailer->SetBody($body);
 	$cmsmailer->SetSubject($subject);
 	$cmsmailer->IsHTML(true);
 	$cmsmailer->SetPriority(1);
 	$cmsmailer->Send();
 	$res = true;
+	$sent = 0; //par défaut on indique le message à non envoyé sent = 0;
 	if($cmsmailer->IsError())
 	{
 		$res = false;
-		$this->SetMessage('message envoyé au gestionnaire');
+		
+		$this->SetMessage('Email non envoyé au gestionnaire');
+		$sent = 0;
+		$status = "Email absent";
 	}
 	else
-	{
-		$this->SetMessage('Email non envoyé au gestionnaire');
+	{	
+		$this->SetMessage('Email  envoyé au gestionnaire');
+		$sent = 1;
+		$status = "Ok";
 	}
+	$senddate = date('Y-m-d');
+	$sendtime = date('H:i:s');
+	$replyto = $user_email;
+	$group_id = 0;
+	$recipients_number = 1;
+	// sujet déjà défini plus haut
+	// idem pour le message
+	$ar = 0;
+	$mess_ops = new T2t_messages;
+	$mess_ops->add_message($user_email, $senddate, $sendtime, $replyto, $group_id,$recipients_number, $subject, $message, $sent);
+	$message_id = $db->Insert_ID();
+	echo $message_id;
+	$mess_ops->add_messages_to_recipients($message_id, '0', $admin_email,$sent,$status, $ar);
 	//echo 'résultat : '.$res;
 	$this->Redirect($id, 'default', $returnid, array("display"=>"fe_commandes"));
 }

@@ -7,15 +7,16 @@ $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
 $properties = $feu->GetUserProperties($userid);
 $email = $feu->LoggedInEmail();
-//var_dump($email);
-$username = $feu->GetUsername($userid);
+
+$username = $feu->GetUserName($userid);
+//var_dump($username);
 //echo "le username est : ".$username;
-if($username == '')
+if($username == '' || 'true' === is_null($username))
 {
 	//echo "pas de résultats, on fait quoi ?";
 	//on redirige vers le formulaire de login
 	$feu->Redirect($id,"login",$returnid);
-	exit;
+//	exit;
 }
 
 $display = 'default';
@@ -30,7 +31,7 @@ if(isset($params['display']) && $params['display'] !='')
 switch($display)
 {
 	case 'infos' :
-	require(__DIR__.'/action.fe_edit_adherent.php');
+	require(__DIR__.'/action.fe_adherent_infos.php');
 	break;
 	
 	case 'sportif' :
@@ -67,6 +68,10 @@ switch($display)
 	require(__DIR__.'/action.fe_commandes.php');
 	break;
 	
+	case 'fe_messages' :
+	require(__DIR__.'/action.fe_messages.php');
+	break;
+	
 	case 'joueurs' :
 	require(__DIR__.'/action.fe_commandes.php');	
 	break;
@@ -88,7 +93,7 @@ switch($display)
 	break;
 	
 	default:
-	require(__DIR__.'/action.moncompte.php');
+	require(__DIR__.'/action.fe-sportif.php');
 	break;
 	
 }

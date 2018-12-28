@@ -50,7 +50,7 @@ $query = "SELECT * FROM ".cms_db_prefix()."module_adherents_groupes";
 				
 				// = $row['actif'];			
 				
-				$onerow->send_emails= $this->createLink($id, 'envoi_emails', $returnid, $themeObject->DisplayImage('icons/topfiles/cmsmailer.gif', $this->Lang('view_results'), '', '', 'systemicon'),array("group"=>$row['id'])) ;
+				$onerow->send_emails= $this->createLink($id, 'envoi_emails', $returnid, $themeObject->DisplayImage('icons/topfiles/cmsmailer.gif', $this->Lang('send_emails'), '', '', 'systemicon'),array("group"=>$row['id'])) ;
 				$onerow->send_sms= $this->createLink($id, 'envoi_sms', $returnid, $img_sms,array("group"=>$row['id'])) ;
 				$onerow->editlink= $this->CreateLink($id, 'add_edit_group', $returnid, $themeObject->DisplayImage('icons/system/edit.gif', $this->Lang('edit'), '', '', 'systemicon'), array('record_id'=>$row['id']));
 				$onerow->delete = $this->CreateLink($id, 'chercher_adherents_spid',$returnid, $themeObject->DisplayImage('icons/system/delete.gif', $this->Lang('delete'), '', '', 'systemicon'), array('obj'=>'delete_group','record_id'=>$row['id']));

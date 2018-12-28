@@ -67,8 +67,8 @@ $(document).ready(function(){
 		<td>{$entry->has_mobile}</td>
 		<td>{$entry->refresh}</td>
 		<td>{$entry->edit}</td>		
-		<td><a href="{root_url}/admin/moduleinterface.php?mact=Commandes,m1_,view_client_orders,0&amp;m1_licence={$entry->licence}&amp;_sk_={$smarty.cookies._sk_}">{$shopping}</a></td>
-		<td><a href="{root_url}/admin/moduleinterface.php?mact=Cotisations,m1_,view_adherent,0&amp;m1_licence={$entry->licence}&amp;_sk_={$smarty.cookies._sk_}">{$cotis}</a></td>
+		<td><a href="{root_url}/admin/moduleinterface.php?mact=Commandes,m1_,view_client_orders,0&amp;m1_licence={$entry->licence}&amp;__c={$smarty.cookies.__c}">{$shopping}</a></td>
+		<td><a href="{root_url}/admin/moduleinterface.php?mact=Cotisations,m1_,view_adherent,0&amp;m1_licence={$entry->licence}&amp;__c={$smarty.cookies.__c}">{$cotis}</a></td>
 		
 		<td>{$entry->view_contacts}</td>
 		<td><input type="checkbox" name="{$actionid}sel[]" value="{$entry->licence}" class="select"></td>

@@ -11,7 +11,7 @@
 		<th>Description</th>
 		<th>Nb utilisateurs</th>
 		<th>Actif</th>
-		<th colspan="3">Actions</th>
+		<th colspan="5">Actions</th>
 	</tr>
  </thead>
  <tbody>

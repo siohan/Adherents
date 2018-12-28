@@ -2,7 +2,7 @@
 
 #-------------------------------------------------------------------------
 # Module : Adherents - 
-# Version : 0.2.9, Sc
+# Version : 0.2.10, Sc
 # Auteur : Claude SIOHAN
 #-------------------------------------------------------------------------
 /**
@@ -20,7 +20,7 @@ class Adherents extends CMSModule
   
   function GetName() { return 'Adherents'; }   
   function GetFriendlyName() { return $this->Lang('friendlyname'); }   
-  function GetVersion() { return '0.2.9'; }  
+  function GetVersion() { return '0.2.10'; }  
   function GetHelp() { return $this->Lang('help'); }   
   function GetAuthor() { return 'Claude SIOHAN'; } 
   function GetAuthorEmail() { return 'claude.siohan@gmail.com'; }
@@ -86,6 +86,7 @@ class Adherents extends CMSModule
 	$this->SetParameterType('message',CLEAN_STRING);
 	$this->SetParameterType('sujet',CLEAN_STRING);
 	$this->SetParameterType('produit_id',CLEAN_INT);
+	$this->SetParameterType('message_id', CLEAN_INT);
 	
 	
 	//form parameters

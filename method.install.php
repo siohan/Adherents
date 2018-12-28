@@ -51,6 +51,7 @@ $flds = "
 	adresse C(255),
 	code_postal C(5),
 	ville C(200),
+	externe I(1) DEFAULT 0,
 	maj D";
 	$sqlarray = $dict->CreateTableSQL( cms_db_prefix()."module_adherents_adherents", $flds, $taboptarray);
 	$dict->ExecuteSQLArray($sqlarray);			
@@ -80,7 +81,8 @@ $flds = "
 	id I(11) AUTO KEY,
 	nom C(100),
 	description C(255),
-	actif I(1)";
+	actif I(1),
+	public I(1) DEFAULT 0";
 	$sqlarray = $dict->CreateTableSQL( cms_db_prefix()."module_adherents_groupes", $flds, $taboptarray);
 	$dict->ExecuteSQLArray($sqlarray);			
 //

@@ -15,6 +15,7 @@ if(isset($params['destinataires']) && $params['destinataires'])
 	//on va chercher les membres du groupe et leurs adresses emails
 	$contact_ops = new contact;
 	$groupe_licencies = $contact_ops->UsersFromGroup($destinataires);
+	$nb = $contact_ops->CountUsersFromGroup($destinataires);
 	if(is_array($groupe_licencies) || array_count_values($groupe_licencies)>0)
 	{
 		//$dest1 = array();
@@ -83,7 +84,15 @@ else
 {
 	// on commence le traitement
 	//On envoie le message ds le module dédié
-	$query = "INSERT INTO ".cms_db_prefix()."module_messages_messages (expediteur, sujet, message, priorite, statut) VALUES (?, ?, ?, ?, ?)";
+	$senddate = date('Y-m-d');
+	$sendtime = date('H:i:s');
+	$replyto = $username;
+	$group_id = $destinataires;
+	$recipients_number = $nb;
+	$subject = $sujet;
+	$sent = 1;
+	$mess_ops = new T2t_messages;
+	$add_mess = $mess_ops->add_message($username, $senddate, $sendtime, $replyto, $group_id,$recipients_number, $subject, $message, $sent);
 	
 	
 
