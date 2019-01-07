@@ -17,7 +17,7 @@ $shopping = '<img src="../modules/Adherents/images/shopping.jpg" class="systemic
 $smarty->assign('add_users', 
 		$this->CreateLink($id, 'edit_adherent',$returnid, 'Ajouter'));
 $smarty->assign('shopping', $shopping);
-$query = "SELECT adh.id, adh.licence, adh.nom, adh.prenom, adh.actif, adh.anniversaire, adh.sexe, adh.type, adh.certif, adh.validation, adh.echelon, adh.place, adh.points, adh.cat, adh.adresse, adh.code_postal, adh.ville FROM ".cms_db_prefix()."module_adherents_adherents AS adh, ".cms_db_prefix()."module_adherents_groupes_belongs AS be WHERE adh.licence = be.licence";//" AND be.id_group = ?";//" WHERE actif = 1";
+$query = "SELECT adh.id, adh.genid, adh.licence, adh.nom, adh.prenom, adh.actif, adh.anniversaire, adh.sexe, adh.certif, adh.validation, adh.points, adh.adresse, adh.code_postal, adh.ville FROM ".cms_db_prefix()."module_adherents_adherents AS adh, ".cms_db_prefix()."module_adherents_groupes_belongs AS be WHERE adh.genid = be.genid";//" AND be.id_group = ?";//" WHERE actif = 1";
 if(isset($params['group']) && $params['group'] != '')
 {
 	$group = $params['group'];
@@ -44,25 +44,25 @@ if($dbresult && $dbresult->RecordCount() >0)
 	
 		$onerow = new StdClass();
 		$onerow->rowclass = $rowclass;
-		$onerow->licence= $row['licence'];
+		$onerow->genid= $row['genid'];
 		$actif = $row['actif'];
-		$has_email = $contact_ops->has_email($row['licence']);
+		$has_email = $contact_ops->has_email($row['genid']);
 		if(TRUE === $has_email)
 		{
 			$onerow->has_email = $themeObject->DisplayImage('icons/system/true.gif', $this->Lang('delete'), '', '', 'systemicon');
 		}
 		else
 		{
-			$onerow->has_email = $this->CreateLink($id, 'add_edit_contact', $returnid,$themeObject->DisplayImage('icons/system/false.gif', $this->Lang('delete'), '', '', 'systemicon'), array("licence"=>$row['licence']));
+			$onerow->has_email = $this->CreateLink($id, 'add_edit_contact', $returnid,$themeObject->DisplayImage('icons/system/false.gif', $this->Lang('delete'), '', '', 'systemicon'), array("genid"=>$row['genid']));
 		}
-		$mobile = $contact_ops->has_mobile($row['licence']);
+		$mobile = $contact_ops->has_mobile($row['genid']);
 		if(TRUE === $mobile)
 		{
 			$onerow->has_mobile = $themeObject->DisplayImage('icons/system/true.gif', $this->Lang('true'), '', '', 'systemicon');
 		}
 		elseif(FALSE === $mobile)
 		{
-			$onerow->has_mobile = $this->CreateLink($id, 'add_edit_contact', $returnid,$themeObject->DisplayImage('icons/system/false.gif', $this->Lang('false'), '', '', 'systemicon'), array("licence"=>$row['licence']));
+			$onerow->has_mobile = $this->CreateLink($id, 'add_edit_contact', $returnid,$themeObject->DisplayImage('icons/system/false.gif', $this->Lang('false'), '', '', 'systemicon'), array("genid"=>$row['genid']));
 		}
 		$onerow->nom= $row['nom'];
 		$onerow->prenom= $row['prenom'];
@@ -75,7 +75,7 @@ if($dbresult && $dbresult->RecordCount() >0)
 			$onerow->actif= $themeObject->DisplayImage('icons/system/false.gif', $this->Lang('false'), '', '', 'systemicon');
 		}
 		
-		$onerow->deletefromgroup = $this->CreateLink($id, 'chercher_adherents_spid',$returnid,$themeObject->DisplayImage('icons/system/delete.gif', $this->Lang('delete'), '', '', 'systemicon'), array("obj"=>"delete_user_from_group","licence"=>$row['licence'], "record_id"=>$group));
+		$onerow->deletefromgroup = $this->CreateLink($id, 'chercher_adherents_spid',$returnid,$themeObject->DisplayImage('icons/system/delete.gif', $this->Lang('delete'), '', '', 'systemicon'), array("obj"=>"delete_user_from_group","genid"=>$row['genid'], "record_id"=>$group));
 		
 		
 		($rowclass == "row1" ? $rowclass= "row2" : $rowclass= "row1");

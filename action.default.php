@@ -5,10 +5,11 @@ if( !isset($gCms) ) exit;
 
 $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
+
 $properties = $feu->GetUserProperties($userid);
 $email = $feu->LoggedInEmail();
 
-$username = $feu->GetUserName($userid);
+$username = $feu->GetUserProperty('genid');//($userid);
 //var_dump($username);
 //echo "le username est : ".$username;
 if($username == '' || 'true' === is_null($username))
@@ -89,11 +90,11 @@ switch($display)
 	break;
 	
 	case 'default' :
-	require(__DIR__.'/action.moncompte.php');
+	require(__DIR__.'/action.fe_adherent_infos.php');
 	break;
 	
 	default:
-	require(__DIR__.'/action.fe-sportif.php');
+	require(__DIR__.'/action.fe_adherent_infos.php');
 	break;
 	
 }

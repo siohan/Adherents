@@ -3,7 +3,7 @@ if (!isset($gCms)) exit;
 //debug_display($params, 'Parameters');
 $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
-$username = $feu->GetUserName($userid);
+$username = $feu->GetUserProperty('genid');
 
 require_once(dirname(__FILE__).'/include/fe_menu.php');
 
@@ -13,13 +13,10 @@ $licence = '';
 $edition = 0;
 $rowclass='row1';
 $OuiNon = array("Oui"=>"1","Non"=>"0");
-if(isset($params['record_id']) && $params['record_id'] != '' && $params['record_id'] == $username)
-{
-	$edition = 1;
-	$record_id = $params['record_id'];
+
 	
-	$query  = "SELECT licence,actif,fftt, anniversaire,nom, prenom, adresse, code_postal, ville FROM ".cms_db_prefix()."module_adherents_adherents WHERE licence = ?";
-	$dbresult = $db->Execute($query, array($record_id));
+	$query  = "SELECT licence,actif, anniversaire,nom, prenom, adresse, code_postal, ville FROM ".cms_db_prefix()."module_adherents_adherents WHERE genid = ?";
+	$dbresult = $db->Execute($query, array($username));
 	if($dbresult)
 	{
 		while ($dbresult && $row = $dbresult->FetchRow())
@@ -30,7 +27,6 @@ if(isset($params['record_id']) && $params['record_id'] != '' && $params['record_
 			$onerow->licence = $row['licence'];
 			$onerow->nom = $row['nom'];
 			$onerow->prenom = $row['prenom'];
-			$onerow->fftt = $row['fftt'];
 			$onerow->adresse = $row['adresse'];
 			$onerow->code_postal = $row['code_postal'];
 			$onerow->ville = $row['ville'];
@@ -41,7 +37,7 @@ if(isset($params['record_id']) && $params['record_id'] != '' && $params['record_
 		$smarty->assign('itemsfound', $this->Lang('resultsfoundtext'));
 		$smarty->assign('itemcount', count($rowarray));
 		$smarty->assign('items', $rowarray);			
-		$smarty->assign('fe_edit', $this->CreateLink($id, 'fe_edit_adherent', $returnid, 'Modifier', array("record_id"=>$record_id)));
+		$smarty->assign('fe_edit', $this->CreateLink($id, 'fe_edit_adherent', $returnid, 'Modifier', array("record_id"=>$username)));
 				
 		//$query.=" ORDER BY date_compet";
 	echo $this->ProcessTemplate('adherent_infos.tpl');
@@ -49,22 +45,9 @@ if(isset($params['record_id']) && $params['record_id'] != '' && $params['record_
 	elseif(!$dbresult)
 	{
 		echo $db->ErrorMsg();
+		echo "une erreur s'est produite !";
 	}
 	
-}
-else
-{
-	echo "une erreur s'est produite !";
-}
-
-
-	
-
-
-
-
-
-
 
 #
 #EOF

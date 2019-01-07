@@ -17,7 +17,7 @@ if(isset($params['record_id']) && $params['record_id'] != '')
 
 }
 global $themeObject;
-$query = "SELECT licence FROM ".cms_db_prefix()."module_adherents_adherents WHERE fftt = '1' LIMIT ?,10 ";
+$query = "SELECT licence FROM ".cms_db_prefix()."module_adherents_adherents LIMIT ?,10 ";
 //echo $query;
 $dbresult = $db->Execute($query, array($record_id));
 if ($dbresult)

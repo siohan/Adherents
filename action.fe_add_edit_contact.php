@@ -1,15 +1,14 @@
 <?php
-if( !isset($gCms) ) exit;
-if (!$this->CheckPermission('Adherents use'))
-{
+if (!isset($gCms)) exit;
+//debug_display($params, 'Parameters');
+$feu = cms_utils::get_module('FrontEndUsers');
+$userid = $feu->LoggedInId();
+$username = $feu->GetUserProperty('genid');
 
-	echo $this->ShowErrors($this->Lang('needpermission'));
-	return;
-}
+require_once(dirname(__FILE__).'/include/fe_menu.php');
 
 $db =& $this->GetDb();
 global $themeObject;
-$licence = '';
 $edit = 0;
 if(isset($params['genid']) && $params['genid'] != '')
 {
@@ -110,10 +109,11 @@ else
 	}
 }
 
-//on prépare un lien pour ajouetre un nouveau contact
-$smarty->assign('add_edit_contact', $this->CreateLink($id, 'add_edit_contact', $returnid, $contents='Nouveau contact',array("genid"=>$genid,"edit"=>"0")));
 
 
 //$query.=" ORDER BY date_compet";
-echo $this->ProcessTemplate('add_edit_contact.tpl');
+echo $this->ProcessTemplate('fe_add_edit_contact.tpl');
+#
+#EOF
+#
 ?>

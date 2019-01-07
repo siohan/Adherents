@@ -12,8 +12,7 @@ global $themeObject;
 //debug_display($params, 'Parameters');
 $aujourdhui = date('Y-m-d');
 $cont_ops = new contact;// = new Ping();
-$group = $cont_ops->liste_groupes_publiques();
-var_dump($group);
+$group = $cont_ops->liste_groupes();
 $act = 1;//par defaut on affiche les actifs (= 1 )
 
 $smarty->assign('formstart',

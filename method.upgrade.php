@@ -1,7 +1,7 @@
 <?php
 #-------------------------------------------------------------------------
 # Module: Adhérents
-# Version: 0.4.6
+# Version: 0.3
 # Method: Upgrade
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2008 by Ted Kulp (wishy@cmsmadesimple.org)
@@ -109,7 +109,7 @@ switch($current_version)
 	{
 		//on installe un groupe par défaut
 		$insert_sql = "INSERT INTO ".cms_db_prefix()."module_adherents_groupes (`nom`, `description`, `actif`) VALUES (?, ?, ?)";
-		$dbresult = $db->execute($insert_sql, array('adherents', 'Les adhérents actifs du club', '1'));
+		$dbresult = $db->Execute($insert_sql, array('adherents', 'Les adhérents actifs du club', '1'));
 		if($dbresult)
 		{
 			$id_group = $db->Insert_ID();
@@ -140,6 +140,164 @@ switch($current_version)
 			$dict->ExecuteSQLArray($sqlarray);
 			
 			
+	}
+	case "0.2.10" :
+	{
+	
+		//on créé un nouveau champ genid I(11) pour la table adhérents
+		$dict = NewDataDictionary( $db );
+		$flds = "genid I(11), pays C(255)";
+		$sqlarray = $dict->AddColumnSQL( cms_db_prefix()."module_adherents_adherents", $flds);
+		$dict->ExecuteSQLArray($sqlarray);
+		
+		//on supprime certains champs inutiles de la table adherents
+		
+		//on supprime le champ FFTT ?
+		$dict = NewDataDictionary( $db );
+		$flds = "fftt";
+		$sqlarray = $dict->DropColumnSQL( cms_db_prefix()."module_adherents_adherents", $flds);
+		$dict->ExecuteSQLArray($sqlarray);
+		
+		//on incrémente le genid dans la table adherents
+		$query = "SELECT id FROM ".cms_db_prefix()."module_adherents_adherents";
+		$dbresult = $db->Execute($query);
+		if($dbresult && $dbresult->RecordCount()>0)
+		{
+			while($row = $dbresult->FetchRow())
+			{
+				$genid = $this->random_int(9);
+				$query2 = "UPDATE ".cms_db_prefix()."module_adherents_adherents SET genid = ? WHERE id = ?";
+				$dbresult2 = $db->Execute($query2, array($genid, $row['id']));
+			}
+		}
+		
+		//on créé un index unique pour la table adherents
+		$idxoptarray = array('UNIQUE');
+		$sqlarray = $dict->CreateIndexSQL(cms_db_prefix().'genid',
+			    cms_db_prefix().'module_adherents_adherents', 'genid',$idxoptarray);
+		$dict->ExecuteSQLArray($sqlarray);
+		
+		//maintenant on remplace licence par genid dans toutes les autres tables
+		
+		//on créé un nouveau champ genid I(11) pour la table contacts
+		$dict = NewDataDictionary( $db );
+		$flds = "genid I(11)";
+		$sqlarray = $dict->AddColumnSQL( cms_db_prefix()."module_adherents_contacts", $flds);
+		$dict->ExecuteSQLArray($sqlarray);
+		
+		//on remplace les licences par le genid
+		$query = "SELECT adh.genid, cont.licence FROM ".cms_db_prefix()."module_adherents_adherents AS adh, ".cms_db_prefix()."module_adherents_contacts AS cont WHERE adh.licence = cont.licence";
+		$dbresult = $db->Execute($query);
+		if($dbresult)
+		{
+			while($row = $dbresult->FetchRow())
+			{
+				$genid = $row['genid'];
+				$query2 = "UPDATE ".cms_db_prefix()."module_adherents_contacts SET genid = ? WHERE licence = ?";
+				$dbresult2 = $db->Execute($query2, array($genid, $row['licence']));
+			
+			}
+		}
+		//on supprime l'index sur la licence
+		
+		
+		$sqlarray = $dict->DropIndexSQL(cms_db_prefix().'licence',
+			    cms_db_prefix().'module_adherents_adherents');
+		$dict->ExecuteSQLArray($sqlarray);
+		
+		//on change aussi le type du champ on passe de int(11) à varchar 11
+		$sqlarray = $dict->AlterColumnSQL(cms_db_prefix()."module_adherents_adherents",
+						     "licence C(11)");
+		$dict->ExecuteSQLArray($sqlarray);
+		
+		//on supprime le champ licence ?
+		$dict = NewDataDictionary( $db );
+		$flds = "licence";
+		$sqlarray = $dict->DropColumnSQL( cms_db_prefix()."module_adherents_contacts", $flds);
+		$dict->ExecuteSQLArray($sqlarray);
+		
+		
+		//on créé un nouveau champ genid I(11) pour la table groupes_belongs
+		$dict = NewDataDictionary( $db );
+		$flds = "genid I(11)";
+		$sqlarray = $dict->AddColumnSQL( cms_db_prefix()."module_adherents_groupes_belongs", $flds);
+		$dict->ExecuteSQLArray($sqlarray);
+		
+		//on remplace les licences par le genid
+		$query = "SELECT adh.genid, be.licence FROM ".cms_db_prefix()."module_adherents_adherents AS adh, ".cms_db_prefix()."module_adherents_groupes_belongs AS be WHERE adh.licence = be.licence";
+		$dbresult = $db->Execute($query);
+		if($dbresult)
+		{
+			while($row = $dbresult->FetchRow())
+			{
+				$genid = $row['genid'];
+				$query2 = "UPDATE ".cms_db_prefix()."module_adherents_groupes_belongs SET genid = ? WHERE licence = ?";
+				$dbresult2 = $db->Execute($query2, array($genid, $row['licence']));
+			
+			}
+		}
+		
+		//on supprime le champ licence ?
+		$dict = NewDataDictionary( $db );
+		$flds = "licence";
+		$sqlarray = $dict->DropColumnSQL( cms_db_prefix()."module_adherents_groupes_belongs", $flds);
+		$dict->ExecuteSQLArray($sqlarray);
+		
+		//on supprime la table adherents_seq
+		//on supprime la table ping_comm devenue obsolete
+		$sqlarray = $dict->DropTableSQL( cms_db_prefix()."module_adherents_adherents_seq",
+						   $flds);
+						
+		//on créé une nouvelle propriété genid pour le groupe adhérents dans FEU
+		
+		$feu = cms_utils::get_module('FrontEndUsers');
+		
+		$gid = $feu->GetGroupId('adherents');
+		//On fait la même chose pour la troisième propriété 
+		$name = "genid";
+		$prompt = "Ton ID";
+		$type = 0;
+		$length = 10;
+		$maxlength = 15;		
+		$feu->AddPropertyDefn($name, $prompt, $type, $length,$maxlength,$attribs = '', $force_unique = 0, $encrypt = 0 );
+		
+		$sortkey = 1;
+		$required = 0; //2= requis, 1 optionnel, 0 = off
+		// on peut assigner les propriétés au groupe adhérents 
+		$feu->AddGroupPropertyRelation($gid,$name,$sortkey, -1, $required);
+		
+		//idéalement on complete la table 
+		$query = "SELECT adh.licence, adh.genid, adh.nom, adh.prenom FROM ".cms_db_prefix()."module_adherents_adherents AS adh";
+		$dbresult = $db->Execute($query);
+		if($dbresult)
+		{
+			while($row = $dbresult->fetchRow())
+			{
+				$licence = $row['licence'];
+				$genid = $row['genid'];
+				$prenom = $row['prenom'];
+				$nom = $row['nom'];
+				$user = $prenom.''.$nom;				
+				$nom_complet = strtolower(str_replace (" ", "", $user));
+				//on récupère le id ou uid de chaque utilisateur
+				$uid = $feu->GetUserID($licence);
+				//on change le username d'abord
+				$query2 = "UPDATE ".cms_db_prefix()."module_feusers_users SET username = ? WHERE username = ?";
+				$dbresult2 = $db->Execute($query2, array($nom_complet, $licence));
+				
+				//puis on ajoute le genid comme nouvelle propriété
+				$feu->SetUserPropertyFull('genid',$genid, $uid);
+							
+			}
+		}
+		
+		$this->SetPreference('feu_commandes',0);
+		$this->SetPreference('feu_fftt',0);
+		$this->SetPreference('feu_messages',1);
+		$this->SetPreference('feu_inscriptions',1);
+		$this->SetPreference('feu_contacts',1);
+		$this->SetPreference('feu_presences',1);
+		$this->SetPreference('feu_factures', 1);
 	}
 	
 

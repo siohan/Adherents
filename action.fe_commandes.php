@@ -3,7 +3,8 @@ if (!isset($gCms)) exit;
 //debug_display($params,'Parameters');
 $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
-$username = $feu->GetUserName($userid);
+$username = $feu->GetUserProperty('genid');
+//$username = $feu->GetUserName($userid);
 require_once(dirname(__FILE__).'/include/fe_menu.php');
 //echo "FEU : le user est : ".$username." ".$userid;
 //$properties = $feu->GetUserProperties($userid);
@@ -24,7 +25,7 @@ $smarty->assign('fe_add_cc',
 	//mais surtout les commandes passées s'il y en a
 	//echo "on continue";
 	//echo $email;
-	$query = "SELECT  nom, prenom,licence FROM ".cms_db_prefix()."module_adherents_adherents WHERE licence LIKE ?";
+	$query = "SELECT  nom, prenom,genid FROM ".cms_db_prefix()."module_adherents_adherents WHERE genid = ?";
 	$dbresult = $db->Execute($query, array($username));
 	
 	if($dbresult && $dbresult->recordCount() >0)
@@ -32,7 +33,7 @@ $smarty->assign('fe_add_cc',
 		$smarty->assign('fe_add_cc',
 				$this->CreateLink($id, 'default', $returnid, 'Ajouter un article', array("record_id"=>$username,"display"=>"add_cc_items")));
 		$row = $dbresult->FetchRow();
-		$client = $row['licence'];
+		$client = $row['genid'];
 		$nom = $row['nom'];
 		//echo "Salut ".$row['prenom'];
 		//le id est : ".$id_client;
@@ -98,7 +99,7 @@ $smarty->assign('fe_add_cc',
 			//Why not !
 			*/
 		//on commence une autre requete pour les commandes validées
-		$query1 = "SELECT date_created, fournisseur, commande_number, libelle_commande, statut_commande, prix_total, paiement FROM ".cms_db_prefix()."module_commandes_cc  WHERE client = ? ";
+		$query1 = "SELECT date_created, fournisseur, commande_number, libelle_commande, statut_commande, prix_total, paiement FROM ".cms_db_prefix()."module_commandes_cc  WHERE genid = ? ";
 
 
 			//$query .=" ORDER BY id DESC";

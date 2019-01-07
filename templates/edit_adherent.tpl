@@ -8,21 +8,9 @@
 <!-- Content Column -->
         <div class="col-lg-9 mb-4">
 {$formstart}
+{$genid}
 
-{if $edition == '0'}
-{$edit}
-<div class="pageoverflow">
-  <p class="pagetext">Licencié(e) FFTT ? :</p>
-  <p class="pageinput">{$fftt}</p>
-</div>
-<div class="pageoverflow">
-  <p class="pagetext">Joueur externe ? :</p>
-  <p class="pageinput">{$externe}</p>
-</div>
-<div class="pageoverflow">
-  <p class="pagetext">Licence :</p>
-  <p class="pageinput">{$licence}</p>
-</div>
+
 <div class="pageoverflow">
   <p class="pagetext">Nom :</p>
   <p class="pageinput">{$nom}</p>
@@ -31,12 +19,17 @@
   <p class="pagetext">Prénom :</p>
   <p class="pageinput">{$prenom}</p>
 </div>
-{else}
-{$licence} {$edit}
-{/if}
+<div class="pageoverflow">
+  <p class="pagetext">Sexe :</p>
+  <p class="pageinput">{$sexe}</p>
+</div>
 <div class="pageoverflow">
   <p class="pagetext">Date naissance :</p>
   <p class="pageinput">{$anniversaire}</p>
+</div>
+<div class="pageoverflow">
+  <p class="pagetext">Licence :</p>
+  <p class="pageinput">{$licence}</p>
 </div>
 <div class="pageoverflow">
   <p class="pagetext">Adresse :</p>
@@ -50,7 +43,14 @@
   <p class="pagetext">Ville :</p>
   <p class="pageinput">{$ville}</p>
 </div>
-
+<div class="pageoverflow">
+  <p class="pagetext">Pays :</p>
+  <p class="pageinput">{$pays}</p>
+</div>
+<div class="pageoverflow">
+  <p class="pagetext">Externe ? :</p>
+  <p class="pageinput">{$externe}</p>
+</div>
 <div class="pageoverflow">
     <p class="pagetext">&nbsp;</p>
     <p class="pageinput">{$submit}{$cancel}</p>

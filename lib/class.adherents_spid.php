@@ -70,12 +70,13 @@ function liste_adherents_spid ()
 					$prenom = (isset($tab->prenom)?"$tab->prenom": "");
 					$nclub = (isset($tab->nclub)?"$tab->nclub":"");
 					$clast = (isset($tab->clast)?"$tab->clast":"");
-
+					$adherents = cms_utils::get_module('Adherents'); 
+					$genid = $this->random_int(9);
 					
-					$add = $this->ajouter_adherent_spid($licence, $nom, $prenom);
+					$add = $this->ajouter_adherent_spid($genid,$licence, $nom, $prenom);
 					if (true === $add && false !== $group_id)
 					{
-						$gp_ops->assign_user_to_group($group_id,$licence);
+						$gp_ops->assign_user_to_group($group_id,$genid);
 					}
 			
 
@@ -84,13 +85,23 @@ function liste_adherents_spid ()
 		
 		}
 }//fin de la fonction
-
-function ajouter_adherent_spid ($licence,$nom, $prenom)
+//génère un identifiant aléatoire de format integer
+function random_int($car) {
+	$string = "";
+	$chaine = "123456789";
+	srand((double)microtime()*1000000);
+	for($i=0; $i<$car; $i++) {
+		$string .= $chaine[rand()%strlen($chaine)];
+	}
+	return $string;
+  }
+function ajouter_adherent_spid ($genid,$licence,$nom, $prenom)
 {
 	global $gCms;
 	$db = cmsms()->GetDb();
-	$query = "INSERT INTO ".cms_db_prefix()."module_adherents_adherents (licence, nom, prenom ) VALUES (?, ?, ?)";
-	$dbresultat = $db->Execute($query,array($licence,$nom, $prenom));
+	
+	$query = "INSERT INTO ".cms_db_prefix()."module_adherents_adherents (genid,licence, nom, prenom ) VALUES (?, ?, ?, ?)";
+	$dbresultat = $db->Execute($query,array($genid,$licence,$nom, $prenom));
 	if($dbresultat)
 	{
 		return true;
@@ -189,9 +200,9 @@ function infos_adherent_spid ($licence)
 					
 					}
 						
-						$query = "UPDATE ".cms_db_prefix()."module_adherents_adherents SET sexe = ?, type = ?, certif = ?, validation = ?, echelon = ?, points = ?, cat = ?, maj = NOW() WHERE licence = ?";
+						$query = "UPDATE ".cms_db_prefix()."module_adherents_adherents SET sexe = ?, certif = ?, validation = ?, cat = ?, maj = NOW() WHERE licence = ?";
 						//echo $query;
-						$dbresult = $db->Execute($query, array($sexe, $type, $certif,$validation, $echelon, $point, $categ, $licence));
+						$dbresult = $db->Execute($query, array($sexe, $certif,$validation, $point, $categ, $licence));
 						if($dbresult)
 						{
 							return true;
@@ -269,12 +280,12 @@ function VerifyClub($club_number)
 		}
 		
     }
-function maj_adherent_spid2 ($licence, $sexe, $type,$certif,$actif,$validation, $echelon, $place, $point, $cat)
+function maj_adherent_spid2 ($genid, $sexe, $type,$certif,$actif,$validation, $cat)
 {
 	global $gCms;
 	$db = cmsms()->GetDb();
-	$query = "UPDATE ".cms_db_prefix()."module_adherents_adherents SET sexe = ?, type = ?, certif = ?, validation = ?, echelon = ?, place = ?, points = ?, cat = ? WHERE licence = ?";
-	$dbresult = $db->Execute($query, array($sexe, $type, $certif,$validation, $echelon, $place, $point, $cat, $licence));
+	$query = "UPDATE ".cms_db_prefix()."module_adherents_adherents SET sexe = ?, type = ?, certif = ?, validation = ?, cat = ? WHERE genid = ?";
+	$dbresult = $db->Execute($query, array($sexe, $type, $certif,$validation, $cat, $genid));
 	if($dbresult)
 	{
 		return true;
@@ -302,20 +313,20 @@ function add_adherent($fftt,$licence,$nom,$prenom,$anniversaire,$adresse, $code_
 	$query = "INSERT INTO ".cms_db_prefix()."module_adherents_adherents (fftt,licence, nom, prenom,anniversaire, adresse, code_postal, ville) VALUES (?, ?, ?, ?,?, ?, ?, ?)";
 	$dbresult = $db->Execute($query, array($fftt,$licence,$nom, $prenom,$anniversaire,$adresse, $code_postal, $ville));
 }
-function fe_edit_adherent($licence,$anniversaire,$adresse, $code_postal, $ville)
+function fe_edit_adherent($genid,$anniversaire,$adresse, $code_postal, $ville)
 {
 	global $gCms;
 	$db = cmsms()->GetDb();
-	$query = "UPDATE ".cms_db_prefix()."module_adherents_adherents SET anniversaire = ?, adresse = ?, code_postal = ?, ville = ? WHERE licence = ?";
-	$dbresult = $db->Execute($query, array($anniversaire,$adresse, $code_postal, $ville, $licence));
+	$query = "UPDATE ".cms_db_prefix()."module_adherents_adherents SET anniversaire = ?, adresse = ?, code_postal = ?, ville = ? WHERE genid = ?";
+	$dbresult = $db->Execute($query, array($anniversaire,$adresse, $code_postal, $ville, $genid));
 }
 //donne la catégorie d'un adhérent
-function get_cat($licence)
+function get_cat($genid)
 {
 	global $gCms;
 	$db = cmsms()->GetDb();
-	$query = "SELECT cat FROM ".cms_db_prefix()."module_adherents_adherents  WHERE licence = ?";
-	$dbresult = $db->Execute($query, array($licence));
+	$query = "SELECT cat FROM ".cms_db_prefix()."module_adherents_adherents  WHERE genid = ?";
+	$dbresult = $db->Execute($query, array($genid));
 	if($dbresult && $dbresult->RecordCount()>0)
 	{
 		$row = $dbresult->FetchRow();
@@ -328,12 +339,12 @@ function get_cat($licence)
 	}
 }
 //récupère le nom et prénom du joueur
-function get_name($licence)
+function get_name($genid)
 {
 	global $gCms;
 	$db = cmsms()->GetDb();
-	$query = "SELECT CONCAT_WS(' ', nom, prenom) AS joueur FROM ".cms_db_prefix()."module_adherents_adherents WHERE licence = ?";
-	$dbresult = $db->Execute($query, array($licence));
+	$query = "SELECT CONCAT_WS(' ', nom, prenom) AS joueur FROM ".cms_db_prefix()."module_adherents_adherents WHERE genid = ?";
+	$dbresult = $db->Execute($query, array($genid));
 	if($dbresult && $dbresult->RecordCount()>0)
 	{
 		$row = $dbresult->FetchRow();
@@ -380,31 +391,31 @@ function refresh()
 		}
 	} 
 }
-function activate ($licence)
+function activate ($genid)
 {
 	$db = cmsms()->GetDb();
-	$query = "UPDATE ".cms_db_prefix()."module_adherents_adherents SET actif = 1 WHERE licence = ?";
-	$dbresult = $db->Execute($query, array($licence));
+	$query = "UPDATE ".cms_db_prefix()."module_adherents_adherents SET actif = 1 WHERE genid = ?";
+	$dbresult = $db->Execute($query, array($genid));
 	if($dbresult)
 	{
 		$gp_ops = new groups;
 		$id_group = $gp_ops->assign_to_adherent();
 		//maintenant on peut désactiver
-		$gp_ops->assign_user_to_group($id_group,$licence);
+		$gp_ops->assign_user_to_group($id_group,$genid);
 	}
 	
 }
-function desactivate ($licence)
+function desactivate ($genid)
 {
 	$db = cmsms()->GetDb();
-	$query = "UPDATE ".cms_db_prefix()."module_adherents_adherents SET actif = 0 WHERE licence = ?";
-	$dbresult = $db->Execute($query, array($licence));
+	$query = "UPDATE ".cms_db_prefix()."module_adherents_adherents SET actif = 0 WHERE genid = ?";
+	$dbresult = $db->Execute($query, array($genid));
 	if($dbresult)
 	{
 		$gp_ops = new groups;
 		$id_group = $gp_ops->assign_to_adherent();
 		//maintenant on peut désactiver
-		$gp_ops->delete_user_from_group($id_group,$licence);
+		$gp_ops->delete_user_from_group($id_group,$genid);
 	}
 	
 }
@@ -413,7 +424,7 @@ function liste_adherents()
 {
 	$db = cmsms()->GetDb();
 	//on fait une requete pour completer l'input dropdown du formulaire
-	$query = "SELECT licence as client_id, CONCAT_WS(' ',nom, prenom) AS joueur FROM ".cms_db_prefix()."module_adherents_adherents WHERE actif = 1 ORDER BY nom ASC, prenom ASC";
+	$query = "SELECT genid as client_id, CONCAT_WS(' ',nom, prenom) AS joueur FROM ".cms_db_prefix()."module_adherents_adherents WHERE actif = 1 ORDER BY nom ASC, prenom ASC";
 	$dbresult = $db->Execute($query);
 
 		if($dbresult && $dbresult->RecordCount() >0)

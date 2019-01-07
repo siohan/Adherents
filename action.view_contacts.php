@@ -10,9 +10,9 @@ if (!$this->CheckPermission('Adherents use'))
 $db =& $this->GetDb();
 global $themeObject;
 
-if(isset($params['licence']) && $params['licence'] != '')
+if(isset($params['genid']) && $params['genid'] != '')
 {
-	$licence = $params['licence'];
+	$genid = $params['genid'];
 }
 else
 {
@@ -21,9 +21,9 @@ else
 $rowarray= array();
 $rowclass = '';
 //on prépare un lien pour ajouetre un nouveau contact
-$smarty->assign('add_edit_contact', $this->CreateLink($id, 'add_edit_contact', $returnid, $contents='Nouveau contact',array("licence"=>$licence)));
-$query  = "SELECT id, licence, type_contact, contact, description FROM ".cms_db_prefix()."module_adherents_contacts WHERE licence = ?";
-$dbresult = $db->Execute($query, array($licence));
+$smarty->assign('add_edit_contact', $this->CreateLink($id, 'add_edit_contact', $returnid, $contents='Nouveau contact',array("genid"=>$genid)));
+$query  = "SELECT id, genid, type_contact, contact, description FROM ".cms_db_prefix()."module_adherents_contacts WHERE genid = ?";
+$dbresult = $db->Execute($query, array($genid));
 if($dbresult)
 {
 	//la requete a fonctionné
@@ -38,8 +38,8 @@ if($dbresult)
 			$onerow->type_contact = $row['type_contact'];
 			$onerow->contact = $row['contact'];
 			$onerow->description = $row['description'];
-			$onerow->edit = $this->CreateLink($id, 'add_edit_contact',$returnid,$themeObject->DisplayImage('icons/system/edit.gif', $this->Lang('edit'), '', '', 'systemicon'),array("licence"=>$licence, "edit"=>"1", "record_id"=>$row['id']) );
-			$onerow->delete = $this->CreateLink($id, 'chercher_adherents_spid',$returnid,$themeObject->DisplayImage('icons/system/delete.gif', $this->Lang('delete'), '', '', 'systemicon'),array("obj"=>"delete_contact","licence"=>$licence, "record_id"=>$row['id']) );
+			$onerow->edit = $this->CreateLink($id, 'add_edit_contact',$returnid,$themeObject->DisplayImage('icons/system/edit.gif', $this->Lang('edit'), '', '', 'systemicon'),array("genid"=>$genid, "edit"=>"1", "record_id"=>$row['id']) );
+			$onerow->delete = $this->CreateLink($id, 'chercher_adherents_spid',$returnid,$themeObject->DisplayImage('icons/system/delete.gif', $this->Lang('delete'), '', '', 'systemicon'),array("obj"=>"delete_contact","genid"=>$genid, "record_id"=>$row['id']) );
 			($rowclass == "row1" ? $rowclass= "row2" : $rowclass= "row1");
 			$rowarray[]= $onerow;
 			

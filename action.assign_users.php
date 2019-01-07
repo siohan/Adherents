@@ -23,7 +23,7 @@ $rowarray = array();
 
 	
 $db = $this->GetDb();
-$query = "SELECT j.licence, CONCAT_WS(' ',j.nom, j.prenom ) AS joueur FROM ".cms_db_prefix()."module_adherents_adherents AS j WHERE actif = 1 ORDER BY nom ASC ";
+$query = "SELECT j.genid, CONCAT_WS(' ',j.nom, j.prenom ) AS joueur FROM ".cms_db_prefix()."module_adherents_adherents AS j WHERE actif = 1 ORDER BY nom ASC ";
 //echo $query;
 $dbresult = $db->Execute($query);
 
@@ -44,15 +44,15 @@ $dbresult = $db->Execute($query);
 		{
 			//var_dump($row);
 			
-			$licence = $row['licence'];
+			$genid = $row['genid'];
 			$joueur = $row['joueur'];
-			$rowarray[$licence]['name'] = $joueur;
-			$rowarray[$licence]['participe'] = false;
+			$rowarray[$genid]['name'] = $joueur;
+			$rowarray[$genid]['participe'] = false;
 			
 			//on va chercher si le joueur est déjà dans la table participe
-			$query2 = "SELECT licence, id_group FROM ".cms_db_prefix()."module_adherents_groupes_belongs WHERE licence = ? AND id_group = ?";
+			$query2 = "SELECT genid, id_group FROM ".cms_db_prefix()."module_adherents_groupes_belongs WHERE genid = ? AND id_group = ?";
 			//echo $query2;
-			$dbresultat = $db->Execute($query2, array($licence, $record_id));
+			$dbresultat = $db->Execute($query2, array($genid, $record_id));
 			
 			if($dbresultat->RecordCount()>0)
 			{
@@ -60,7 +60,7 @@ $dbresult = $db->Execute($query);
 				{
 			
 				
-					$rowarray[$licence]['participe'] = true;
+					$rowarray[$genid]['participe'] = true;
 				}
 			}
 			//print_r($rowarray);

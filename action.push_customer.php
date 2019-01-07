@@ -9,16 +9,16 @@ $error = 0;//on instancie un compteur d'erreurs
 // variables à contrôler :  l'email , la licence
 if(isset($params['nom']) && $params['nom'] !='')
 {
-	$nom = $params['nom'];
+	$nom = str_replace(" ", "",$params['nom']);
 }
 if(isset($params['prenom']) && $params['prenom'] !='')
 {
-	$prenom = $params['prenom'];
+	$prenom = str_replace(" ", "",$params['prenom']);
 }
-$nom_complet = $prenom. ' '.$nom;
-if(isset($params['licence']) && $params['licence'] !='')
+$nom_complet = strtolower($prenom. ''.$nom);
+if(isset($params['genid']) && $params['genid'] !='')
 {
-	$licence = $params['licence'];
+	$genid = $params['genid'];
 }
 else
 {
@@ -53,12 +53,12 @@ if($error<1)
 		*/
 		$name = "email";
 		$prompt = "Ton email";
-		$type = 2;
+		$type = 2;//0 = text; 1 = checkbox; 2 = email;3 = textarea; 4,5 = count(options)?;6 = image;7= radiobuttons; 8= date
 		$length = 80;
 		$maxlength = 255;		
 		$feu->AddPropertyDefn($name, $prompt, $type, $length,$maxlength,$attribs = '', $force_unique = 0, $encrypt = 0 );
 		
-		$sortkey = 0;
+		$sortkey = 1;
 		$required = 2; //2= requis, 1 optionnel, 0 = off
 		/* on peut assigner les propriétés au groupe adhérents */
 		$feu->AddGroupPropertyRelation($gid,$name,$sortkey, -1, $required);
@@ -76,7 +76,18 @@ if($error<1)
 		/* on peut assigner les propriétés au groupe adhérents */
 		$feu->AddGroupPropertyRelation($gid,$name,$sortkey, -1, $required);
 		
+		/*On fait la même chose pour la troisième propriété */
+		$name = "genid";
+		$prompt = "Ton ID";
+		$type = 0;
+		$length = 10;
+		$maxlength = 15;		
+		$feu->AddPropertyDefn($name, $prompt, $type, $length,$maxlength,$attribs = '', $force_unique = 0, $encrypt = 0 );
 		
+		$sortkey = 1;
+		$required = 0; //2= requis, 1 optionnel, 0 = off
+		/* on peut assigner les propriétés au groupe adhérents */
+		$feu->AddGroupPropertyRelation($gid,$name,$sortkey, -1, $required);
 		
 	}
 	
@@ -90,15 +101,15 @@ if($error<1)
 	//qqs variables pour le mail
 	$smarty->assign('prenom_joueur', $prenom);
 	$smarty->assign('nom_joueur' , $nom);
-	$smarty->assign('licence', $licence);
+	$smarty->assign('nom_complet', $nom_complet);
 	//$motdepasse = 'UxzqsUIM1';
 	$smarty->assign('motdepasse', $motdepasse);
 	
 	//$add_user = $feu->AddUser($licence, $motdepasse,$expires);
-	$add_user = $feu->AddUser($licence, $motdepasse,$expires);
+	$add_user = $feu->AddUser($nom_complet, $motdepasse,$expires);
 	
 	//on récupère le userid ($uid)
-	$uid = $feu->GetUserId($licence);
+	$uid = $feu->GetUserId($nom_complet);
 	//on force le changement de mot de passe ?
 	$feu->ForcePasswordChange($uid, $flag = TRUE);	
 	$gid = $feu->GetGroupId('adherents');
@@ -107,6 +118,7 @@ if($error<1)
 	/* on remplit les propriétés de lutilisateur */
 	$feu->SetUserPropertyFull('email',$user_email, $uid);
 	$feu->SetUserPropertyFull('nom', $nom_complet,$uid);
+	$feu->SetUserPropertyFull('genid',$genid, $uid);
 	
 	/* On essaie d'envoyer un message à l'utilisateur pour lui dire qu'il est enregistré */	
 

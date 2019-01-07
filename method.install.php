@@ -33,26 +33,23 @@ $dict = NewDataDictionary( $db );
 // table schema description
 $flds = "
 	id I(11) AUTO KEY,
+	genid I(11),
 	maj D,
 	actif I(1) DEFAULT 1,
-	fftt I(1) DEFAULT 1,
-	licence I(11),
+	licence C(11),
 	nom C(255),
 	prenom C(255),
 	anniversaire D,
 	sexe C(1),
-	type C(1),
 	certif C(255),
 	validation D,
 	echelon C(1),
-	place I(4),
-	points I(4),
 	cat C(20),
 	adresse C(255),
 	code_postal C(5),
 	ville C(200),
-	externe I(1) DEFAULT 0,
-	maj D";
+	pays C(255),
+	externe I(1) DEFAULT 0";
 	$sqlarray = $dict->CreateTableSQL( cms_db_prefix()."module_adherents_adherents", $flds, $taboptarray);
 	$dict->ExecuteSQLArray($sqlarray);			
 //
@@ -64,7 +61,7 @@ $dict = NewDataDictionary( $db );
 // table schema description
 $flds = "
 	id I(11) AUTO KEY,
-	licence I(11),
+	genid I(11),
 	type_contact I(2),
 	contact C(255),
 	description C(255)";
@@ -95,7 +92,7 @@ $dict = NewDataDictionary( $db );
 $flds = "
 	id I(11) AUTO KEY,
 	id_group I(11),
-	licence I(11)";
+	genid I(11)";
 	$sqlarray = $dict->CreateTableSQL( cms_db_prefix()."module_adherents_groupes_belongs", $flds, $taboptarray);
 	$dict->ExecuteSQLArray($sqlarray);			
 //
@@ -104,17 +101,13 @@ $taboptarray = array( 'mysql' => 'ENGINE=MyISAM' );
 
 $dict = NewDataDictionary( $db );
 
-// table schema description
-$flds = "
-	id I(11)";
-	$sqlarray = $dict->CreateTableSQL( cms_db_prefix()."module_adherents_adherents_seq", $flds, $taboptarray);
-	$dict->ExecuteSQLArray($sqlarray);			
+		
 //			
 //
 //les index
 $idxoptarray = array('UNIQUE');
 $sqlarray = $dict->CreateIndexSQL(cms_db_prefix().'adherents',
-	    cms_db_prefix().'module_adherents_adherents', 'licence',$idxoptarray);
+	    cms_db_prefix().'module_adherents_adherents', 'genid',$idxoptarray);
 	       $dict->ExecuteSQLArray($sqlarray);
 
 # Mails templates
@@ -129,9 +122,15 @@ $insert_sql = "INSERT INTO ".cms_db_prefix()."module_adherents_groupes (`nom`, `
 $db->execute($insert_sql, array('adherents', 'Les adhérents actifs du club', '1'));
 
 $this->SetPreference('admin_email', 'root@localhost.com');
-$this->SetPreference('email_activation_subject', 'Votre compte T2T est actif');
+$this->SetPreference('email_activation_subject', 'Ton compte est actif');
 $this->SetPreference('LastVerifAdherents', time());
-//$this->SetPreference('mail_activation_body', );
+$this->SetPreference('feu_commandes',0);
+$this->SetPreference('feu_fftt',0);
+$this->SetPreference('feu_messages',1);
+$this->SetPreference('feu_inscriptions',1);
+$this->SetPreference('feu_contacts',1);
+$this->SetPreference('feu_presences',1);
+$this->SetPreference('feu_factures', 1);
 //Permissions
 $this->CreatePermission('Adherents use', 'Utiliser le module Adhérents');
 $this->CreatePermission('Adherents prefs', 'Modifier les données du compte');

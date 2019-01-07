@@ -3,7 +3,7 @@ if (!isset($gCms)) exit;
 //debug_display($params, 'Parameters');
 $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
-$username = $feu->GetUserName($userid);
+$username = $feu->GetUserProperty('genid');
 
 require_once(dirname(__FILE__).'/include/fe_menu.php');
 
@@ -17,7 +17,7 @@ if(isset($params['record_id']) && $params['record_id'] != '' && $params['record_
 	$edition = 1;
 	$record_id = $params['record_id'];
 	
-	$query  = "SELECT licence,actif,fftt, anniversaire,nom, prenom, adresse, code_postal, ville FROM ".cms_db_prefix()."module_adherents_adherents WHERE licence = ?";
+	$query  = "SELECT genid,licence,actif, anniversaire,nom, prenom, adresse, code_postal, ville FROM ".cms_db_prefix()."module_adherents_adherents WHERE genid = ?";
 	$dbresult = $db->Execute($query, array($record_id));
 	if($dbresult)
 	{
@@ -28,7 +28,6 @@ if(isset($params['record_id']) && $params['record_id'] != '' && $params['record_
 			$licence = $row['licence'];
 			$nom = $row['nom'];
 			$prenom = $row['prenom'];
-			$fftt = $row['fftt'];
 			$adresse = $row['adresse'];
 			$code_postal = $row['code_postal'];
 			$ville = $row['ville'];
@@ -37,9 +36,10 @@ if(isset($params['record_id']) && $params['record_id'] != '' && $params['record_
 		}
 		$smarty->assign('formstart',
 				    $this->CreateFormStart( $id, 'fe_do_edit_adherent', $returnid ) );
-
+		$smarty->assign('genid',
+				$this->CreateInputHidden($id,'genid',$record_id));
 		$smarty->assign('licence',
-					$this->CreateInputHidden($id,'licence',$record_id));
+					$this->CreateInputText($id,'licence',$licence));
 		$smarty->assign('anniversaire',$this->CreateInputDate($id, 'anniversaire',(isset($anniversaire)?$anniversaire:"")));
 		$smarty->assign('adresse',
 				$this->CreateInputText($id,'adresse',(isset($adresse)?$adresse:""), 100, 250));

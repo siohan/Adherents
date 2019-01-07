@@ -149,11 +149,11 @@ function count_users_in_group($id_group)
 	return $nb;
 }
 //supprime un utilisateur d'un groupe particulier
-function delete_user_from_group($record_id, $licence)
+function delete_user_from_group($record_id, $genid)
 {
 	$db = cmsms()->GetDb();
-	$query = "DELETE FROM ".cms_db_prefix()."module_adherents_groupes_belongs WHERE id_group = ? AND licence = ?";
-	$dbresult = $db->Execute($query, array($record_id,$licence));
+	$query = "DELETE FROM ".cms_db_prefix()."module_adherents_groupes_belongs WHERE id_group = ? AND genid = ?";
+	$dbresult = $db->Execute($query, array($record_id,$genid));
 	if($dbresult)
 	{
 		return TRUE;
@@ -165,11 +165,11 @@ function delete_user_from_group($record_id, $licence)
 	
 }
 //assigne un adhérent à un groupe
-function assign_user_to_group($id_group, $licence)
+function assign_user_to_group($id_group, $genid)
 {
 	$db = cmsms()->GetDb();
-	$query = "INSERT INTO ".cms_db_prefix()."module_adherents_groupes_belongs (id_group,licence) VALUES ( ?, ?)";
-	$dbresultat = $db->Execute($query, array($id_group,$licence));
+	$query = "INSERT INTO ".cms_db_prefix()."module_adherents_groupes_belongs (id_group,genid) VALUES ( ?, ?)";
+	$dbresultat = $db->Execute($query, array($id_group,$genid));
 }
 //assigne un nouvel utilisateur au groupe adherents( groupe par défaut)
 function assign_to_adherent()
@@ -190,11 +190,11 @@ function assign_to_adherent()
 	}
 }
 //retire un adhérent de tous les groupes où il est présent
-function delete_user_from_all_groups($licence)
+function delete_user_from_all_groups($genid)
 {
 	$db = cmsms()->GetDb();
-	$query = "DELETE FROM ".cms_db_prefix()."module_adherents_groupes_belongs WHERE licence = ?";
-	$dbresult = $db->Execute($query, array($licence));
+	$query = "DELETE FROM ".cms_db_prefix()."module_adherents_groupes_belongs WHERE genid = ?";
+	$dbresult = $db->Execute($query, array($genid));
 	if($dbresult)
 	{
 		return TRUE;
@@ -206,12 +206,12 @@ function delete_user_from_all_groups($licence)
 	
 }
 //supprime l'accès à l'espace privé
-function delete_user_feu($licence)
+function delete_user_feu($genid)
 {
 	$feu = cms_utils::get_module('FrontEndUsers');
 	//$feu_ops = new FrontEndUsersManipulator;//cms_utils::get_module('FrontEndUsers');
 	//on récupére le id de l'utilisateur
-	$id = $feu->GetUserID($licence);
+	$id = $feu->GetUserProperty($genid);
 	$supp_user = $feu->DeleteUserFull($id);
 }
 //créé une liste de tous les groupes actifs
@@ -248,8 +248,8 @@ function liste_licences_from_group($id_group)
 	{
 		while($row = $dbresult->FetchRow())
 		{
-			$licence = $row['licence'];
-			$liste_licences[] = $row['licence'];
+			$genid = $row['genid'];
+			$liste_licences[] = $row['genid'];
 		}
 		return $liste_licences;
 	}

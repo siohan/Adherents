@@ -2,7 +2,7 @@
 if( !isset($gCms) ) exit;
 $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
-$username = $feu->GetUsername($userid);
+$username = $feu->GetUserProperty('genid');
 
 require_once(dirname(__FILE__).'/include/fe_menu.php');
 $delete = '<img src="modules/Adherents/images/delete.gif" class="systemicon" alt="Supprimer" title="Supprimer">';
@@ -46,43 +46,30 @@ $dbresult= $db->Execute($query, array($username));
 				$onerow->date_created = $row['date_created'];
 				$onerow->tarif = $row['tarif'];	
 				$reglement = $paiement_ops->is_paid($ref_action);
-				//var_dump($reglement);
 				$restant_du = '0.00';
 				$du = '0.00';
 				if(TRUE === $reglement)
 				{
 					$onerow->statut = $vrai;//$themeObject->DisplayImage('icons/system/true.gif', $this->Lang('delete'), '', '', 'systemicon');
 					$onerow->restant_du = $du;
-				//	$onerow->view_reglement = $this->CreateLink($id, 'view_reglements',$returnid, $themeObject->DisplayImage('icons/system/view.gif', $this->Lang('view'), '', '', 'systemicon'), array('record_id'=>$row['ref_action']));
 				}
 				elseif(FALSE === $reglement)
 				{
 					$restant_du = $paiement_ops->restant_du($ref_action);
-					//$restant_du = number_format($restant_du,2);
-				//	var_dump($restant_du);
+				
 					if(is_null($restant_du) || $restant_du > 0)//il n'y a pas encore de reglement ou pas la totalité du montant
 					{
 						$du = $row['tarif'] - $restant_du;
-					//	$du = number_format($du,2);
-					//	var_dump($du);
-					//	var_dump($du);
+					
 						if($du >0)
 						{
-							$onerow->statut = $faux;//$themeObject->DisplayImage('icons/system/false.gif', $this->Lang('delete'), '', '', 'systemicon');
-							//$onerow->add_reglement= $this->CreateLink($id, 'add_edit_reglement', $returnid, $shopping, array('record_id'=>$row['ref_action']));
-							$onerow->restant_du = $du;
-						//	$onerow->editlink= $this->CreateLink($id, 'add_edit_produit', $returnid, $themeObject->DisplayImage('icons/system/edit.gif', $this->Lang('edit'), '', '', 'systemicon'), array('record_id'=>$row['ref_action']));
-							//on envoie une relance ? si on a bien un mail
-						
-						//	$onerow->relance=$this->CreateLink($id, 'relance_email',$returnid,$relance, array("licence"=>$row['licence'], "ref_action"=>$row['ref_action']));
+							$onerow->statut = $faux;						
+							$onerow->restant_du = $du;						
 						}
 						else
 						{
-
 							$onerow->statut = $vrai;//$themeObject->DisplayImage('icons/system/true.gif', $this->Lang('delete'), '', '', 'systemicon');
-							$onerow->restant_du = $du;
-							//$onerow->view_details_commande=  $this$themeObject->DisplayImage('icons/system/view.gif', $this->Lang('delete'), '', '', 'systemicon');
-							//$onerow->view_reglement = $this->CreateLink($id, 'view_reglements',$returnid, $themeObject->DisplayImage('icons/system/view.gif', $this->Lang('view'), '', '', 'systemicon'), array('record_id'=>$row['ref_action']));
+							$onerow->restant_du = $du;						
 						}
 
 
@@ -90,8 +77,7 @@ $dbresult= $db->Execute($query, array($username));
 					
 					
 				}
-				//$onerow->delete = $this->CreateLink($id, '', $returnid, $themeObject->DisplayImage('icons/system/delete.gif', $this->Lang('delete'), '', '', 'systemicon'),array() );
-				
+			
 				($rowclass == "row1" ? $rowclass= "row2" : $rowclass= "row1");
 				$rowarray[]= $onerow;
       			}

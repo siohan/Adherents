@@ -1,7 +1,7 @@
 <?php
 //ce fichier fait des actions de masse, il est appelé depuis l'onglet de récupération des infos sur les joueurs
 if( !isset($gCms) ) exit;
-debug_display($params, 'Parameters');
+//debug_display($params, 'Parameters');
 //var_dump($params['sel']);
 $db = cmsms()->GetDb();
 if (isset($params['submit_massaction']) && isset($params['actiondemasse']) )
@@ -35,9 +35,9 @@ if (isset($params['submit_massaction']) && isset($params['actiondemasse']) )
 			
 			case "desactivate" : 
 				$adh_ops = new adherents_spid;
-				foreach($params['sel'] as $licence)
+				foreach($params['sel'] as $genid)
 				{
-					$adh_ops->desactivate($licence);
+					$adh_ops->desactivate($genid);
 				}
 				
 				$this->Redirect($id,'defaultadmin',$returnid);

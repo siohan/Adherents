@@ -1,5 +1,4 @@
-<pre>{*$rowarray|var_dump*}</pre>
-{**}<div class="pageoverflow">
+<div class="pageoverflow">
 {$formstart}
 
 <div class="pageoverflow">
@@ -9,7 +8,7 @@
 
 {foreach from=$rowarray key=key item=entry}
 <div class="pageoverflow">
-    <p class="pageinput"><input type="checkbox"  name="m1_licence[{$key}]" id="m1_licence[{$key}]" {if $entry['participe'] ==1}checked='checked' {/if} value = '1'>{$entry['name']}</p>
+    <p class="pageinput"><input type="checkbox"  name="m1_genid[{$key}]" id="m1_genid[{$key}]" {if $entry['participe'] ==1}checked='checked' {/if} value = '1'>{$entry['name']}</p>
   </div>
 {/foreach}
   <div class="pageoverflow">

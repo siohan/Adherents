@@ -10,7 +10,8 @@
 		<th>Groupe</th>
 		<th>Description</th>
 		<th>Nb utilisateurs</th>
-		<th>Actif</th>
+		<th>Actif ?</th>
+		<th>Gp public ?</th>
 		<th colspan="5">Actions</th>
 	</tr>
  </thead>
@@ -22,6 +23,7 @@
 	<td>{$entry->description}</td>
 	<td>{$entry->nb_users}</td>
 	<td>{$entry->actif}</td>
+	<td>{$entry->public}</td>
 	<td>{$entry->send_emails}</td>
 	<td>{$entry->send_sms}</td>
 	<td>{$entry->editlink}</td>

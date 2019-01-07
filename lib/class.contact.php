@@ -17,12 +17,12 @@ class contact
 
 	}
 	
-	function add_contact ($licence, $type_contact,$contact,$description)
+	function add_contact ($genid, $type_contact,$contact,$description)
 	{
 		global $gCms;
 		$db = cmsms()->GetDb();
-		$query = "INSERT INTO ".cms_db_prefix()."module_adherents_contacts (licence, type_contact,contact, description) VALUES (?, ?, ?, ?)";
-		$dbresult = $db->Execute($query, array($licence, $type_contact,$contact,$description));
+		$query = "INSERT INTO ".cms_db_prefix()."module_adherents_contacts (genid, type_contact,contact, description) VALUES (?, ?, ?, ?)";
+		$dbresult = $db->Execute($query, array($genid, $type_contact,$contact,$description));
 	}
 	
 	function update_contact ($type_contact,$contact,$description,$record_id)
@@ -34,11 +34,11 @@ class contact
 		$dbresult = $db->Execute($query, array($type_contact,$contact,$description,$record_id));
 	}
 	//Cette fonction vérifie si le licencié a une adresse email répertoriée
-	function has_email($licence)
+	function has_email($genid)
 	{
 		$db = cmsms()->GetDb();
-		$query = "SELECT contact FROM ".cms_db_prefix()."module_adherents_contacts WHERE licence = ? AND type_contact = 1";
-		$dbresult = $db->Execute($query, array($licence));
+		$query = "SELECT contact FROM ".cms_db_prefix()."module_adherents_contacts WHERE genid = ? AND type_contact = 1";
+		$dbresult = $db->Execute($query, array($genid));
 		if($dbresult && $dbresult->RecordCount()>0)
 		{
 			return TRUE;
@@ -50,11 +50,11 @@ class contact
 		
 	}
 	//vérifie si l'adhérent a un mobile répertorié
-	function has_mobile($licence)
+	function has_mobile($genid)
 	{
 		$db = cmsms()->GetDb();
-		$query = "SELECT contact FROM ".cms_db_prefix()."module_adherents_contacts WHERE licence = ? AND type_contact = 2";
-		$dbresult = $db->Execute($query, array($licence));
+		$query = "SELECT contact FROM ".cms_db_prefix()."module_adherents_contacts WHERE genid = ? AND type_contact = 2";
+		$dbresult = $db->Execute($query, array($genid));
 		if($dbresult && $dbresult->RecordCount()>0)
 		{
 			return TRUE;
@@ -65,11 +65,11 @@ class contact
 		}
 		
 	}
-	function email_address($licence)
+	function email_address($genid)
 	{
 		$db = cmsms()->GetDb();
-		$query = "SELECT contact FROM ".cms_db_prefix()."module_adherents_contacts WHERE licence = ? AND type_contact = 1";
-		$dbresult = $db->Execute($query, array($licence));
+		$query = "SELECT contact FROM ".cms_db_prefix()."module_adherents_contacts WHERE genid = ? AND type_contact = 1";
+		$dbresult = $db->Execute($query, array($genid));
 		if($dbresult && $dbresult->RecordCount()>0)
 		{
 			$row = $dbresult->FetchRow();
@@ -83,11 +83,11 @@ class contact
 		
 	}
 	//récupère le N° de portable d'un licencié
-	function mobile($licence)
+	function mobile($genid)
 	{
 		$db = cmsms()->GetDb();
-		$query = "SELECT contact FROM ".cms_db_prefix()."module_adherents_contacts WHERE licence = ? AND type_contact = 2";
-		$dbresult = $db->Execute($query, array($licence));
+		$query = "SELECT contact FROM ".cms_db_prefix()."module_adherents_contacts WHERE genid = ? AND type_contact = 2";
+		$dbresult = $db->Execute($query, array($genid));
 		if($dbresult && $dbresult->RecordCount()>0)
 		{
 			$row = $dbresult->FetchRow();
@@ -168,13 +168,13 @@ class contact
 	function UsersFromGroup($id_group)
 	{
 		$db = cmsms()->GetDb();
-		$query = "SELECT licence FROM ".cms_db_prefix()."module_adherents_groupes_belongs WHERE id_group = ?";
+		$query = "SELECT genid FROM ".cms_db_prefix()."module_adherents_groupes_belongs WHERE id_group = ?";
 		$dbresult = $db->Execute($query, array($id_group));
 		if($dbresult && $dbresult->RecordCount()>0)
 		{
 			while($row = $dbresult->FetchRow())
 			{
-				$licencies[] = $row['licence'];
+				$licencies[] = $row['genid'];
 			}
 			return $licencies;
 		}

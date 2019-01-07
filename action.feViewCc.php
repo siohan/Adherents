@@ -3,7 +3,8 @@ if( !isset($gCms) ) exit;
 
 $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
-$username = $feu->GetUsername($userid);
+$username = $feu->GetUserProperty('genid');
+//$username = $feu->GetUsername($userid);
 //global $themeObject;
 require_once(dirname(__FILE__).'/include/fe_menu.php');
 $email = $feu->LoggedInEmail();
@@ -23,7 +24,7 @@ else
 $modify = '<img src="modules/Adherents/images/edit.gif" class="systemicon" alt="Modifier" title="Modifier">';
 $del = '<img src="modules/Adherents/images/delete.gif" class="systemicon" alt="Supprimer" title="Supprimer">';
 $result= array ();
-$query1 = "SELECT it.id AS item_id, it.fk_id , it.date_created,it.libelle_commande,it.ep_manche_taille, it.couleur, it.categorie_produit, it.fournisseur,it.quantite, it.prix_total, it.statut_item,it.commande FROM ".cms_db_prefix()."module_commandes_cc_items AS it WHERE id = ? AND fk_id = ? ";
+$query1 = "SELECT it.id AS item_id, it.fk_id , it.date_created,it.libelle_commande,it.ep_manche_taille, it.couleur, it.categorie_produit, it.fournisseur,it.quantite, it.prix_total, it.statut_item,it.commande FROM ".cms_db_prefix()."module_commandes_cc_items AS it WHERE id = ? AND genid = ? ";
 
 
 	//$query .=" ORDER BY id DESC";
@@ -41,12 +42,12 @@ $query1 = "SELECT it.id AS item_id, it.fk_id , it.date_created,it.libelle_comman
 				$onerow= new StdClass();
 				$onerow->rowclass= $rowclass;
 				$onerow->item_id= $row['item_id'];
-				$id_commandes = $row['fk_id'];
+				$id_commandes = $row['genid'];
 				//$user_validation = $row['user_validation'];
 				//$commande_number = $row['commande_number'];
 				$commande = $row['commande']; //gère si l'item doit être modifiable ou non
 				//$fournisseur = $row['fournisseur'];
-				$onerow->commande_id= $row['fk_id'];
+				$onerow->commande_id= $row['genid'];
 				$onerow->date_created = $row['date_created'];
 				$onerow->libelle_commande = $row['libelle_commande'];
 				$onerow->categorie_produit = $row['categorie_produit'];
@@ -78,7 +79,7 @@ $query1 = "SELECT it.id AS item_id, it.fk_id , it.date_created,it.libelle_comman
 		$smarty->assign('validate',
 			$this->CreateLink($id, 'default',$returnid, 'Terminer ma commande', array("display"=>"validate", "commande_number"=>$commande_number),$warn_message="Votre commande va devenir définitive : vous ne pourrez plus la modifier."));
 		$smarty->assign('new_command', 
-			$this->CreateLink($id, 'default', $returnid, 'Ajouter un article',array("display"=>"add_cc_items","commande_number"=>$commande_number, "commande_id"=>$row['fk_id'],"fournisseur"=>$fournisseur)));
+			$this->CreateLink($id, 'default', $returnid, 'Ajouter un article',array("display"=>"add_cc_items","commande_number"=>$commande_number, "commande_id"=>$row['genid'],"fournisseur"=>$fournisseur)));
 		$smarty->assign('itemsfound', $this->Lang('resultsfoundtext'));
 		$smarty->assign('itemcount', count($rowarray));
 		$smarty->assign('items', $rowarray);

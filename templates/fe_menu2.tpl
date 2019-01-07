@@ -86,7 +86,7 @@
             <a class="dropdown-item" href="blank.html">Blank Page</a>
           </div>
         </li>
--->
+-->{if $feu_fftt == 1}
         <li class="nav-item">
           <a class="nav-link" href="{cms_action_url action=fe_sportif record_id=$username}">
             <i class="fas fa-fw fa-table-tennis"></i>
@@ -102,27 +102,40 @@
             <i class="fas fa-fw fa-chart-area"></i>
             <span>Ma situation mensuelle</span></a>
         </li>
+{/if}
+{if $feu_commandes == 1}
 		<li class="nav-item">
           <a class="nav-link" href="{cms_action_url action=fe_commandes display=infos record_id=$username}">
             <i class="fas fa-fw fa-shopping-cart"></i>
             <span>Mes commandes</span></a>
         </li>
-		<!--<li class="nav-item">
+{/if}
+{if $feu_inscriptions ==1}
+		<li class="nav-item">
           <a class="nav-link" href="{cms_action_url action=fe_inscriptions display=infos record_id=$username}">
             <i class="fas fa-fw fa-user-check"></i>
             <span>Mes inscriptions</span></a>
         </li>
--->
+{/if}
+{if $feu_presences ==1}
+		<li class="nav-item">
+          <a class="nav-link" href="{cms_action_url action=fe_presences display=infos record_id=$username}">
+            <i class="fas fa-fw fa-user-check"></i>
+            <span>Mes présences</span></a>
+        </li>
+{/if}
 		<li class="nav-item">
           <a class="nav-link" href="{cms_action_url action=default display=infos record_id=$username}">
             <i class="fas fa-fw fa-chart-area"></i>
             <span>Mes infos</span></a>
         </li>
+{if $feu_contacts == 1}
         <li class="nav-item">
           <a class="nav-link" href="{cms_action_url action=fe_view_contacts display=contacts record_id=$username}l">
             <i class="fas fa-fw fa-user"></i>
             <span>Mes contacts</span></a>
         </li>
+{/if}
       </ul>
 	<div id="content-wrapper">
 
@@ -139,6 +152,7 @@
 	          <!-- Icon Cards-->
 			
 	          <div class="row">
+				{if $feu_messages == 1}
 				<div class="col-xl-3 col-sm-6 mb-3">
 	              <div class="card text-white bg-primary o-hidden h-100">
 	                <div class="card-body">
@@ -155,6 +169,8 @@
 	                </a>
 	              </div>
 	            </div>
+	{/if}
+	{if $feu_factures == 1}
 	            <div class="col-xl-3 col-sm-6 mb-3">
 	              <div class="card text-white bg-warning o-hidden h-100">
 	                <div class="card-body">
@@ -171,6 +187,8 @@
 	                </a>
 	              </div>
 	            </div>
+	{/if}
+	{if $feu_commandes == 1}
 	            <div class="col-xl-3 col-sm-6 mb-3">
 	              <div class="card text-white bg-success o-hidden h-100">
 	                <div class="card-body">
@@ -187,6 +205,7 @@
 	                </a>
 	              </div>
 	            </div>
+{/if}
 	<!--
 	            <div class="col-xl-3 col-sm-6 mb-3">
 	              <div class="card text-white bg-danger o-hidden h-100">
@@ -207,11 +226,3 @@
 	-->
 	          </div>
 	
-{*
-{$infos_persos}
-{$contacts}
-{$myresults}
-{$spid}
-{$masitmens}
-{$MesCommandes}
-*}

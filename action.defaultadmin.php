@@ -20,7 +20,8 @@ if (FALSE == empty($params['active_tab']))
 	echo $this->SetTabHeader('email', 'Emails' , ('email' == $tab)?true:false);
 if ($this->CheckPermission('Adherents prefs'))
 {
-	echo $this->SetTabHeader('compte', 'Compte' , ('compte' == $tab)?true:false);
+	echo $this->SetTabHeader('config', 'Config' , ('config' == $tab)?true:false);
+	echo $this->SetTabHeader('compte', 'FFTT' , ('compte' == $tab)?true:false);
 }
 
 
@@ -49,6 +50,10 @@ echo $this->StartTabContent();
 /*	*/
 if ($this->CheckPermission('Adherents prefs'))
 {
+	echo $this->StartTab('config' , $params);
+	include(dirname(__FILE__).'/action.admin_config_tab.php');
+	echo $this->EndTab();
+	
 	echo $this->StartTab('compte' , $params);
 	include(dirname(__FILE__).'/action.admin_compte_tab.php');
 	echo $this->EndTab();

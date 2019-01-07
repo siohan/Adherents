@@ -3,7 +3,9 @@ if (!isset($gCms)) exit;
 //debug_display($params,'Parameters');
 $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
-$username = $feu->GetUserName($userid);
+$username = $feu->GetUserProperty('genid');
+//$username = $feu->GetUserName($userid);
+//$username 
 require_once(dirname(__FILE__).'/include/fe_menu.php');
 //echo "FEU : le user est : ".$username." ".$userid;
 //$properties = $feu->GetUserProperties($userid);
@@ -19,7 +21,7 @@ $designation = '';
 $smarty->assign('fe_envoi_message',
 		$this->CreateLink($id, 'fe_envoi_message', $returnid, 'Ecrire un nouveau message', array("record_id"=>$username,$inline='true')));
 	
-	$query = " SELECT mess.id AS id_message,mess.sender, mess.senddate, mess.sendtime, mess.replyto, mess.group_id, mess.subject, mess.message, recip.licence, recip.id AS mess_id, recip.ar FROM ".cms_db_prefix()."module_messages_messages AS mess, ".cms_db_prefix()."module_messages_recipients AS recip  WHERE mess.id = recip.message_id AND recip.licence LIKE ? AND mess.sent = '1' AND recip.actif = '1' ORDER BY senddate DESC, sendtime DESC";
+	$query = " SELECT mess.id AS id_message,mess.sender, mess.senddate, mess.sendtime, mess.replyto, mess.group_id, mess.subject, mess.message, recip.genid, recip.id AS mess_id, recip.ar FROM ".cms_db_prefix()."module_messages_messages AS mess, ".cms_db_prefix()."module_messages_recipients AS recip  WHERE mess.id = recip.message_id AND recip.genid = ? AND mess.sent = '1' AND recip.actif = '1' ORDER BY senddate DESC, sendtime DESC";
 	$dbresult = $db->Execute($query, array($username));
 	
 	if($dbresult && $dbresult->recordCount() >0)

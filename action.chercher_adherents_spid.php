@@ -30,18 +30,19 @@ if(isset($params['email']) && $params['email'] != '')
 {
 	$email = $params['email'];
 }
-if(isset($params['licence']) && $params['licence'] != '')
+if(isset($params['genid']) && $params['genid'] != '')
 {
-	$licence = $params['licence'];
+	$genid = $params['genid'];
 }
 if(isset($params['nom']) && $params['nom'] != '')
 {
-	$nom = $params['nom'];
+	$nom = str_replace(" ","",$params['nom']);
 }
 if(isset($params['prenom']) && $params['prenom'] != '')
 {
-	$prenom = $params['prenom'];
+	$prenom = str_replace(" ", "",$params['prenom']);
 }
+
 
 switch($obj)
 {
@@ -76,12 +77,13 @@ switch($obj)
 	case "delete_contact" : 
 		$del_contact = new contact;
 		$adhrents_spid = $del_contact->delete_contact($record_id);
-		$this->Redirect($id, 'view_contacts',$returnid, array("licence"=>$licence));
+		$this->Redirect($id, 'view_contacts',$returnid, array("genid"=>$genid));
 	break;
 	case "delete_user_feu" :
 		//cms_utils::get_module('FrontEndUsers');
 		//on récupére le id de l'utilisateur
-		$id = $feu->GetUserID($licence);
+		$username = $prenom.''.$nom;
+		$id = $feu->GetUserID($username);
 		$supp_user = $feu->DeleteUserFull($id);
 		
 		$this->RedirectToAdminTab('feu');
@@ -102,7 +104,7 @@ switch($obj)
 		//qqs variables pour le mail
 		$smarty->assign('prenom_joueur', $prenom);
 		$smarty->assign('nom_joueur' , $nom);
-		$smarty->assign('licence', $licence);
+		$smarty->assign('genid', $genid);
 		//$motdepasse = 'UxzqsUIM1';
 		$smarty->assign('motdepasse', $motdepasse);
 
@@ -110,7 +112,7 @@ switch($obj)
 		$add_user = $feu->AddUser($licence, $motdepasse,$expires);
 
 		//on récupère le userid ($uid)
-		$uid = $feu->GetUserId($licence);
+		$uid = $feu->GetUserId($username);
 		//on force le changement de mot de passe ?
 		$feu->ForcePasswordChange($uid, $flag = TRUE);	
 		$gid = $feu->GetGroupId('adherents');
@@ -119,6 +121,7 @@ switch($obj)
 		/* on remplit les propriétés de lutilisateur */
 		$feu->SetUserPropertyFull('email',$user_email, $uid);
 		$feu->SetUserPropertyFull('nom', $nom_complet,$uid);
+		$feu->SetUserPropertyFull('genid', $genid,$uid);
 
 		/* On essaie d'envoyer un message à l'utilisateur pour lui dire qu'il est enregistré */	
 
@@ -150,7 +153,7 @@ switch($obj)
 		$this->RedirectToAdminTab('adherents');
 	break;
 	case "delete_user_from_group" :
-		$supp_user_from_group = $group_ops->delete_user_from_group($record_id,$licence);
+		$supp_user_from_group = $group_ops->delete_user_from_group($record_id,$genid);
 		if(FALSE === $supp_user_from_group)
 		{
 			$this->SetMessage('Erreur : Adhérent non supprimé du groupe');
@@ -168,16 +171,16 @@ switch($obj)
 	break;
 	
 	case "activate" :
-		$class_ops->activate($licence);
-		$group_ops->assign_to_adherent($licence);
+		$class_ops->activate($genid);
+		$group_ops->assign_to_adherent($genid);
 		$this->SetMessage('Adhérent activé, ajouté au groupe des adhérents');
 		$this->Redirect($id, 'defaultadmin', $returnid);
 	break;
 	
 	case "desactivate" : 
-		$class_ops->desactivate($licence);
-		$group_ops->delete_user_from_all_groups($licence);
-		$group_ops->delete_user_feu($licence);
+		$class_ops->desactivate($genid);
+		$group_ops->delete_user_from_all_groups($genid);
+		$group_ops->delete_user_feu($genid);
 		$this->SetMessage('Adhérent désactivé, retiré de tous les groupes et accès espace privé supprimé');
 		$this->Redirect($id, 'defaultadmin', $returnid);
 	break;

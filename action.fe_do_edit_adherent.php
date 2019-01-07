@@ -1,6 +1,6 @@
 <?php
 if (!isset($gCms)) exit;
-debug_display($params, 'Parameters');
+//debug_display($params, 'Parameters');
 
 
 if( isset($params['cancel']) )
@@ -8,6 +8,9 @@ if( isset($params['cancel']) )
 	$this->Redirect($i, 'default', $returnid);
 	return;
 }
+$feu = cms_utils::get_module('FrontEndUsers');
+$userid = $feu->LoggedInId();
+$username = $feu->GetUserProperty('genid');
 
 //on récupère les valeurs
 //pour l'instant pas d'erreur
@@ -18,7 +21,7 @@ $alert = 0;//pour savoir si certains champs doivent contenir une valeur ou non
 	
 		
 		
-	
+		
 		$licence = '';
 		if (isset($params['licence']) && $params['licence'] !='')
 		{
@@ -50,7 +53,7 @@ $alert = 0;//pour savoir si certains champs doivent contenir une valeur ou non
 		if($error>0)
 		{
 			$this->Setmessage('Parametres requis manquants !');
-			$this->Redirect($id, 'edit_adherent',$returnid, array("licence"=>$licence));//ToAdminTab('commandesclients');
+			$this->Redirect($id, 'edit_adherent',$returnid, array("genid"=>$username));//ToAdminTab('commandesclients');
 		}
 		else // pas d'erreurs on continue
 		{
@@ -58,7 +61,7 @@ $alert = 0;//pour savoir si certains champs doivent contenir une valeur ou non
 			$service = new adherents_spid();
 			
 			
-				$update_adherent = $service->fe_edit_adherent($licence,$anniversaire,$adresse,$code_postal,$ville);
+				$update_adherent = $service->fe_edit_adherent($username,$licence,$anniversaire,$adresse,$code_postal,$ville);
 			
 			
 		

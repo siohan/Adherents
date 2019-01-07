@@ -18,91 +18,41 @@ global $themeObject;
 $licence = '';
 $edition = 0;
 $OuiNon = array("Oui"=>"1","Non"=>"0");
+$edit = 0;
 if(isset($params['record_id']) && $params['record_id'] != '')
 {
-	$edition = 1;
-	$valeur = 1;
+	
 	$record_id = $params['record_id'];
-	
-	$query  = "SELECT licence,actif,fftt, nom, prenom, adresse, code_postal, anniversaire, ville FROM ".cms_db_prefix()."module_adherents_adherents WHERE id = ?";
-	$dbresult = $db->Execute($query, array($record_id));
-	if($dbresult)
-	{
-		while ($dbresult && $row = $dbresult->FetchRow())
-		{
-			//$compt++;
+	$as_adh = new Asso_adherents;
+	$details = $as_adh->details_adherent($record_id);
+	$edit = 1;
+	$smarty->assign('genid',$this->CreateInputHidden($id,'genid', $details['genid']));
 			
-			$licence = $row['licence'];
-			$nom = $row['nom'];
-			$prenom = $row['prenom'];
-			$fftt = $row['fftt'];
-			$adresse = $row['adresse'];
-			$code_postal = $row['code_postal'];
-			$ville = $row['ville'];
-			$anniversaire = $row['anniversaire'];
-			
-				
-			
-			
-		}
-		$smarty->assign('formstart',
-				    $this->CreateFormStart( $id, 'do_edit_adherent', $returnid ) );
-		$smarty->assign('edit',$this->CreateInputHidden('edit',$edition));
-		$smarty->assign('licence',
-					$this->CreateInputHidden($id,'licence',$licence));
-		$smarty->assign('anniversaire',$this->CreateInputDate($id, 'anniversaire', $anniversaire));
-		$smarty->assign('adresse',
-				$this->CreateInputText($id,'adresse',$adresse, 100, 250));
-		$smarty->assign('code_postal',
-				$this->CreateInputText($id, 'code_postal',$code_postal, 50, 200));		
-		$smarty->assign('ville',
-				$this->CreateInputText($id,'ville',$ville,50,200));
-		$smarty->assign('submit',
-				$this->CreateInputSubmit($id, 'submit', $this->Lang('submit'), 'class="button"'));
-		$smarty->assign('cancel',
-				$this->CreateInputSubmit($id,'cancel',
-							$this->Lang('cancel')));
-
-
-		$smarty->assign('formend',
-				$this->CreateFormEnd());
-				
-		//$query.=" ORDER BY date_compet";
-	echo $this->ProcessTemplate('edit_adherent.tpl');
-	}
-	elseif(!$dbresult)
-	{
-		echo $db->ErrorMsg();
-	}
-	
 }
-else
-{
-	$valeur = 0;
-	$smarty->assign('edition',$valeur);
-	$smarty->assign('edit',$this->CreateInputHidden($id,'edit',0));
-	//on renvoie à un formulaire vierge
+
 	$smarty->assign('formstart',
 			    $this->CreateFormStart( $id, 'do_edit_adherent', $returnid ) );
 
 	$smarty->assign('licence',
-				$this->CreateInputText($id,'licence',$licence, 15,30));
+				$this->CreateInputText($id,'licence',(isset($details['licence'])?$details['licence']: ""), 15,30));
 	$smarty->assign('nom',
-			$this->CreateInputText($id,'nom','', 15,30));
+			$this->CreateInputText($id,'nom',(isset($details['nom'])?$details['nom']: ""), 15,30));
 	$smarty->assign('prenom',
-			$this->CreateInputText($id,'prenom','', 15,30));
-	$smarty->assign('fftt',
-			$this->CreateInputDropdown($id,'fftt',$OuiNon, '',''));
+			$this->CreateInputText($id,'prenom',(isset($details['prenom'])?$details['prenom']: ""), 15,30));
+	$smarty->assign('sexe',
+			$this->CreateInputDropdown($id,'sexe',array("Masculin"=>"M", "Féminin"=>"F"),'',$selectedvalue=$details['sexe']));
 	$smarty->assign('externe',
-			$this->CreateInputDropdown($id,'externe',$OuiNon, '',''));
+			$this->CreateInputDropdown($id,'externe',$OuiNon, '',$selectedvalue=$details['externe']));
 	$smarty->assign('anniversaire',
-			$this->CreateInputDate($id, 'anniversaire'));
+			$this->CreateInputDate($id, 'anniversaire',(isset($details['anniversaire'])?$details['anniversaire']: "")));
 	$smarty->assign('adresse',
-			$this->CreateInputText($id,'adresse','', 100, 250));
+			$this->CreateInputText($id,'adresse',(isset($details['adresse'])?$details['adresse']: ""), 100, 250));
 	$smarty->assign('code_postal',
-			$this->CreateInputText($id, 'code_postal','', 50, 200));		
+			$this->CreateInputText($id, 'code_postal',(isset($details['code_postal'])?$details['code_postal']: ""), 50, 200));		
 	$smarty->assign('ville',
-			$this->CreateInputText($id,'ville','',50,200));
+			$this->CreateInputText($id,'ville',(isset($details['ville'])?$details['ville']: ""),50,200));
+	$smarty->assign('pays',
+			$this->CreateInputText($id,'pays',(isset($details['pays'])?$details['pays']: ""),50,200));
 	$smarty->assign('submit',
 			$this->CreateInputSubmit($id, 'submit', $this->Lang('submit'), 'class="button"'));
 	$smarty->assign('cancel',
@@ -115,16 +65,6 @@ else
 			
 	//$query.=" ORDER BY date_compet";
 echo $this->ProcessTemplate('edit_adherent.tpl');
-}
-
-
-	
-
-
-
-
-
-
 
 #
 #EOF

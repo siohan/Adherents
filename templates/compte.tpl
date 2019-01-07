@@ -1,6 +1,6 @@
 {$startform}
 <fieldset>
-<legend>Données de votre compte (fournies par la FFTT)</legend>
+<legend>(Pour les clubs de tennis de table uniquement) Données de votre compte (fournies par la FFTT)</legend>
 	<div class="pageoverflow">
 		<p class="pagetext">Id de votre application</p>
 		<p class="pageinput">{$idAppli}</p>

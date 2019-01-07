@@ -23,10 +23,10 @@ $alert = 0;//pour savoir si certains champs doivent contenir une valeur ou non
 	
 		
 		
-		$licence = '';
-		if (isset($params['licence']) && $params['licence'] !='')
+		$genid = '';
+		if (isset($params['genid']) && $params['genid'] !='')
 		{
-			$licence = $params['licence'];
+			$genid = $params['genid'];
 		}
 		else
 		{
@@ -108,7 +108,7 @@ $alert = 0;//pour savoir si certains champs doivent contenir une valeur ou non
 		if($error>0)
 		{
 			$this->Setmessage('Parametres requis manquants ou email invalide !');
-			$this->Redirect($id, 'add_edit_contact',$returnid, array("licence"=>$licence, "edit"=>$edit));//ToAdminTab('commandesclients');
+			$this->Redirect($id, 'add_edit_contact',$returnid, array("genid"=>$genid, "edit"=>$edit));//ToAdminTab('commandesclients');
 		}
 		else // pas d'erreurs on continue
 		{
@@ -117,7 +117,7 @@ $alert = 0;//pour savoir si certains champs doivent contenir une valeur ou non
 			
 			if($edit == 0)
 			{
-				$add_contact = $service->add_contact($licence, $type_contact,$contact,$description);				
+				$add_contact = $service->add_contact($genid, $type_contact,$contact,$description);				
 			}
 			else
 			{
@@ -135,6 +135,6 @@ $alert = 0;//pour savoir si certains champs doivent contenir une valeur ou non
 		
 
 $this->SetMessage('Contact modifié');
-$this->Redirect($id,'view_contacts', $returnid, array("licence"=>$licence));
+$this->Redirect($id,'view_contacts', $returnid, array("genid"=>$genid));
 
 ?>

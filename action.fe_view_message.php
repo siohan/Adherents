@@ -3,7 +3,7 @@ if (!isset($gCms)) exit;
 //debug_display($params,'Parameters');
 $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
-$username = $feu->GetUserName($userid);
+$username = $feu->GetUserProperty('genid');
 require_once(dirname(__FILE__).'/include/fe_menu.php');
 //echo "FEU : le user est : ".$username." ".$userid;
 //$properties = $feu->GetUserProperties($userid);
@@ -42,7 +42,7 @@ $designation = '';
 $smarty->assign('fe_add_cc',
 		$this->CreateLink($id, 'default', $returnid, 'Ajouter un article', array("record_id"=>$username,"display"=>"add_cc_items")));
 	
-	$query = "SELECT mess.id AS id_message,mess.sender, mess.senddate, mess.sendtime, mess.replyto, mess.group_id, mess.subject, mess.message, recip.licence FROM ".cms_db_prefix()."module_messages_messages AS mess, ".cms_db_prefix()."module_messages_recipients AS recip  WHERE mess.id = recip.message_id AND mess.id = ? AND recip.licence LIKE ?";
+	$query = "SELECT mess.id AS id_message,mess.sender, mess.senddate, mess.sendtime, mess.replyto, mess.group_id, mess.subject, mess.message, recip.genid FROM ".cms_db_prefix()."module_messages_messages AS mess, ".cms_db_prefix()."module_messages_recipients AS recip  WHERE mess.id = recip.message_id AND mess.id = ? AND recip.genid = ?";
 	$dbresult = $db->Execute($query, array($message_id,$username));
 	
 	if($dbresult && $dbresult->recordCount() >0)
@@ -51,31 +51,23 @@ $smarty->assign('fe_add_cc',
 		while($row = $dbresult->FetchRow())
 		{
 		
-					$onerow = new StdClass();
-					$onerow->sender = $row['sender'];
-					$onerow->senddate = $row['senddate'];
-					$onerow->sendtime =  $row['sendtime'];
-					$onerow->replyto = $row['replyto'];
-					$onerow->group_id = $row['group_id'];
-					$onerow->subject = $row['subject'];
-					$onerow->message = $row['message'];
-
-					//$onerow->view = $this->CreateFrontendLink($id, $returnid,'feViewCc', $contents='Détails',array("record_id"=>$row['commande_id']),$warn_message='',$onlyhref='',$inline='true');
-					//$onerow->view = $this->CreateLink($id, 'view_message', $returnid,$view,array("licence"=>$username, "message_id"=>$row['id']),$warn_message='',$onlyhref='',$inline='true');
-					
-					($rowclass == "row1" ? $rowclass= "row2" : $rowclass= "row1");
-					$rowarray[]= $onerow;
-				
-				
-
+			$onerow = new StdClass();
+			$onerow->sender = $row['sender'];
+			$onerow->senddate = $row['senddate'];
+			$onerow->sendtime =  $row['sendtime'];
+			$onerow->replyto = $row['replyto'];
+			$onerow->group_id = $row['group_id'];
+			$onerow->subject = $row['subject'];
+			$onerow->message = $row['message'];			
+			($rowclass == "row1" ? $rowclass= "row2" : $rowclass= "row1");
+			$rowarray[]= $onerow;	
 
 		}
 		$smarty->assign('itemsfound', $this->Lang('resultsfoundtext'));
 		$smarty->assign('itemcount', count($rowarray));
 		$smarty->assign('items', $rowarray);
 			
-	}
-		
+	}		
 
 	echo $this->ProcessTemplate('fe_view_message.tpl');	
 #

@@ -2,7 +2,7 @@
 
 #-------------------------------------------------------------------------
 # Module : Adherents - 
-# Version : 0.2.10, Sc
+# Version : 0.3, Sc
 # Auteur : Claude SIOHAN
 #-------------------------------------------------------------------------
 /**
@@ -20,7 +20,7 @@ class Adherents extends CMSModule
   
   function GetName() { return 'Adherents'; }   
   function GetFriendlyName() { return $this->Lang('friendlyname'); }   
-  function GetVersion() { return '0.2.10'; }  
+  function GetVersion() { return '0.3'; }  
   function GetHelp() { return $this->Lang('help'); }   
   function GetAuthor() { return 'Claude SIOHAN'; } 
   function GetAuthorEmail() { return 'claude.siohan@gmail.com'; }
@@ -41,7 +41,7 @@ class Adherents extends CMSModule
   
   function GetDependencies()
   {
-	return array('FrontEndUsers'=>'2.12');
+	return array('FrontEndUsers'=>'2.12.6');
   }
 
   
@@ -132,7 +132,16 @@ return $obj;
   function UninstallPreMessage() { return $this->Lang('really_uninstall'); }
   function random_string($car) {
 	$string = "";
-	$chaine = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+	$chaine = "abcdefghijklmnpqrstuvwxyz";
+	srand((double)microtime()*1000000);
+	for($i=0; $i<$car; $i++) {
+		$string .= $chaine[rand()%strlen($chaine)];
+	}
+	return $string;
+  }
+function random_int($car) {
+	$string = "";
+	$chaine = "123456789";
 	srand((double)microtime()*1000000);
 	for($i=0; $i<$car; $i++) {
 		$string .= $chaine[rand()%strlen($chaine)];

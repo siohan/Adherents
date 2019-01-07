@@ -2,7 +2,8 @@
 if(!isset($gCms) ) exit;
 $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
-$username = $feu->GetUserName($userid);
+$username = $feu->GetUserProperty('genid');
+//$username = $feu->GetUserName($userid);
 
 
 //um menu ?

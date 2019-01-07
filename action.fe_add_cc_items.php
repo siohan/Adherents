@@ -2,7 +2,8 @@
 if( !isset($gCms) ) exit;
 $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
-$username = $feu->GetUsername($userid);
+$username = $feu->GetUserProperty('genid');
+//$username = $feu->GetUsername($userid);
 //global $themeObject;
 require_once(dirname(__FILE__).'/include/fe_menu.php');
 $db =& $this->GetDb();

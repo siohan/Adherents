@@ -27,7 +27,7 @@ $(document).ready(function(){
 	<table border="0" cellspacing="0" cellpadding="0" class="pagetable tablesorter">
 	 <thead>
 		<tr>
-			<th>Licence</th>
+			<th>ID</th>
 			<th>Nom</th>
 			<th>Prénom</th> 
 			<th>Actif ?</th>
@@ -41,7 +41,7 @@ $(document).ready(function(){
 	 <tbody>
 	{foreach from=$items item=entry}
 	  <tr class="{$entry->rowclass}">
-		<td>{$entry->licence}</td>
+		<td>{$entry->genid}</td>
 		<td>{$entry->nom}</td>
 		<td>{$entry->prenom}</td>
 		<td>{$entry->actif}</td>

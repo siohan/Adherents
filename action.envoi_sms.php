@@ -9,7 +9,7 @@ if(!$this->CheckPermission('Adherents use'))
 }
 $db = cmsms()->GetDb();
 global $themeObject;
-debug_display($params, 'Parameters');
+//debug_display($params, 'Parameters');
 $aujourdhui = date('Y-m-d');
 //$ping = new Ping();
 $act = 1;//par defaut on affiche les actifs (= 1 )
