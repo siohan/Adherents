@@ -17,7 +17,7 @@ $db =& $this->GetDb();
 global $themeObject;
 $licence = '';
 $edition = 0;
-$OuiNon = array("Oui"=>"1","Non"=>"0");
+$OuiNon = array("Non"=>"0","Oui"=>"1");
 $edit = 0;
 if(isset($params['record_id']) && $params['record_id'] != '')
 {
@@ -40,9 +40,9 @@ if(isset($params['record_id']) && $params['record_id'] != '')
 	$smarty->assign('prenom',
 			$this->CreateInputText($id,'prenom',(isset($details['prenom'])?$details['prenom']: ""), 15,30));
 	$smarty->assign('sexe',
-			$this->CreateInputDropdown($id,'sexe',array("Masculin"=>"M", "Féminin"=>"F"),'',$selectedvalue=$details['sexe']));
+			$this->CreateInputDropdown($id,'sexe',array("Masculin"=>"M", "Féminin"=>"F"),'',(isset($details['sexe'])?$details['sexe']:"M")));
 	$smarty->assign('externe',
-			$this->CreateInputDropdown($id,'externe',$OuiNon, '',$selectedvalue=$details['externe']));
+			$this->CreateInputDropdown($id,'externe',$OuiNon, '',(isset($details['externe'])?$details['externe']:"Non")));
 	$smarty->assign('anniversaire',
 			$this->CreateInputDate($id, 'anniversaire',(isset($details['anniversaire'])?$details['anniversaire']: "")));
 	$smarty->assign('adresse',

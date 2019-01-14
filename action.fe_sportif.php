@@ -6,7 +6,10 @@ $userid = $feu->LoggedInId();
 $username = $feu->GetUserProperty('genid');//$username = $feu->GetUsername($userid);
 //global $themeObject;
 require_once(dirname(__FILE__).'/include/fe_menu.php');
-
+$asso_ops = new Asso_adherents;
+$details = $asso_ops->details_adherent_by_genid($username);
+$licence = $details['licence'];
+var_dump($licence);
 global $themeObject;
 $ping = new Ping();
 $saison = (isset($params['saison'])?$params['saison']:$ping->GetPreference('saison_en_cours'));
@@ -16,7 +19,7 @@ $db =& $this->GetDb();
 $query= "SELECT advnompre, advclaof,pointres, vd,date_event,codechamp FROM ".cms_db_prefix()."module_ping_parties WHERE saison = ? AND licence = ?";//" ORDER BY date_event ASC";
 $query.=" ORDER BY date_event DESC";
 //echo $query;
-$dbresult = $db->Execute($query, array($saison,$username));
+$dbresult = $db->Execute($query, array($saison,$licence));
 
 $rowarray= array();
 $rowclass= '';

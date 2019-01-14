@@ -7,14 +7,20 @@ if( !isset($gCms) ) exit;
 $db =& $this->GetDb();
 $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
-$username = $feu->GetUserName($userid);
+$username = $feu->GetUserProperty('genid');
 //echo $username;
+
 $service = new retrieve_ops();
+$ping_ops = new ping_admin_ops();
+$asso_ops = new Asso_adherents;
+
 if(isset($params['record_id']) && $params['record_id'] == $username)
 {
-	$licence = $params['record_id'];
+	$record_id = $params['record_id'];
 	//on récupère la catégorie du joueur depuis le module adherent
-	$cat = $this->get_cat($licence);
+	$cat = $this->get_cat($record_id);
+	$lic = $asso_ops->details_adherent_by_genid($record_id);
+	$licence = $lic['licence']; 
 }
 else
 {
@@ -23,8 +29,7 @@ else
 switch($params['retrieve'])
 {
 	case "spid" :
-		$service = new retrieve_ops();
-		$ping_ops = new ping_admin_ops();
+		
 		
     			$query = "SELECT CONCAT_WS(' ', nom, prenom) AS player FROM ".cms_db_prefix()."module_ping_joueurs WHERE licence = ? AND actif = '1'";
 			$dbretour = $db->Execute($query, array($licence));
@@ -34,18 +39,17 @@ switch($params['retrieve'])
 			      	{
 					$player = $row['player'];
 					
-					$service = new retrieve_ops();
+					
 					$resultats = $service->retrieve_parties_spid2($licence,$player,$cat);
 					$maj_spid = $ping_ops->compte_spid($licence);
 					//var_dump($resultats);
 				}
 
 			}  
-		$this->Redirect($id, 'fe_spid', $returnid, array("record_id"=>$licence));		
+		$this->Redirect($id, 'fe_spid', $returnid, array("record_id"=>$record_id));		
 	break;
 	case "fftt" :
-		$service = new retrieve_ops();
-		$ping_ops = new ping_admin_ops();
+		
 		
     			$query = "SELECT CONCAT_WS(' ', nom, prenom) AS player FROM ".cms_db_prefix()."module_ping_joueurs WHERE licence = ? AND actif = '1'";
 			$dbretour = $db->Execute($query, array($licence));
@@ -56,23 +60,23 @@ switch($params['retrieve'])
 					$player = $row['player'];
 					
 					//return $player;
-					$service = new retrieve_ops();
+					
 					$resultats = $service->retrieve_parties_fftt($licence,$player,$cat);
 					$maj_spid = $ping_ops->compte_spid($licence);
 					//var_dump($resultats);
 				}
 
 			}
-		$this->Redirect($id, 'fe_user_results', $returnid, array("record_id"=>$licence));
+		$this->Redirect($id, 'fe_user_results', $returnid, array("record_id"=>$record_id));
   		
 	break;
 		
 	case "sit_mens" :
 		
-		$service = new retrieve_ops();
+		
 		$sit_mens = $service->retrieve_sit_mens($licence);
 		//$this->SetMessage();
-		$this->Redirect($id,'fe_sit_mens', $returnid, array("record_id"=>$username));		
+		$this->Redirect($id,'fe_sit_mens', $returnid, array("record_id"=>$record_id));		
 		
 	break;
 

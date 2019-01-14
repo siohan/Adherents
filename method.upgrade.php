@@ -276,7 +276,8 @@ switch($current_version)
 				$licence = $row['licence'];
 				$genid = $row['genid'];
 				$prenom = $row['prenom'];
-				$nom = $row['nom'];
+				$nom = str_replace("&#39;", "", $row['nom']);
+				
 				$user = $prenom.''.$nom;				
 				$nom_complet = strtolower(str_replace (" ", "", $user));
 				//on récupère le id ou uid de chaque utilisateur

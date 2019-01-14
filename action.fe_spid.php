@@ -4,7 +4,7 @@ if( !isset($gCms) ) exit;
 $db =& $this->GetDb();
 $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
-$username = $feu->GetUsername($userid);
+$username = $feu->GetUserProperty('genid');
 //global $themeObject;
 require_once(dirname(__FILE__).'/include/fe_menu.php');
 $record_id = '';
@@ -12,19 +12,18 @@ $date_event = '';
 $affiche = 1;
 $current_month = date('n');
 $current_day = date('d');
+$asso_ops = new Asso_adherents;
 if($current_day < 10)
 {
 	$current_month = $current_month-1;
 }
 
-	if(!isset($params['record_id']) && $params['record_id'] =='' )
+	if(isset($params['record_id']) && $params['record_id'] !='' )
 	{
-		echo "la licence est absente !";
-		
-	}
-	else
-	{
-		$licence = $params['record_id'];
+	
+		$record_id = $params['record_id'];
+		$lic = $asso_ops->details_adherent_by_genid($record_id);
+		$licence = $lic['licence'];
 		$ping = cms_utils::get_module('Ping');
 		$saison_courante = $ping->GetPreference('saison_en_cours');
 		
@@ -67,7 +66,7 @@ $smarty->assign('items', $rowarray);
 $smarty->assign('resultats',
 		$this->CreateLink($id,'spid',$returnid,$contents = 'Tous ses résultats', array('record_id'=>$licence)));
 $smarty->assign('rafraichir',
-			$this->CreateLink($id,'retrieve',$returnid, 'Rafraichir mes données ou recalculer', array("retrieve"=>"spid",'record_id'=>$licence)));
+			$this->CreateLink($id,'retrieve',$returnid, 'Rafraichir mes données ou recalculer', array("retrieve"=>"spid",'record_id'=>$record_id)));
 echo $this->ProcessTemplate('fe_spid.tpl');
 
 

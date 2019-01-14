@@ -1,19 +1,26 @@
 <?php
 if( !isset($gCms) ) exit;
 //echo "Cool !";
-//debug_display($params, 'Parameters');
+debug_display($params, 'Parameters');
 $designation = '';//le message de fin....
 $feu = cms_utils::get_module('FrontEndUsers');
 //$feu = new FrontEndUsers();
 $error = 0;//on instancie un compteur d'erreurs
 // variables à contrôler :  l'email , la licence
+$asso_ops = new Asso_adherents;
 if(isset($params['nom']) && $params['nom'] !='')
 {
-	$nom = str_replace(" ", "",$params['nom']);
+	$nom = mb_convert_encoding($params['nom'], "UTF-8", "Windows-1252");
+	$nom = stripslashes($nom);
+	$nom = str_replace("&#39;", "", $params['nom']);
+	$nom = str_replace(" ", "",$nom);
+	var_dump($nom);
+	
 }
 if(isset($params['prenom']) && $params['prenom'] !='')
 {
-	$prenom = str_replace(" ", "",$params['prenom']);
+	$prenom = str_replace("&#39", "",$params['prenom']);
+	$prenom = $asso_ops->clean_name($prenom);
 }
 $nom_complet = strtolower($prenom. ''.$nom);
 if(isset($params['genid']) && $params['genid'] !='')

@@ -3,18 +3,18 @@ if( !isset($gCms) ) exit;
 //debug_display($params, 'Parameters');
 $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
-$username = $feu->GetUsername($userid);
+$username = $feu->GetUserProperty('genid');
 //global $themeObject;
 require_once(dirname(__FILE__).'/include/fe_menu.php');
 $db =& $this->GetDb();
 global $themeObject;
-if(!isset($params['record_id']) || $params['record_id'] != $username)
+$asso_ops = new Asso_adherents;
+if(isset($params['record_id']) && $params['record_id'] == $username)
 {
-	echo "Erreur !";
-}
-else
-{
-	$licence = $params['record_id'];
+
+	$record_id = $params['record_id'];
+	$lic = $asso_ops->details_adherent_by_genid($record_id);
+	$licence = $lic['licence'];
 	$ping = cms_utils::get_module('Ping');
 	$pong = new ping_admin_ops;
 	$sit = $pong->get_sit_mens($licence, date('m'), date('Y'));
@@ -22,7 +22,7 @@ else
 //	var_dump($sit);
 	if(FALSE === $sit)
 	{
-		$smarty->assign('sit_mens', $this->CreateLink($id, 'retrieve', $returnid, 'Rafraichir', array("retrieve"=>"sit_mens", "record_id"=>$username)));
+		$smarty->assign('sit_mens', $this->CreateLink($id, 'retrieve', $returnid, 'Rafraichir', array("retrieve"=>"sit_mens", "record_id"=>$record_id)));
 	}
 	else
 	{

@@ -4,13 +4,14 @@ if( !isset($gCms) ) exit;
 $db =& $this->GetDb();
 $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
-$username = $feu->GetUsername($userid);
+$username = $feu->GetUserProperty('genid');
 //global $themeObject;
 require_once(dirname(__FILE__).'/include/fe_menu.php');
 $licence = '';
 $date_event = '';
 $affiche = 1;//cette variable détermine l'affichage par mois
 $ok = 0;
+$asso_ops = new Asso_adherents;
 if(isset($params['saison']) && $params['saison'] != '')
 {
 	$saison_courante = $params['saison'];
@@ -23,14 +24,12 @@ else
 
 $phase = (isset($params['phase']))?$params['phase']:$this->GetPreference('phase_en_cours');
 //echo 'la phase est : '.$phase;
-	if(!isset($params['record_id']) && $params['record_id'] =='' )
+	if(isset($params['record_id']) && $params['record_id'] !='' )
 	{
-		echo "la licence est absente !";
-		
-	}
-	else
-	{
-		$licence = $params['record_id'];
+		$record_id = $params['record_id'];
+		$lic = $asso_ops->details_adherent_by_genid($record_id);
+		$licence = $lic['licence'];
+		//$licence = $params['record_id'];
 		$parms = array();
 		//si une date est précisée alors on affiche que les résultats de cette date
 		if(isset($params['date_debut']) && $params['date_debut'] !='')
@@ -51,9 +50,9 @@ $phase = (isset($params['phase']))?$params['phase']:$this->GetPreference('phase_
 		if($affiche ==1)
 		{
 			$smarty->assign('phase2',
-					$this->CreateLink($id,'fe_user_results',$returnid, 'Phase 2', array("phase"=>"2","record_id"=>$licence,'saison'=>$saison_courante) ));
+					$this->CreateLink($id,'fe_user_results',$returnid, 'Phase 2', array("phase"=>"2","record_id"=>$record_id,'saison'=>$saison_courante) ));
 			$smarty->assign('phase1',
-					$this->CreateLink($id,'fe_user_results',$returnid, 'Phase 1', array("phase"=>"1","record_id"=>$licence,'saison'=>$saison_courante) ));
+					$this->CreateLink($id,'fe_user_results',$returnid, 'Phase 1', array("phase"=>"1","record_id"=>$record_id,'saison'=>$saison_courante) ));
 		}
 		
 		$rowarray1 = array();
@@ -222,7 +221,7 @@ $smarty->assign('items', $rowarray);
 $smarty->assign('affiche',$affiche);
 
 $smarty->assign('rafraichir',
-		$this->CreateLink($id,'retrieve',$returnid, 'Rafraichir mes données', array("retrieve"=>"fftt",'record_id'=>$licence)));
+		$this->CreateLink($id,'retrieve',$returnid, 'Rafraichir mes données', array("retrieve"=>"fftt",'record_id'=>$record_id)));
 
 echo $this->ProcessTemplate('fe_user_results.tpl');
 
