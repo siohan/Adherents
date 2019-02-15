@@ -146,8 +146,8 @@ class contact
 	{
 		$db = cmsms()->GetDb();
 		$details = array();
-		$query = "SELECT id, nom, description, actif FROM ".cms_db_prefix()."module_adherents_groupes WHERE actif = 1";
-		$dbresult = $db->Execute($query);
+		$query = "SELECT id, nom, description, actif FROM ".cms_db_prefix()."module_adherents_groupes WHERE actif = 1 AND id = ?";
+		$dbresult = $db->Execute($query, array($id_group));
 		if($dbresult && $dbresult->RecordCount()>0)
 		{
 			while($row = $dbresult->FetchRow())
@@ -164,7 +164,7 @@ class contact
 			return FALSE;
 		}
 	}
-	//Cette fonction récupère les utilisateurs d'un groupe donné
+	//Cette fonction récupère les genid des adhérents d'un groupe donné
 	function UsersFromGroup($id_group)
 	{
 		$db = cmsms()->GetDb();
@@ -192,12 +192,12 @@ class contact
 		{
 			$row = $dbresult->FetchRow();
 			$nb = $row['nb'];
-			return $nb;
-		}
+				}
 		else
 		{
-			return false;
+			 $nb = 0;
 		}
+		return $nb;
 	}
 	
 	

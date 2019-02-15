@@ -237,11 +237,11 @@ function liste_groupes()
 		return false;
 	}
 }
-//Fais la liste des licences d'un groupe donné'
+//Fais la liste des genids d'un groupe donné'
 function liste_licences_from_group($id_group)
 {
 	$db = cmsms()->GetDb();
-	$query = "SELECT licence FROM ".cms_db_prefix()."module_adherents_groupes_belongs WHERE id_group = ?";
+	$query = "SELECT genid FROM ".cms_db_prefix()."module_adherents_groupes_belongs WHERE id_group = ?";
 	$dbresult = $db->Execute($query, array($id_group));
 	$liste_licences = array();
 	if($dbresult && $dbresult->RecordCount()>0)
@@ -249,15 +249,43 @@ function liste_licences_from_group($id_group)
 		while($row = $dbresult->FetchRow())
 		{
 			$genid = $row['genid'];
-			$liste_licences[] = $row['genid'];
+			$liste_genids[] = $row['genid'];
 		}
-		return $liste_licences;
+		return $liste_genids;
 	}
 	else
 	{
 		return false;
 	}
 	
+}
+
+//liste les groupes auxquels appartient un utilisateur
+function member_of_groups($genid)
+{
+	$db = cmsms()->GetDb();
+	$query = "SELECT DISTINCT id_group FROM ".cms_db_prefix()."module_adherents_groupes_belongs WHERE genid = ?";
+	$dbresult = $db->Execute($query, array($genid));
+	if($dbresult)
+	{
+		if($dbresult->RecordCount()>0)
+		{
+			$groups = array();
+			while($row = $dbresult->FetchRow())
+			{
+				$groups[] = $row['id_group'];
+			}
+			return $groups;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	else
+	{
+		return false;
+	}
 }
 #
 #

@@ -62,11 +62,11 @@ class VerifAdherentsTask implements \CmsRegularTask
 	if($mois >=1 && $mois <7) //2ème phase
 	{
 		
-		$query = "SELECT licence FROM ".cms_db_prefix()."module_adherents_adherents WHERE fftt = '1' AND YEAR(validation) < ?";
+		$query = "SELECT licence FROM ".cms_db_prefix()."module_adherents_adherents WHERE YEAR(validation) < ?";
 	}
 	else //début de saison
 	{
-		$query = "SELECT licence FROM ".cms_db_prefix()."module_adherents_adherents WHERE fftt = '1' AND YEAR(validation) <= ?";
+		$query = "SELECT licence FROM ".cms_db_prefix()."module_adherents_adherents WHERE YEAR(validation) <= ?";
 	}
 	$query.= " ORDER BY maj ASC LIMIT 5";
 	$dbresult = $db->Execute($query, array($annee));

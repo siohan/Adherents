@@ -63,7 +63,7 @@ if($dbresult)
 	$cmsmailer = new \cms_mailer();
 	$cmsmailer->reset();
 	$cmsmailer->AddAddress($admin_email);
-	$cmsmailer->AddAddress('claude@agi-webconseil.fr');
+//	$cmsmailer->AddAddress('claude@agi-webconseil.fr');
 	//$cmsmailer->AddAddress($admin_email);
 	//$cmsmailer->AddAddress($admin_email);
 	$cmsmailer->SetBody($body);

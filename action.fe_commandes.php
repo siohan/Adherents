@@ -38,7 +38,7 @@ $smarty->assign('fe_add_cc',
 		//echo "Salut ".$row['prenom'];
 		//le id est : ".$id_client;
 		//deuxième requete pour trouver les commandes
-		$query2 = "SELECT id AS commande_id, date_created, libelle_commande,quantite, ep_manche_taille, couleur, commande_number,fournisseur, prix_total, commande, user_validation FROM ".cms_db_prefix()."module_commandes_cc_items WHERE fk_id = ? AND commande <= '1'";
+		$query2 = "SELECT id AS commande_id, date_created, libelle_commande,quantite, ep_manche_taille, couleur, commande_number,fournisseur, prix_total, commande, user_validation FROM ".cms_db_prefix()."module_commandes_cc_items WHERE genid = ? AND commande <= '1'";
 		$dbresult2 = $db->Execute($query2, array($username));
 		//echo $query2;
 		if($dbresult2 && $dbresult2->RecordCount()>0)

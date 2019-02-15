@@ -3,7 +3,7 @@ if (!isset($gCms)) exit;
 //debug_display($params,'Parameters');
 $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
-$username = $feu->GetUserName($userid);
+$username = $feu->GetUserProperty('genid');
 require_once(dirname(__FILE__).'/include/fe_menu.php');
 //echo "FEU : le user est : ".$username." ".$userid;
 //$properties = $feu->GetUserProperties($userid);

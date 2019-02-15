@@ -48,11 +48,11 @@ switch($obj)
 		{
 			$id_inscription = $params['id_inscription'];
 		}
-		$query = "DELETE FROM ".cms_db_prefix()."module_inscriptions_belongs WHERE id_inscription = ? AND id_option = ? AND licence = ?";
+		$query = "DELETE FROM ".cms_db_prefix()."module_inscriptions_belongs WHERE id_inscription = ? AND id_option = ? AND genid = ?";
 			$dbresult = $db->Execute($query, array($id_inscription,$record_id, $adherent));
 			if($dbresult)
 			{
-				$this->SetMessage('Inscrition à cette option supprimée');
+				$this->SetMessage('Inscription à cette option supprimée');
 				$this->Redirect($id, 'fe_inscriptions', $returnid, array("record_id"=>$params['adherent']));
 			}
 			else

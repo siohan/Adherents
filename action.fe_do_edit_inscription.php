@@ -3,7 +3,7 @@ if (!isset($gCms)) exit;
 debug_display($params, 'Parameters');
 $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
-$username = $feu->GetUsername($userid);
+$username = $feu->GetUserProperty('genid');
 //global $themeObject;
 require_once(dirname(__FILE__).'/include/fe_menu.php');
 $db =& $this->GetDb();
@@ -38,17 +38,18 @@ $alert = 0;//pour savoir si certains champs doivent contenir une valeur ou non
 					$id_option = $insc_ops->search_id_option($id_inscription, $item);
 					if(false !== $id_option)
 					{
-						$query = "INSERT INTO ".cms_db_prefix()."module_inscriptions_belongs (id_inscription, id_option, licence) VALUES (?, ?, ?)";
-						$dbresult = $db->Execute($query, array($id_inscription, $id_option, $username));
+						$add_rep = $insc_ops->add_reponse($id_inscription, $id_option, $username);
+						//$query = "INSERT INTO ".cms_db_prefix()."module_inscriptions_belongs (id_inscription, id_option, genid) VALUES (?, ?, ?)";
+						//$dbresult = $db->Execute($query, array($id_inscription, $id_option, $username));
 					}
 
 				}
 			}
 			else
 			{
-				
-					$query = "INSERT INTO ".cms_db_prefix()."module_inscriptions_belongs (id_inscription, id_option, licence) VALUES (?, ?, ?)";
-					$dbresult = $db->Execute($query, array($id_inscription, $nom, $username));
+					$add_rep = $insc_ops->add_reponse($id_inscription, $id_option, $username);
+				//	$query = "INSERT INTO ".cms_db_prefix()."module_inscriptions_belongs (id_inscription, id_option, genid) VALUES (?, ?, ?)";
+				//	$dbresult = $db->Execute($query, array($id_inscription, $nom, $username));
 				
 			}
 			

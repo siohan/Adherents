@@ -3,7 +3,7 @@ if (!isset($gCms)) exit;
 debug_display($params, 'Parameters');
 $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
-$username = $feu->GetUsername($userid);
+$username = $feu->GetUserProperty('genid');
 //global $themeObject;
 require_once(dirname(__FILE__).'/include/fe_menu.php');
 $db =& $this->GetDb();
@@ -112,7 +112,7 @@ $alert = 0;//pour savoir si certains champs doivent contenir une valeur ou non
 			if($edit == 0)
 			{
 				$commande = 0;
-				$query = "INSERT INTO ".cms_db_prefix()."module_commandes_cc_items (fk_id,date_created, date_modified,libelle_commande, categorie_produit, fournisseur, quantite, ep_manche_taille, couleur, prix_total, statut_item, commande) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				$query = "INSERT INTO ".cms_db_prefix()."module_commandes_cc_items (genid,date_created, date_modified,libelle_commande, categorie_produit, fournisseur, quantite, ep_manche_taille, couleur, prix_total, statut_item, commande) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 				$dbresult = $db->Execute($query, array($username,$aujourdhui, $aujourdhui,$produits,$categorie_produit,$fournisseur, $quantite,$ep_manche_taille, $couleur, $prix_total, $statut_item,$commande));
 			}
 			else

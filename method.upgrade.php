@@ -300,6 +300,11 @@ switch($current_version)
 		$this->SetPreference('feu_presences',1);
 		$this->SetPreference('feu_factures', 1);
 	}
+	case "0.3":
+	case "0.3.1":
+	{
+		
+	}
 	
 
 }

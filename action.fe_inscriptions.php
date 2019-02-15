@@ -16,7 +16,22 @@ $vrai = '<img src="modules/Adherents/images/true.gif" class="systemicon" alt="Vr
 $faux = '<img src="modules/Adherents/images/false.gif" class="systemicon" alt="Faux" title="Faux">';
 
 $db = cmsms()->GetDb();
-$query = "SELECT id,nom, description, date_debut FROM ".cms_db_prefix()."module_inscriptions_inscriptions WHERE actif = 1";
+$gp_ops = new groups;
+$groupes = $gp_ops->member_of_groups($username);
+
+$query = "SELECT id,nom, description, date_debut FROM ".cms_db_prefix()."module_inscriptions_inscriptions WHERE actif = 1 AND date_limite >= CURRENT_DATE()";
+if(FALSE !== $groupes)
+{
+	if(is_array($groupes) && count($groupes) > 0 )
+	{
+		$tab = implode(', ',$groupes);	
+		$query.= " AND groupe IN ($tab)";
+	}
+	else
+	{
+		$query.= " AND groupe = $tab";
+	}
+}
 $dbresult = $db->Execute($query);
 if($dbresult && $dbresult->RecordCount()>0)
 {

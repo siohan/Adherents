@@ -48,7 +48,7 @@ function details_adherent($record_id)
 }
 function details_adherent_by_genid($record_id)
 {
-	$db = cmsms()->getDb();
+	$db = cmsms()->GetDb();
 	$query  = "SELECT id, genid,licence, actif, nom, prenom, sexe, cat, certif, validation, adresse, code_postal, anniversaire, ville, pays, externe, maj FROM ".cms_db_prefix()."module_adherents_adherents WHERE genid = ?";
 	$dbresult = $db->Execute($query, array($record_id));
 	if($dbresult)
