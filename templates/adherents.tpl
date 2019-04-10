@@ -26,7 +26,6 @@ $(document).ready(function(){
 	<table border="0" cellspacing="0" cellpadding="0" class="pagetable tablesorter">
 	 <thead>
 		<tr>
-			<th>Maj</th>
 			<th>Genid</th>
 			<th>Nom</th>
 			<th>Prénom</th> 
@@ -38,16 +37,14 @@ $(document).ready(function(){
 			<th>Ville</th>
 			<th>Email ?</th>
 			<th>Portable ?</th>
-			<th colspan="3">Actions</th>
+			<th colspan="2">Actions</th>
 			<th><input type="checkbox" id="selectall" name="selectall"></th>
 			
 		</tr>
 	</thead>
 	 <tbody>
 	{foreach from=$items item=entry}
-	  <tr class="{$entry->rowclass}">
-		<td>{$entry->maj|date_format:"%d-%m-%Y"}</td>
-		
+	  <tr class="{$entry->rowclass}">		
 		<td>{$entry->genid}</td>
 		<td>{$entry->nom}</td>
 		<td>{$entry->prenom}</td>
@@ -59,7 +56,6 @@ $(document).ready(function(){
 		<td>{$entry->ville}</td>
 		<td>{$entry->has_email}</td>
 		<td>{$entry->has_mobile}</td>
-		<td>{$entry->refresh}</td>
 		<td>{$entry->edit}</td>			
 		<td>{$entry->view_contacts}</td>
 		<td><input type="checkbox" name="{$actionid}sel[]" value="{$entry->genid}" class="select"></td>

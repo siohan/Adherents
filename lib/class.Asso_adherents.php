@@ -105,6 +105,16 @@ function clean_name($texte)
 	    return $texte;        
 
 }
+//génère un entier aléatoire
+function random_int($car) {
+	$string = "";
+	$chaine = "123456789";
+	srand((double)microtime()*1000000);
+	for($i=0; $i<$car; $i++) {
+		$string .= $chaine[rand()%strlen($chaine)];
+	}
+	return $string;
+  }
 
 function add_adherent($genid,$actif, $nom, $prenom, $sexe, $anniversaire, $licence,$adresse, $code_postal, $ville, $pays,$externe )
 {
@@ -120,6 +130,25 @@ function add_adherent($genid,$actif, $nom, $prenom, $sexe, $anniversaire, $licen
 	else
 	{
 		echo $db->ErrorMsg();
+	}
+	
+
+}//fin de la fonction
+//ajoute un adhérent depuis le module Ping
+function add_adherent_from_ping($genid,$actif, $nom, $prenom, $sexe, $licence)
+{
+	
+	$db = cmsms()->GetDb();
+	$maj = date('Y-m-d');
+	$query = "INSERT INTO ".cms_db_prefix()."module_adherents_adherents (genid,actif, nom, prenom, sexe, licence) VALUES (?, ?, ?, ?, ?, ?)";
+	$dbresult = $db->Execute($query, array($genid, $actif, $nom, $prenom, $sexe, $licence));
+	if($dbresult)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
 	}
 	
 
@@ -153,6 +182,21 @@ function get_name($genid)
 	else
 	{
 		return FALSE;
+	}
+}
+//détermine si un membre ayant une licence est déjà présent en bdd
+function already_exists($licence)
+{
+	$db = cmsms()->GetDb();
+	$query = "SELECT licence FROM ".cms_db_prefix()."module_adherents_adherents WHERE licence = ?";
+	$dbresult = $db->Execute($query, array($licence));
+	if($dbresult && $dbresult->RecordCount()>0)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
 	}
 }
 

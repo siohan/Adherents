@@ -94,7 +94,7 @@ if($dbresult && $dbresult->RecordCount() >0)
 	
 		$onerow = new StdClass();
 		$onerow->rowclass = $rowclass;
-		$onerow->licence= $row['licence'];
+		$onerow->genid= $row['genid'];
 		$onerow->nom= $row['nom'];
 		$onerow->prenom= $row['prenom'];
 		$actif= $row['actif'];
@@ -110,7 +110,6 @@ if($dbresult && $dbresult->RecordCount() >0)
 		$onerow->certif= $row['certif'];
 		$onerow->date_validation = $row['validation'];
 		$onerow->anniversaire = $row['anniversaire'];
-		$onerow->maj = $row['maj'];
 		$onerow->adresse = $row['adresse'];
 		$onerow->code_postal = $row['code_postal'];
 		$onerow->ville = $row['ville'];
@@ -118,20 +117,20 @@ if($dbresult && $dbresult->RecordCount() >0)
 		//var_dump($email);
 		if(TRUE === $email)
 		{
-			$onerow->has_email = $themeObject->DisplayImage('icons/system/true.gif', $this->Lang('true'), '', '', 'systemicon');
+			$onerow->has_email = $this->CreateLink($id, 'view_contacts', $returnid, $themeObject->DisplayImage('icons/system/true.gif', $this->Lang('true'), '', '', 'systemicon'), array("genid"=>$row['genid']));
 		}
 		elseif(FALSE === $email)
 		{
-			$onerow->has_email = $this->CreateLink($id, 'add_edit_contact', $returnid,$themeObject->DisplayImage('icons/system/false.gif', $this->Lang('false'), '', '', 'systemicon'), array("genid"=>$row['genid']));
+			$onerow->has_email = $this->CreateLink($id, 'add_edit_contact', $returnid,$themeObject->DisplayImage('icons/system/false.gif', $this->Lang('false'), '', '', 'systemicon'), array("genid"=>$row['genid'], "type_contact"=>'1'));
 		}
 		$mobile = $contact_ops->has_mobile($row['genid']);
 		if(TRUE === $mobile)
 		{
-			$onerow->has_mobile = $themeObject->DisplayImage('icons/system/true.gif', $this->Lang('true'), '', '', 'systemicon');
+			$onerow->has_mobile = $this->CreateLink($id, 'view_contacts', $returnid, $themeObject->DisplayImage('icons/system/true.gif', $this->Lang('true'), '', '', 'systemicon'), array("genid"=>$row['genid']));
 		}
 		elseif(FALSE === $mobile)
 		{
-			$onerow->has_mobile = $this->CreateLink($id, 'add_edit_contact', $returnid,$themeObject->DisplayImage('icons/system/false.gif', $this->Lang('false'), '', '', 'systemicon'), array("genid"=>$row['genid']));
+			$onerow->has_mobile = $this->CreateLink($id, 'add_edit_contact', $returnid,$themeObject->DisplayImage('icons/system/false.gif', $this->Lang('false'), '', '', 'systemicon'), array("genid"=>$row['genid'], "type_contact"=>'2'));
 		}
 		$onerow->edit = $this->CreateLink($id, 'edit_adherent',$returnid,$themeObject->DisplayImage('icons/system/edit.gif', $this->Lang('edit'), '', '', 'systemicon'), array("record_id"=>$row['id']));
 		$onerow->view_contacts= $this->CreateLink($id, 'view_contacts', $returnid,'<img src="../modules/Adherents/images/contact.jpg" class="systemicon" alt="Contacts" title="Contacts">',array("genid"=>$row['genid']));//$row['closed'];

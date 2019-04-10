@@ -20,7 +20,7 @@ class Adherents extends CMSModule
   
   function GetName() { return 'Adherents'; }   
   function GetFriendlyName() { return $this->Lang('friendlyname'); }   
-  function GetVersion() { return '0.3.2'; }  
+  function GetVersion() { return '0.3.3'; }  
   function GetHelp() { return $this->Lang('help'); }   
   function GetAuthor() { return 'Claude SIOHAN'; } 
   function GetAuthorEmail() { return 'claude.siohan@gmail.com'; }
@@ -41,7 +41,7 @@ class Adherents extends CMSModule
   
   function GetDependencies()
   {
-	return array('FrontEndUsers'=>'2.12.6');
+	return array('FrontEndUsers'=>'2.13');
   }
 
   
@@ -112,7 +112,7 @@ public function get_tasks()
 {
    $obj = array();
 	//$obj[0] = new RecupAdherentsTask();
-   	$obj[0] = new VerifAdherentsTask();  
+   	//$obj[0] = new VerifAdherentsTask();  
 	
 return $obj; 
 }

@@ -20,6 +20,8 @@ else
 }
 $rowarray= array();
 $rowclass = '';
+//un lien de retour
+$smarty->assign('retour', $this->CreateLink($id, 'defaultadmin', $returnid, $contents='<= Revenir'));
 //on prépare un lien pour ajouetre un nouveau contact
 $smarty->assign('add_edit_contact', $this->CreateLink($id, 'add_edit_contact', $returnid, $contents='Nouveau contact',array("genid"=>$genid)));
 $query  = "SELECT id, genid, type_contact, contact, description FROM ".cms_db_prefix()."module_adherents_contacts WHERE genid = ?";

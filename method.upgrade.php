@@ -303,7 +303,7 @@ switch($current_version)
 	case "0.3":
 	case "0.3.1":
 	{
-		
+		$this->RemovePreference('LastVerifAdherents');
 	}
 	
 

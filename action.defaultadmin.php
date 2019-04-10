@@ -21,7 +21,7 @@ if (FALSE == empty($params['active_tab']))
 if ($this->CheckPermission('Adherents prefs'))
 {
 	echo $this->SetTabHeader('config', 'Config' , ('config' == $tab)?true:false);
-	echo $this->SetTabHeader('compte', 'FFTT' , ('compte' == $tab)?true:false);
+//	echo $this->SetTabHeader('compte', 'FFTT' , ('compte' == $tab)?true:false);
 }
 
 
@@ -54,9 +54,11 @@ if ($this->CheckPermission('Adherents prefs'))
 	include(dirname(__FILE__).'/action.admin_config_tab.php');
 	echo $this->EndTab();
 	
+	/*
 	echo $this->StartTab('compte' , $params);
 	include(dirname(__FILE__).'/action.admin_compte_tab.php');
 	echo $this->EndTab();
+	*/
 }	
 
 echo $this->EndTabContent();

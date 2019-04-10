@@ -1,6 +1,5 @@
+<div class="pageoptions"><p class="pageoptions">{$retour}</p></div>
 <div class="pageoptions"><p class="pageoptions">{$itemcount}&nbsp;{$itemsfound}&nbsp;|&nbsp;{$add_edit_contact}</p></div>
-
-
 {if $itemcount > 0}
 	<table border="0" cellspacing="0" cellpadding="0" class="pagetable tablesorter">
 	 <thead>

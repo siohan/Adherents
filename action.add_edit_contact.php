@@ -6,10 +6,10 @@ if (!$this->CheckPermission('Adherents use'))
 	echo $this->ShowErrors($this->Lang('needpermission'));
 	return;
 }
-
+debug_display($params, 'parameters');
 $db =& $this->GetDb();
 global $themeObject;
-$licence = '';
+
 $edit = 0;
 if(isset($params['genid']) && $params['genid'] != '')
 {
@@ -44,7 +44,7 @@ if($edit == 0)
 				$this->CreateInputHidden($id,'genid',$genid));
 	
 	$smarty->assign('type_contact',
-			$this->CreateInputDropdown($id,'type_contact',$libelle));
+			$this->CreateInputDropdown($id,'type_contact',$libelle, (isset($params['type_contact'])?$params['type_contact']:"0")));
 	$smarty->assign('contact',
 			$this->CreateInputText($id, 'contact','', 50, 200));		
 	$smarty->assign('description',

@@ -123,7 +123,6 @@ $db->execute($insert_sql, array('adherents', 'Les adhérents actifs du club', '1
 
 $this->SetPreference('admin_email', 'root@localhost.com');
 $this->SetPreference('email_activation_subject', 'Ton compte est actif');
-$this->SetPreference('LastVerifAdherents', time());
 $this->SetPreference('feu_commandes',0);
 $this->SetPreference('feu_fftt',0);
 $this->SetPreference('feu_messages',1);
