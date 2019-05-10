@@ -305,6 +305,11 @@ switch($current_version)
 	{
 		$this->RemovePreference('LastVerifAdherents');
 	}
+	case "0.3.2":
+	case "0.3.3":
+	{
+		$this->SetPreference('feu_compos', 1);
+	}
 	
 
 }

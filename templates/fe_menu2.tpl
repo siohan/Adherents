@@ -124,6 +124,13 @@
             <span>Mes présences</span></a>
         </li>
 {/if}
+{if $feu_compos ==1}
+		<li class="nav-item">
+          <a class="nav-link" href="{cms_action_url action=fe_compos display=infos record_id=$username}">
+            <i class="fas fa-fw fa-user-friends"></i>
+            <span>Mes convocations</span></a>
+        </li>
+{/if}
 		<li class="nav-item">
           <a class="nav-link" href="{cms_action_url action=default display=infos record_id=$username}">
             <i class="fas fa-fw fa-chart-area"></i>

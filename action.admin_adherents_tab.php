@@ -85,7 +85,7 @@ else
 $rowarray = array();
 $rowclass = 'row1';
 $contact_ops = new contact;
-$adh_ops = new adherents_spid;
+//$adh_ops = new adherents_spid;
 if($dbresult && $dbresult->RecordCount() >0)
 {
 	

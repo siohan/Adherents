@@ -199,6 +199,50 @@ function already_exists($licence)
 		return false;
 	}
 }
+function activate ($genid)
+{
+	$db = cmsms()->GetDb();
+	$query = "UPDATE ".cms_db_prefix()."module_adherents_adherents SET actif = 1 WHERE genid = ?";
+	$dbresult = $db->Execute($query, array($genid));
+	if($dbresult)
+	{
+		$gp_ops = new groups;
+		$id_group = $gp_ops->assign_to_adherent($genid);
+	}
+	
+}
+function desactivate ($genid)
+{
+	$db = cmsms()->GetDb();
+	$query = "UPDATE ".cms_db_prefix()."module_adherents_adherents SET actif = 0 WHERE genid = ?";
+	$dbresult = $db->Execute($query, array($genid));
+	if($dbresult)
+	{
+		$gp_ops = new groups;
+		$id_group = $gp_ops->assign_to_adherent($genid);
+		//maintenant on peut désactiver
+		$gp_ops->delete_user_from_group($id_group,$genid);
+	}
+	
+}
+//retourne la liste des adhérents
+function liste_adherents()
+{
+	$db = cmsms()->GetDb();
+	//on fait une requete pour completer l'input dropdown du formulaire
+	$query = "SELECT genid as client_id, CONCAT_WS(' ',nom, prenom) AS joueur FROM ".cms_db_prefix()."module_adherents_adherents WHERE actif = 1 ORDER BY nom ASC, prenom ASC";
+	$dbresult = $db->Execute($query);
+
+		if($dbresult && $dbresult->RecordCount() >0)
+		{
+			while($row= $dbresult->FetchRow())
+			{
+				$nom[$row['joueur']] = $row['client_id'];
+				//$indivs = $row['indivs'];
+			}
+		return $nom;	
+		}	
+}
 
 #
 #

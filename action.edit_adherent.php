@@ -36,9 +36,9 @@ if(isset($params['record_id']) && $params['record_id'] != '')
 	$smarty->assign('licence',
 				$this->CreateInputText($id,'licence',(isset($details['licence'])?$details['licence']: ""), 15,30));
 	$smarty->assign('nom',
-			$this->CreateInputText($id,'nom',(isset($details['nom'])?$details['nom']: ""), 15,30));
+			$this->CreateInputText($id,'nom',(isset($details['nom'])?$details['nom']: ""), 150,300));
 	$smarty->assign('prenom',
-			$this->CreateInputText($id,'prenom',(isset($details['prenom'])?$details['prenom']: ""), 15,30));
+			$this->CreateInputText($id,'prenom',(isset($details['prenom'])?$details['prenom']: ""), 150,300));
 	$smarty->assign('sexe',
 			$this->CreateInputDropdown($id,'sexe',array("Masculin"=>"M", "Féminin"=>"F"),'',(isset($details['sexe'])?$details['sexe']:"M")));
 	$smarty->assign('externe',

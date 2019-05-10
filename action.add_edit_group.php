@@ -22,6 +22,7 @@ $index = 0;
 $libelle = '';
 $actif = 0;
 $edit = 0;
+$public = 0;
 
 if(isset($params['record_id']) && $params['record_id'] !="")
 {

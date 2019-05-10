@@ -101,6 +101,33 @@ function add_group ()
 		
 	}
 }//fin de la fonction
+
+//Tous les détails d'un groupe
+function details_groupe($record_id)
+{
+	$db = cmsms()->GetDb();
+	$query = "SELECT id,nom, description, actif, public FROM ".cms_db_prefix()."module_adherents_groupes WHERE id = ?";
+	$dbresult = $db->Execute($query, array($record_id));
+	$details_groupe = array();
+	if($dbresult && $dbresult->RecordCount()>0)
+	{
+		while($row = $dbresult->FetchRow())
+		{
+			$details_groupe['id'] = $row['id'];
+			$details_groupe['nom'] = $row['nom'];
+			$details_groupe['description'] = $row['description'];
+			$details_groupe['actif'] = $row['actif'];
+			$details_groupe['public'] = $row['public'];
+		}
+		return $details_groupe;
+	}
+	else
+	{
+		return FALSE;
+	}
+	
+}
+
 //supprime un groupe completement
 function delete_group($record_id)
 {
@@ -169,10 +196,18 @@ function assign_user_to_group($id_group, $genid)
 {
 	$db = cmsms()->GetDb();
 	$query = "INSERT INTO ".cms_db_prefix()."module_adherents_groupes_belongs (id_group,genid) VALUES ( ?, ?)";
-	$dbresultat = $db->Execute($query, array($id_group,$genid));
+	$dbresult = $db->Execute($query, array($id_group,$genid));
+	if($dbresult)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 //assigne un nouvel utilisateur au groupe adherents( groupe par défaut)
-function assign_to_adherent()
+function assign_to_adherent($genid)
 {
 	$db = cmsms()->GetDb();
 	$query = "SELECT id FROM ".cms_db_prefix()."module_adherents_groupes WHERE nom LIKE 'adherents' LIMIT 1";
@@ -181,7 +216,7 @@ function assign_to_adherent()
 	{
 		$row = $dbresult->fetchRow();
 		$id_group = $row['id'];
-		//$this->assign_user_to_group($id_group, $licence);
+		$this->assign_user_to_group($id_group, $genid);
 		return $id_group;
 	}
 	else
@@ -281,6 +316,21 @@ function member_of_groups($genid)
 		{
 			return false;
 		}
+	}
+	else
+	{
+		return false;
+	}
+}
+//détermine si un utilisateur appartient à un groupe particulier
+function is_member($genid, $id_group)
+{
+	$db = cmsms()->GetDb();
+	$query = "SELECT DISTINCT id_group FROM ".cms_db_prefix()."module_adherents_groupes_belongs WHERE genid = ? AND id_group = ?";
+	$dbresult = $db->Execute($query, array($genid, $id_group));
+	if($dbresult && $dbresult->RecordCount()>0)
+	{
+		return true;
 	}
 	else
 	{

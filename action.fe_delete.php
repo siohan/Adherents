@@ -5,7 +5,7 @@ $error = 0;//on instancie un compteur d'erreurs
 //on commence par vérifier que ts les éléments sont là
 $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
-$username = $feu->GetUserName($userid);
+$username = $feu->GetUserProperty('genid');
 if(isset($params['record_id']) && $params['record_id'] != '')
 {
 	$record_id = $params['record_id'];

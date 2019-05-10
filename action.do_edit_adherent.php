@@ -106,14 +106,27 @@ $edit = 0;
 		else // pas d'erreurs on continue
 		{
 			
+			$message = '';
 			$service = new Asso_adherents();
 			if($edit == 1)
 			{
 				$update_adherent = $service->update_adherent($actif, $nom, $prenom, $sexe, $anniversaire, $licence,$adresse, $code_postal, $ville, $pays,$externe, $aujourdhui, $genid);
+				$message.=" Adhérent modifié. ";
 			}
 			else
 			{
 				$add_adherent = $service->add_adherent($genid,$actif, $nom, $prenom, $sexe, $anniversaire, $licence,$adresse, $code_postal, $ville, $pays,$externe);
+				if(true === $add_adherent)
+				{
+					$message.=" Adhérent inséré. ";
+					//on insère automatiquement le nouveau ds le gp par défaut 
+					$gp_ops = new groups;
+					$id_gp = $gp_ops->assign_to_adherent($genid);
+					if(false !== $id_gp)
+					{
+						$message.=" Inscrit dans le groupe adhérent.";
+					}
+				}
 			}
 			
 		}		

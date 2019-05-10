@@ -49,7 +49,7 @@ $smarty->assign('fe_envoi_message',
 			{
 				$onerow->lu =$faux;
 			}
-			$onerow->delete = $this->CreateLink($id, 'fe_delete',$returnid, $del,array("obj"=>"message","record_id"=>$row['mess_id']));
+			$onerow->delete = $this->CreateLink($id, 'fe_delete',$returnid, $del,array("licence"=>$username,"obj"=>"message","record_id"=>$row['mess_id']));
 			$onerow->view = $this->CreateLink($id, 'fe_view_message', $returnid,$view,array("licence"=>$username, "message_id"=>$row['id_message'], "recip_id"=>$row['mess_id']),$warn_message='',$onlyhref='',$inline='true');
 			
 			($rowclass == "row1" ? $rowclass= "row2" : $rowclass= "row1");

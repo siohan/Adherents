@@ -15,6 +15,7 @@ if(isset($params['submit']))
 	$this->SetPreference('feu_presences', $params['feu_presences']);
 	$this->SetPreference('feu_factures', $params['feu_factures']);
 	$this->SetPreference('feu_commandes', $params['feu_commandes']);
+	$this->SetPreference('feu_compos', $params['feu_compos']);
 	$this->SetMessage('Config modifiée');
 	$this->RedirectToAdminTab('config');
 }
@@ -38,6 +39,7 @@ else
 	$smarty->assign('feu_presences', $this->CreateInputDropdown($id, 'feu_presences',$OuiNon,-1,$this->GetPreference('feu_presences')));
 	$smarty->assign('feu_factures', $this->CreateInputDropdown($id, 'feu_factures',$OuiNon,-1,$this->GetPreference('feu_factures')));
 	$smarty->assign('feu_commandes', $this->CreateInputDropdown($id, 'feu_commandes',$OuiNon,-1,$this->GetPreference('feu_fftt')));
+	$smarty->assign('feu_compos', $this->CreateInputDropdown($id, 'feu_compos',$OuiNon,-1,$this->GetPreference('feu_compos')));
 
 	$smarty->assign('submit', $this->CreateInputSubmit ($id, 'submit', $this->Lang('submit')));
 

@@ -47,7 +47,7 @@ $alert = 0;//pour savoir si certains champs doivent contenir une valeur ou non
 			}
 			else
 			{
-					$add_rep = $insc_ops->add_reponse($id_inscription, $id_option, $username);
+					$add_rep = $insc_ops->add_reponse($id_inscription, $nom, $username);
 				//	$query = "INSERT INTO ".cms_db_prefix()."module_inscriptions_belongs (id_inscription, id_option, genid) VALUES (?, ?, ?)";
 				//	$dbresult = $db->Execute($query, array($id_inscription, $nom, $username));
 				

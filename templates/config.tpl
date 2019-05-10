@@ -24,7 +24,12 @@
 		<div class="pageoverflow">
 			<p class="pagetext">Présences ?</p>
 			<p class="pageinput">{$feu_presences}</p>
-		</div><div class="pageoverflow">
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext">Convocations ?</p>
+			<p class="pageinput">{$feu_compos}</p>
+		</div>
+		<div class="pageoverflow">
 			<p class="pagetext">Résultats FFTT ?</p>
 			<p class="pageinput">{$feu_fftt}</p>
 		</div>

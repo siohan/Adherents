@@ -10,7 +10,7 @@ if(!$this->CheckPermission('Adherents use'))
 $db =& $this->GetDb();
 global $themeObject;
 $aujourdhui = date('Y-m-d');
-$class_ops = new adherents_spid;
+$class_ops = new Asso_adherents;
 $group_ops = new groups;
 $feu = cms_utils::get_module('FrontEndUsers');
 //$feu_ops = new FrontEndUsersManipulator;
@@ -46,33 +46,7 @@ if(isset($params['prenom']) && $params['prenom'] != '')
 
 switch($obj)
 {
-	case "all":
-		$adherents_spid = $class_ops->liste_adherents_spid();
-		//var_dump($adherents_spid);
-		if(TRUE === $adherents_spid)
-		{
-			$this->SetMessag('Adhérent(s) inséré(s)');
-		}
-		else
-		{
-			$this->SetMessage('Erreur');
-		}
-		$this->Redirect($id, 'details_adherents', $returnid);
-		//$this->RedirectToAdminTab('adherents');
-	break;
-	
-	case "refresh" :
-		$adherents_spid = $class_ops->infos_adherent_spid($licence);
-		if(true === $adherents_spid )
-		{
-			$this->SetMessage('Joueur mis à jour');
-		}
-		else
-		{
-			$this->SetMessage('Joueur inactif ou erreur');
-		}
-		$this->RedirectToAdminTab('adherents');
-	break;
+
 	
 	case "delete_contact" : 
 		$del_contact = new contact;
@@ -147,11 +121,7 @@ switch($obj)
 		$this->Redirect($id, 'defaultadmin',$returnid, array("active_tab"=>"feu"));
 	break;
 	
-	case "refresh_all"  :
-		$adherents_spid = $class_ops->refresh();
-		//$class_ops->info_adherents
-		$this->RedirectToAdminTab('adherents');
-	break;
+	
 	case "delete_user_from_group" :
 		$supp_user_from_group = $group_ops->delete_user_from_group($record_id,$genid);
 		if(FALSE === $supp_user_from_group)

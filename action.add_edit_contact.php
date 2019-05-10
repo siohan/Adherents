@@ -6,7 +6,7 @@ if (!$this->CheckPermission('Adherents use'))
 	echo $this->ShowErrors($this->Lang('needpermission'));
 	return;
 }
-debug_display($params, 'parameters');
+//debug_display($params, 'parameters');
 $db =& $this->GetDb();
 global $themeObject;
 

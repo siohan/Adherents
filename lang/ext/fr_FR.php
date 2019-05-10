@@ -27,7 +27,8 @@ $lang['help'] = '<h3>Que fait ce module ?</h3>
 <p>T2T modules est conçu pour fonctionner en relation avec les autres modules de la suite. Il vous faudra donc installer Commandes, Cotisations, Paiements, etc...</p>
 <p>Le module Ping et Livescoring fonctionnent uniquement avec le module Adherents.</p>
 <h3>Espace privé</h3>
-<p>Un espace privé a été créé pour vous permettre de communiquer davantage avec chaque adhérent. Il sera étoffé au fil de l\'eau.<br />Pour l\'implémenter dans votre site, il suffit de mettre le tag suivant dans une de vos pages : {cms_module module=Adherents}
+<p>Un espace privé a été créé pour vous permettre de communiquer davantage avec chaque adhérent. Il sera étoffé au fil de l\'eau.<br />Pour l\'implémenter dans votre site, il suffit de mettre le tag suivant dans une de vos pages : {cms_module module=Adherents}.
+Pour agrémenter cet espace,un thème visuel Bootstrap 4 appelé "SB ADMIN" a été utilisé. Il est disponible en téléchargement ici
 <h3>Bogues et Github</h3>
 <p>Certaines corrections de bogues mineurs ne font pas l\'objet d\'une version officielle mais peuvent toutefois se trouver sur le github dont l\'adresse figure ci-dessous.<br />Il vous suffit alors de télécharger le fichier zip disponible(via le bouton vert "Clone or download") et de le déployer si votre serveur.</p><ul>
 <li>Pour obtenir la dernière version en cours (avant release officielle)

@@ -77,6 +77,10 @@ switch($display)
 	require(__DIR__.'/action.fe_commandes.php');	
 	break;
 	
+	case 'compos' :
+	require(__DIR__.'/action.fe_compos.php');	
+	break;
+	
 	case 'fe_envoi_message' : 
 	require(__DIR__.'/action.fe_envoi_message.php');
 	break;

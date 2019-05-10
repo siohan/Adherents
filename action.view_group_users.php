@@ -17,7 +17,7 @@ $shopping = '<img src="../modules/Adherents/images/shopping.jpg" class="systemic
 $smarty->assign('add_users', 
 		$this->CreateLink($id, 'edit_adherent',$returnid, 'Ajouter'));
 $smarty->assign('shopping', $shopping);
-$query = "SELECT adh.id, adh.genid, adh.licence, adh.nom, adh.prenom, adh.actif, adh.anniversaire, adh.sexe, adh.certif, adh.validation, adh.points, adh.adresse, adh.code_postal, adh.ville FROM ".cms_db_prefix()."module_adherents_adherents AS adh, ".cms_db_prefix()."module_adherents_groupes_belongs AS be WHERE adh.genid = be.genid";//" AND be.id_group = ?";//" WHERE actif = 1";
+$query = "SELECT adh.id, adh.genid, adh.licence, adh.nom, adh.prenom, adh.actif, adh.anniversaire, adh.sexe, adh.certif, adh.validation, adh.adresse, adh.code_postal, adh.ville FROM ".cms_db_prefix()."module_adherents_adherents AS adh, ".cms_db_prefix()."module_adherents_groupes_belongs AS be WHERE adh.genid = be.genid";//" AND be.id_group = ?";//" WHERE actif = 1";
 if(isset($params['group']) && $params['group'] != '')
 {
 	$group = $params['group'];
