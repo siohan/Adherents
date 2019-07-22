@@ -225,19 +225,19 @@ function desactivate ($genid)
 	}
 	
 }
-//retourne la liste des adhérents
+//retourne la liste des adhérents pour les formulaires
 function liste_adherents()
 {
 	$db = cmsms()->GetDb();
 	//on fait une requete pour completer l'input dropdown du formulaire
-	$query = "SELECT genid as client_id, CONCAT_WS(' ',nom, prenom) AS joueur FROM ".cms_db_prefix()."module_adherents_adherents WHERE actif = 1 ORDER BY nom ASC, prenom ASC";
+	$query = "SELECT genid , CONCAT_WS(' ',nom, prenom) AS joueur FROM ".cms_db_prefix()."module_adherents_adherents WHERE actif = 1 ORDER BY nom ASC, prenom ASC";
 	$dbresult = $db->Execute($query);
 
 		if($dbresult && $dbresult->RecordCount() >0)
 		{
 			while($row= $dbresult->FetchRow())
 			{
-				$nom[$row['joueur']] = $row['client_id'];
+				$nom[$row['joueur']] = $row['genid'];
 				//$indivs = $row['indivs'];
 			}
 		return $nom;	

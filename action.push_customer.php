@@ -14,7 +14,7 @@ if(isset($params['nom']) && $params['nom'] !='')
 	$nom = stripslashes($nom);
 	$nom = str_replace("&#39;", "", $params['nom']);
 	$nom = str_replace(" ", "",$nom);
-	var_dump($nom);
+//	var_dump($nom);
 	
 }
 if(isset($params['prenom']) && $params['prenom'] !='')
@@ -45,6 +45,7 @@ if($error<1)
 	//on fait le job
 	//on ajoute le groupe
 	$group_exists = $feu->GroupExistsByName('adherents');
+	//on dit que l'email n'est pas l'identifiant
 	$feu->SetPreference('username_is_email',0);
 	if(FALSE === $group_exists)
 	{

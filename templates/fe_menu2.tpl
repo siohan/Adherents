@@ -131,6 +131,13 @@
             <span>Mes convocations</span></a>
         </li>
 {/if}
+
+        <li class="nav-item">
+          <a class="nav-link" href="{cms_action_url action=fe_adhesions display=contacts record_id=$username}l">
+            <i class="fas fa-fw fa-user-circle"></i>
+            <span>Mes adhésions</span></a>
+        </li>
+
 		<li class="nav-item">
           <a class="nav-link" href="{cms_action_url action=default display=infos record_id=$username}">
             <i class="fas fa-fw fa-chart-area"></i>

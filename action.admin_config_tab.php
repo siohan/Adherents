@@ -8,6 +8,9 @@ if(!$this->CheckPermission('Adherents Set Prefs'))
 }
 if(isset($params['submit']))
 {
+	$module = \cms_utils::get_module($compositions);
+	$result = 0;
+	if( is_object( $module ) ) $result = 1;
 	$this->SetPreference('feu_fftt', $params['feu_fftt']);
 	$this->SetPreference('feu_messages', $params['feu_messages']);
 	$this->SetPreference('feu_inscriptions', $params['feu_inscriptions']);

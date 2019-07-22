@@ -2,7 +2,7 @@
 
 #-------------------------------------------------------------------------
 # Module : Adherents - 
-# Version : 0.3.2, Sc
+# Version : 0.3.4, Sc
 # Auteur : Claude SIOHAN
 #-------------------------------------------------------------------------
 /**
@@ -20,7 +20,7 @@ class Adherents extends CMSModule
   
   function GetName() { return 'Adherents'; }   
   function GetFriendlyName() { return $this->Lang('friendlyname'); }   
-  function GetVersion() { return '0.3.3.1'; }  
+  function GetVersion() { return '0.3.4'; }  
   function GetHelp() { return $this->Lang('help'); }   
   function GetAuthor() { return 'Claude SIOHAN'; } 
   function GetAuthorEmail() { return 'claude.siohan@gmail.com'; }
@@ -98,7 +98,8 @@ class Adherents extends CMSModule
 
 function InitializeAdmin()
 {
-  	$this->SetParameters();
+  	return parent::InitializeAdmin();
+	$this->SetParameters();
 	//$this->CreateParameter('pagelimit', 100000, $this->Lang('help_pagelimit'));
 }
 
@@ -111,8 +112,7 @@ public function HasCapability($capability, $params = array())
 public function get_tasks()
 {
    $obj = array();
-	//$obj[0] = new RecupAdherentsTask();
-   	//$obj[0] = new VerifAdherentsTask();  
+	
 	
 return $obj; 
 }

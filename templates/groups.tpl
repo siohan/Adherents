@@ -1,4 +1,4 @@
-<div class="pageoptions"><p><span class="pageoptions warning">{$add_edit_group} </span></p></div>
+<div class="pageoptions"><p><a href="{module_action_url action='add°edit_group'}">{admin_icon icon='newobject'}Ajouter un groupe</a></p></div>
 <div class="pageoptions"><p class="pageoptions">{$itemcount}&nbsp;{$itemsfound}</p></div>
 
 {if $itemcount > 0}

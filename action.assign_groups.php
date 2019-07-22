@@ -7,14 +7,14 @@ if( !isset($gCms) ) exit;
 $rowarray = array();
 
 	
-	if(!isset($params['record_id']) || $params['record_id'] == '')
+	if(!isset($params['genid']) || $params['genid'] == '')
 	{
 		$this->SetMessage("parametres manquants");
 		$this->RedirectToAdminTab('groups');
 	}
 	else
 	{
-		$record_id = $params['record_id'];
+		$record_id = $params['genid'];
 		$genid = $record_id;
 	}
 
@@ -32,7 +32,7 @@ $dbresult = $db->Execute($query);
 	}
 
 	$smarty->assign('formstart',
-			$this->CreateFormStart( $id, 'do_assign_users', $returnid ) );
+			$this->CreateFormStart( $id, 'do_assign_groups', $returnid ) );
 	$smarty->assign('record_id',
 			$this->CreateInputText($id,'record_id',$record_id,10,15));	
 	if($dbresult && $dbresult->RecordCount()>0)
@@ -59,7 +59,7 @@ $dbresult = $db->Execute($query);
 		}
 	
 	}
-	var_dump($rowarray);
+//	var_dump($rowarray);
 	$smarty->assign('items', $rowarray);
 	$smarty->assign('submit',
 			$this->CreateInputSubmit($id, 'submit', $this->Lang('submit'), 'class="button"'));

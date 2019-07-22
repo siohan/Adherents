@@ -3,8 +3,8 @@
 $lang['friendlyname'] = 'Asso Adhérents';
 $lang['resultsfoundtext'] = 'Résultats trouvés';
 $lang['moddescription'] = 'Les adhérents de votre association.';
-$lang['welcome_text'] = '<p>Bienvenue dans le module de gestion des résultats de votre club de ping</p>';
-$lang['postinstall'] = 'Merci d\avoir installer ce module. Deux permissions ajoutées. Remplissez les données du compte !';
+$lang['welcome_text'] = '<p>Bienvenue dans le module de gestion des adhérents de votre association</p>';
+$lang['postinstall'] = 'Merci d\avoir installer ce module. Deux permissions ajoutées.';
 $lang['postuninstall'] = 'Module désinstallé.';
 $lang['really_uninstall'] = 'Etes-vous certain de vouloir désinstaller ce module ?';
 $lang['needpermission'] = 'Une permission est nécessaire';
@@ -14,6 +14,7 @@ $lang['edit'] = 'Modifier';
 $lang['add'] = 'Ajouter ';
 $lang['submit'] = 'Envoyer';
 $lang['cancel'] = 'Annuler';
+$lang['apply'] = 'Appliquer';
 $lang['apply_to_selection'] = 'Appliquer à la sélection ?';
 $lang['areyousure_actionmultiple'] = 'Appliquer cette action à toute la sélection ?';
 $lang['send_emails'] = 'Envoyer des mails';
@@ -24,8 +25,12 @@ $lang['help'] = '<h3>Que fait ce module ?</h3>
 
 <p>Ce module vous permet de gérer les adhérents de votre association. Vous pouvez ensuite y ajouter leurs adresses et contacts.</p>
 <h3>Fonctionnement optimal</h3>
-<p>T2T modules est conçu pour fonctionner en relation avec les autres modules de la suite. Il vous faudra donc installer Commandes, Cotisations, Paiements, etc...</p>
-<p>Le module Ping et Livescoring fonctionnent uniquement avec le module Adherents.</p>
+<p>Asso Simple est une suite de modules conçue pour fonctionner en relation les uns avec les autres. Pour un fonctionnement optimal, vous devriez installer les autres modules de la suite. Renseignements sur www.agi-webconseil.fr/</p>
+<h3>Utilisation des photos</h3>
+<p>Créer un répertoire dans l\'arborescence de votre site à l\'emplacement suivant : uploads/images et nommez-le trombines pour obtenir le chemin suivant : uploads/images/trombines.
+Collectez les photos de vos membres en cliquant sur le chevron trombines, et choisissez une photo (formats acceptés : jpg, jpeg, png, gif)cela créera une vignette avec le genid du membre.</p>
+<h3>Groupe privé</h3>
+<p>Constituez des groupes afin d\'affiner votre communication, ces groupes seront repris dans les autres modules de la suite. Le statut privé (ou non) sera utilisé pour un affichage sur le site et pour la communication. En clair, si le groupe est privé, vous ne pourrez pas l\'afficher plus tard sur votre site.
 <h3>Espace privé</h3>
 <p>Un espace privé a été créé pour vous permettre de communiquer davantage avec chaque adhérent. Il sera étoffé au fil de l\'eau.<br />Pour l\'implémenter dans votre site, il suffit de mettre le tag suivant dans une de vos pages : {cms_module module=Adherents}.
 Pour agrémenter cet espace,un thème visuel Bootstrap 4 appelé "SB ADMIN" a été utilisé. Il est disponible en téléchargement ici

@@ -8,63 +8,122 @@ if (!$this->CheckPermission('Adherents use'))
 	$this->SetMessage("$designation");
 	$this->RedirectToAdminTab('adherents');
 }
-if( isset($params['cancel']) )
-{
-	$this->RedirectToAdminTab('adherents');
-	return;
-}
-$db =& $this->GetDb();
-global $themeObject;
-$licence = '';
-$edition = 0;
-$OuiNon = array("Non"=>"0","Oui"=>"1");
-$edit = 0;
-if(isset($params['record_id']) && $params['record_id'] != '')
-{
+if( !empty($_POST) ) {
+        if( isset($_POST['cancel']) ) {
+            $this->RedirectToAdminTab();
+        }
+
+	$message = "";
+	$genid = $_POST['genid'];
+	if(! $genid)
+	{
+		$genid = $this->random_int(9);
+	}
+	$edit = $_POST['edit'];
+	$actif = cms_to_bool($_POST['actif']);
+	$licence = $_POST['licence'];
+	$nom = filter_var(strtoupper($_POST['nom']) , FILTER_SANITIZE_STRING);
+	$prenom = $_POST['prenom'];
+	$anniversaire = $_POST['anniversaire'];
+	$sexe = $_POST['sexe'];
+	$adresse = $_POST['adresse'];
+	$code_postal = $_POST['code_postal'];
+	$ville = $_POST['ville'];
+	$pays = $_POST['pays'];
+	$externe = 0;
+	$aujourdhui = date('Y-m-d');
 	
-	$record_id = $params['record_id'];
-	$as_adh = new Asso_adherents;
-	$details = $as_adh->details_adherent($record_id);
-	$edit = 1;
-	$smarty->assign('genid',$this->CreateInputHidden($id,'genid', $details['genid']));
-			
+	$service = new Asso_adherents;
+	
+	if($edit == 1)
+	{
+		$update_adherent = $service->update_adherent($actif, $nom, $prenom, $sexe, $anniversaire, $licence,$adresse, $code_postal, $ville, $pays,$externe, $aujourdhui, $genid);
+		$message.="Adhérent modifié. ";
+	}
+	else
+	{
+		$add_adherent = $service->add_adherent($genid,$actif, $nom, $prenom, $sexe, $anniversaire, $licence,$adresse, $code_postal, $ville, $pays,$externe);
+		if(true === $add_adherent)
+		{
+			$message.=" Adhérent inséré. ";
+			//on insère automatiquement le nouveau ds le gp par défaut 
+			$gp_ops = new groups;
+			$id_gp = $gp_ops->assign_to_adherent($genid);
+			if(false !== $id_gp)
+			{
+				$message.=" Inscrit dans le groupe adhérent.";
+			}
+		}
+	}
+	$this->SetMessage($message);
+	$this->RedirectToAdminTab('adherents');
+	
 }
+else
+{
+	$db =& $this->GetDb();
+	global $themeObject;
+	//les valeurs des champs par défaut
+	$actif = '1';
+	$genid = "";
+	$licence = "";
+	$nom = "";//$details['nom'];
+	$prenom = "";//$details['prenom'];
+	$anniversaire = date('Y-m-d');//$details['anniversaire'];
+	$sexe = 'M';//$details['sexe'];
+	$adresse = "";//$details['adresse'];
+	$code_postal = "";//$details['code_postal'];
+	$ville = "";//$details['ville'];
+	$pays = 'France';//$details['pays'];
+	$OuiNon = array("Non"=>"0","Oui"=>"1");
+	$liste_sexe = array("M"=>"Masculin", "F"=>"Féminin");
+	$edit = 0;
+	
+	$anniversaire = date('Y-m-d');
+	if(isset($params['record_id']) && $params['record_id'] != '')
+	{
+		$record_id = $params['record_id'];
+		$genid = $params['record_id'];
+		$as_adh = new Asso_adherents;
+		$details = $as_adh->details_adherent_by_genid($record_id);
+		var_dump($details);
+		$edit = 1;
+		$actif = $details['actif'];
+		$genid = $details['genid'];
+		$licence = $details['licence'];
+		$nom = $details['nom'];
+		$prenom = $details['prenom'];
+		$anniversaire = $details['anniversaire'];
+		$sexe = $details['sexe'];
+		$adresse = $details['adresse'];
+		$code_postal = $details['code_postal'];
+		$ville = $details['ville'];
+		$pays = $details['pays'];	
+	}
+	else
+	{
+	
 
-	$smarty->assign('formstart',
-			    $this->CreateFormStart( $id, 'do_edit_adherent', $returnid ) );
-
-	$smarty->assign('licence',
-				$this->CreateInputText($id,'licence',(isset($details['licence'])?$details['licence']: ""), 15,30));
-	$smarty->assign('nom',
-			$this->CreateInputText($id,'nom',(isset($details['nom'])?$details['nom']: ""), 150,300));
-	$smarty->assign('prenom',
-			$this->CreateInputText($id,'prenom',(isset($details['prenom'])?$details['prenom']: ""), 150,300));
-	$smarty->assign('sexe',
-			$this->CreateInputDropdown($id,'sexe',array("Masculin"=>"M", "Féminin"=>"F"),'',(isset($details['sexe'])?$details['sexe']:"M")));
-	$smarty->assign('externe',
-			$this->CreateInputDropdown($id,'externe',$OuiNon, '',(isset($details['externe'])?$details['externe']:"Non")));
-	$smarty->assign('anniversaire',
-			$this->CreateInputDate($id, 'anniversaire',(isset($details['anniversaire'])?$details['anniversaire']: "")));
-	$smarty->assign('adresse',
-			$this->CreateInputText($id,'adresse',(isset($details['adresse'])?$details['adresse']: ""), 100, 250));
-	$smarty->assign('code_postal',
-			$this->CreateInputText($id, 'code_postal',(isset($details['code_postal'])?$details['code_postal']: ""), 50, 200));		
-	$smarty->assign('ville',
-			$this->CreateInputText($id,'ville',(isset($details['ville'])?$details['ville']: ""),50,200));
-	$smarty->assign('pays',
-			$this->CreateInputText($id,'pays',(isset($details['pays'])?$details['pays']: ""),50,200));
-	$smarty->assign('submit',
-			$this->CreateInputSubmit($id, 'submit', $this->Lang('submit'), 'class="button"'));
-	$smarty->assign('cancel',
-			$this->CreateInputSubmit($id,'cancel',
-						$this->Lang('cancel')));
-
-
-	$smarty->assign('formend',
-			$this->CreateFormEnd());
+	}			
+	$tpl = $smarty->CreateTemplate($this->GetTemplateResource('edit_adherent.tpl'), null, null, $smarty);
+	$tpl->assign('edit', $edit);
+	$tpl->assign('genid', $genid);
+	$tpl->assign('actif', $actif);
+	$tpl->assign('nom', $nom);
+	$tpl->assign('prenom', $prenom);
+	$tpl->assign('sexe', $sexe);
+	$tpl->assign('anniversaire', $anniversaire);
+	$tpl->assign('liste_sexe', $liste_sexe);
+	$tpl->assign('adresse', $adresse);
+	$tpl->assign('code_postal', $code_postal);
+	$tpl->assign('ville', $ville);
+	$tpl->assign('pays', $pays);
+	$tpl->display();
 			
 	//$query.=" ORDER BY date_compet";
-echo $this->ProcessTemplate('edit_adherent.tpl');
+//echo $this->ProcessTemplate('edit_adherent.tpl');
+}
+	
 
 #
 #EOF

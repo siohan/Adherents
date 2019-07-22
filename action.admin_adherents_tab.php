@@ -18,9 +18,6 @@ $aujourdhui = date('Y-m-d');
 $act = 1;//par defaut on affiche les actifs (= 1 )
 $shopping = '<img src="../modules/Adherents/images/shopping.jpg" class="systemicon" alt="Commandes" title="Commandes">';
 $cotis = '<img src="../modules/Adherents/images/cotisations.png" class="systemicon" alt="Cotisations" title="Cotisations">';
-//$faux = 
-$smarty->assign('add_users', 
-		$this->CreateLink($id, 'edit_adherent',$returnid, 'Ajouter'));
 $smarty->assign('shopping', $shopping);
 $smarty->assign('cotis', $cotis);
 $smarty->assign('inactifs',
@@ -88,13 +85,42 @@ $contact_ops = new contact;
 //$adh_ops = new adherents_spid;
 if($dbresult && $dbresult->RecordCount() >0)
 {
-	
+	$config = cmsms()->GetConfig();
+	$base = $config['root_url'];
 	while($row = $dbresult->FetchRow())
 	{
 	
 		$onerow = new StdClass();
 		$onerow->rowclass = $rowclass;
-		$onerow->genid= $row['genid'];
+		$genid = $row['genid'];
+		$tabExt = array('jpg','gif','png','jpeg');    // Extensions autorisees
+		foreach($tabExt as $value)
+		{
+			$right_extension = file_exists("../uploads/images/trombines/".$genid.".".$value);
+			if(true == $right_extension)
+			{
+				$has_image = true;
+				$myimage = "../uploads/images/trombines/".$genid.".".$value;
+			}
+			else
+			{
+				$has_image = false;
+			}
+		}
+		
+		//var_dump($has_image);
+		if(true == $has_image)//file_exists("http://localhost:8888/1.0/uploads/images/trombines/".$genid.".jpg"))
+		{
+			$img = '<img src="'.$myimage.'" alt="ma trombine" width="24" height="24">';
+			$thumb = $this->CreateLink($id, 'upload_image', $returnid,$contents=$img, array("genid"=>$genid));
+		}
+		else
+		{
+			$thumb = $this->CreateLink($id, 'upload_image', $returnid,$contents=$themeObject->DisplayImage('icons/system/false.gif', $this->Lang('false'), '', '', 'systemicon'), array("genid"=>$genid));
+		}
+		$onerow->genid= $genid;
+		
+		$onerow->thumbnail = $thumb;
 		$onerow->nom= $row['nom'];
 		$onerow->prenom= $row['prenom'];
 		$actif= $row['actif'];
@@ -132,8 +158,9 @@ if($dbresult && $dbresult->RecordCount() >0)
 		{
 			$onerow->has_mobile = $this->CreateLink($id, 'add_edit_contact', $returnid,$themeObject->DisplayImage('icons/system/false.gif', $this->Lang('false'), '', '', 'systemicon'), array("genid"=>$row['genid'], "type_contact"=>'2'));
 		}
-		$onerow->edit = $this->CreateLink($id, 'edit_adherent',$returnid,$themeObject->DisplayImage('icons/system/edit.gif', $this->Lang('edit'), '', '', 'systemicon'), array("record_id"=>$row['id']));
-		$onerow->view_contacts= $this->CreateLink($id, 'view_contacts', $returnid,'<img src="../modules/Adherents/images/contact.jpg" class="systemicon" alt="Contacts" title="Contacts">',array("genid"=>$row['genid']));//$row['closed'];
+		$onerow->groups= $this->CreateLink($id, 'assign_groups', $returnid,$themeObject->DisplayImage('icons/system/groupassign.gif', $this->Lang('assign'), '', '', 'systemicon'),array("genid"=>$row['genid']));//$row['closed'];
+		$onerow->edit = $this->CreateLink($id, 'edit_adherent',$returnid,$themeObject->DisplayImage('icons/system/edit.gif', $this->Lang('edit'), '', '', 'systemicon'), array("record_id"=>$row['genid']));
+		$onerow->view_contacts= $this->CreateLink($id, 'view_contacts', $returnid,$themeObject->DisplayImage('icons/topfiles/groupmembers.gif', $this->Lang('groupmembers'), '', '', 'systemicon'),array("genid"=>$row['genid']));//$row['closed'];
 		
 		($rowclass == "row1" ? $rowclass= "row2" : $rowclass= "row1");
 		$rowarray[]= $onerow;

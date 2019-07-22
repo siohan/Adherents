@@ -1,7 +1,7 @@
 <?php
 #-------------------------------------------------------------------------
 # Module: Adherents
-# Version: 0.2.7, Claude SIOHAN
+# Version: 0.3.4, Claude SIOHAN
 # Method: Install
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2008 by Ted Kulp (wishy@cmsmadesimple.org)
@@ -49,6 +49,7 @@ $flds = "
 	code_postal C(5),
 	ville C(200),
 	pays C(255),
+	role C(255),
 	externe I(1) DEFAULT 0";
 	$sqlarray = $dict->CreateTableSQL( cms_db_prefix()."module_adherents_adherents", $flds, $taboptarray);
 	$dict->ExecuteSQLArray($sqlarray);			
@@ -96,6 +97,23 @@ $flds = "
 	$sqlarray = $dict->CreateTableSQL( cms_db_prefix()."module_adherents_groupes_belongs", $flds, $taboptarray);
 	$dict->ExecuteSQLArray($sqlarray);			
 //
+
+// table schema description pour la table roles
+$flds = "
+	id I(11) AUTO KEY,
+	id_group I(11),
+	genid I(11)";
+	$sqlarray = $dict->CreateTableSQL( cms_db_prefix()."module_adherents_roles", $flds, $taboptarray);
+	$dict->ExecuteSQLArray($sqlarray);			
+//
+// table schema description pour la table roles
+$flds = "
+	id I(11) AUTO KEY,
+	id_group I(11),
+	genid I(11)";
+	$sqlarray = $dict->CreateTableSQL( cms_db_prefix()."module_adherents_roles_belongs", $flds, $taboptarray);
+	$dict->ExecuteSQLArray($sqlarray);			
+//
 // mysql-specific, but ignored by other database
 $taboptarray = array( 'mysql' => 'ENGINE=MyISAM' );
 
@@ -125,12 +143,12 @@ $this->SetPreference('admin_email', 'root@localhost.com');
 $this->SetPreference('email_activation_subject', 'Ton compte est actif');
 $this->SetPreference('feu_commandes',0);
 $this->SetPreference('feu_fftt',0);
-$this->SetPreference('feu_messages',1);
-$this->SetPreference('feu_inscriptions',1);
-$this->SetPreference('feu_contacts',1);
-$this->SetPreference('feu_presences',1);
-$this->SetPreference('feu_factures', 1);
-$this->SetPreference('feu_compos', 1);
+$this->SetPreference('feu_messages',0);
+$this->SetPreference('feu_inscriptions',0);
+$this->SetPreference('feu_contacts',0);
+$this->SetPreference('feu_presences',0);
+$this->SetPreference('feu_factures', 0);
+$this->SetPreference('feu_compos', 0);
 //Permissions
 $this->CreatePermission('Adherents use', 'Utiliser le module Adhérents');
 $this->CreatePermission('Adherents prefs', 'Modifier les données du compte');

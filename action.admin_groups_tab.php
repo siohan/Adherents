@@ -7,9 +7,6 @@ if (!$this->CheckPermission('Adherents use'))
 	return;
 }
 
-
-$smarty->assign('add_edit_group',
-		$this->CreateLink($id, 'add_edit_group', $returnid,$contents='Ajouter un groupe'));
 $result= array ();
 $query = "SELECT * FROM ".cms_db_prefix()."module_adherents_groupes";
 
@@ -21,7 +18,7 @@ $query = "SELECT * FROM ".cms_db_prefix()."module_adherents_groupes";
 	$rowclass = '';
 	$group_ops = new groups();
 	$contact_ops = new contact();
-	$img_sms = '<img src="../modules/Adherents/images/sms2.png" class="systemicon" alt="Envoyer des SMS" title="Envoyer des SMS">';
+	$img_sms = '<img src="../assets/modules/Adherents/images/sms2.png" class="systemicon" alt="Envoyer des SMS" title="Envoyer des SMS">';
 		if ($dbresult && $dbresult->RecordCount() > 0)
   		{
     			while ($row= $dbresult->FetchRow())

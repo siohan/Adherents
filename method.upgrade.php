@@ -311,6 +311,58 @@ switch($current_version)
 		$this->SetPreference('feu_compos', 1);
 	}
 	
+	case "0.3.3.1" :
+	{
+		//ajout de nouveaux champs
+		//role
+		$dict = NewDataDictionary( $db );
+		$flds = "role C(255), description C(255)";
+		$sqlarray = $dict->AddColumnSQL( cms_db_prefix()."module_adherents_adherents", $flds);
+		$dict->ExecuteSQLArray($sqlarray);
+		
+		/*
+			//Design pour la liste des adhérents
+			try {
+			    $adh_type = new CmsLayoutTemplateType();
+			    $adh_type->set_originator($this->GetName());
+			    $adh_type->set_name('liste_adherents');
+			    $adh_type->set_dflt_flag(TRUE);
+			    $adh_type->set_description('Adherents Liste');
+			    $adh_type->set_lang_callback('Adherents::page_type_lang_callback');
+			    $adh_type->set_content_callback('Adherents::reset_page_type_defaults');
+			    $adh_type->reset_content_to_factory();
+			    $adh_type->save();
+			}
+
+			catch( CmsException $e ) {
+			    // log it
+			    debug_to_log(__FILE__.':'.__LINE__.' '.$e->GetMessage());
+			    audit('',$this->GetName(),'Installation Error: '.$e->GetMessage());
+			    return $e->GetMessage();
+			}
+
+			try {
+			    $fn = cms_join_path(dirname(__FILE__),'templates','orig_sitprov.tpl');
+			    if( file_exists( $fn ) ) {
+			        $template = @file_get_contents($fn);
+			        $tpl = new CmsLayoutTemplate();
+			        $tpl->set_name(\CmsLayoutTemplate::generate_unique_name('Adherents Liste'));
+			        $tpl->set_owner($uid);
+			        $tpl->set_content($template);
+			        $tpl->set_type($adh_type);
+			        $tpl->set_type_dflt(TRUE);
+			        $tpl->save();
+			    }
+			}
+			catch( \Exception $e ) {
+			  debug_to_log(__FILE__.':'.__LINE__.' '.$e->GetMessage());
+			  audit('',$this->GetName(),'Installation Error: '.$e->GetMessage());
+			  return $e->GetMessage();
+			}
+			//fin de la liste des adhérents
+		*/
+	}
+	
 
 }
 // put mention into the admin log
