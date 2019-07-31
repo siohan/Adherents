@@ -1,50 +1,99 @@
 <?php
 if(!isset($gCms) ) exit;
 //on établit les permissions
+//debug_display($_POST, 'Parameters');
 if(!$this->CheckPermission('Adherents Set Prefs'))
 {
 	$this->SetMessage($this->Lang('needpermission'));
 	$this->RedirectToAdminTab('adherents');
 }
-if(isset($params['submit']))
+if(isset($_POST['submit']))
 {
-	$module = \cms_utils::get_module($compositions);
-	$result = 0;
-	if( is_object( $module ) ) $result = 1;
-	$this->SetPreference('feu_fftt', $params['feu_fftt']);
-	$this->SetPreference('feu_messages', $params['feu_messages']);
-	$this->SetPreference('feu_inscriptions', $params['feu_inscriptions']);
-	$this->SetPreference('feu_contacts', $params['feu_contacts']);
-	$this->SetPreference('feu_presences', $params['feu_presences']);
-	$this->SetPreference('feu_factures', $params['feu_factures']);
-	$this->SetPreference('feu_commandes', $params['feu_commandes']);
-	$this->SetPreference('feu_compos', $params['feu_compos']);
-	$this->SetMessage('Config modifiée');
+	$designation= '';
+	$module = \cms_utils::get_module('Ping');
+	if( is_object( $module ) )
+	{
+		$this->SetPreference('feu_messages', $_POST['feu_messages']);
+		
+	}
+	else
+	{
+		$this->SetPreference('feu_messages', '0');
+		$designation.=" Module Messages absent ou non activé !";
+	}
+	$module = \cms_utils::get_module('Paiements');
+	if( is_object( $module ) )
+	{
+		$this->SetPreference('feu_factures', $_POST['feu_factures']);
+		
+	}
+	else
+	{
+		$this->SetPreference('feu_factures', '0');
+		$designation.=" Module Paiements absent ou non activé !";
+	}
+	$module = \cms_utils::get_module('Commandes');
+	if( is_object( $module ) )
+	{
+		$this->SetPreference('feu_commandes', $_POST['feu_commandes']);
+		
+	}
+	else
+	{
+		$this->SetPreference('feu_commandes', '0');
+		$designation.=" Module Commandes absent ou non activé !";
+	}
+	$module = \cms_utils::get_module('Inscriptions');
+	if( is_object( $module ) )
+	{
+		$this->SetPreference('feu_inscriptions', $_POST['feu_inscriptions']);
+		
+	}
+	else
+	{
+		$this->SetPreference('feu_inscriptions', '0');
+		$designation.=" Module Inscriptions absent ou non activé !";
+	}
+	$module = \cms_utils::get_module('Presence');
+	if( is_object( $module ) )
+	{
+		$this->SetPreference('feu_presences', $_POST['feu_presences']);
+		
+	}
+	else
+	{
+		$this->SetPreference('feu_presences', '0');
+		$designation.=" Module Presence absent ou non activé !";
+	}
+	$module = \cms_utils::get_module('Compositions');
+	if( is_object( $module ) )
+	{
+		$this->SetPreference('feu_compos', $_POST['feu_compos']);
+		
+	}
+	else
+	{
+		$this->SetPreference('feu_compos', '0');
+		$designation.=" Module Compositions absent ou non activé !";
+	}
+
+	$this->SetPreference('feu_contacts', $_POST['feu_contacts']);
+	$designation.= "Config modifiée";
+	$this->SetMessage($designation);
 	$this->RedirectToAdminTab('config');
 }
 else
 {
 	//debug_display($parms, 'Parameters');
 
-	$feu_fftt = $this->GetPreference('feu_fftt');
-	$feu_messages = $this->GetPreference('feu_messages');
-	$feu_contacts = $this->GetPreference('feu_contacts');
-	//$club_number = $this->GetPreference('club_number');
-	//$serial = random_string(15);
-	$OuiNon = array("Oui"=>"1", "Non"=>"0");
-	$smarty->assign('startform', $this->CreateFormStart($id,'admin_config_tab', $returnid));
-	$smarty->assign('endform', $this->CreateFormEnd());
-
-	$smarty->assign('feu_fftt', $this->CreateInputDropdown($id, 'feu_fftt',$OuiNon,-1,$this->GetPreference('feu_fftt')));
-	$smarty->assign('feu_messages', $this->CreateInputDropdown($id, 'feu_messages',$OuiNon,-1,$this->GetPreference('feu_messages')));
-	$smarty->assign('feu_inscriptions', $this->CreateInputDropdown($id, 'feu_inscriptions',$OuiNon,-1,$this->GetPreference('feu_inscriptions')));
-	$smarty->assign('feu_contacts', $this->CreateInputDropdown($id, 'feu_contacts',$OuiNon,-1,$this->GetPreference('feu_contacts')));
-	$smarty->assign('feu_presences', $this->CreateInputDropdown($id, 'feu_presences',$OuiNon,-1,$this->GetPreference('feu_presences')));
-	$smarty->assign('feu_factures', $this->CreateInputDropdown($id, 'feu_factures',$OuiNon,-1,$this->GetPreference('feu_factures')));
-	$smarty->assign('feu_commandes', $this->CreateInputDropdown($id, 'feu_commandes',$OuiNon,-1,$this->GetPreference('feu_fftt')));
-	$smarty->assign('feu_compos', $this->CreateInputDropdown($id, 'feu_compos',$OuiNon,-1,$this->GetPreference('feu_compos')));
-
-	$smarty->assign('submit', $this->CreateInputSubmit ($id, 'submit', $this->Lang('submit')));
+	$smarty->assign('feu_fftt', $this->GetPreference('feu_fftt'));
+	$smarty->assign('feu_messages', $this->GetPreference('feu_messages'));
+	$smarty->assign('feu_inscriptions', $this->GetPreference('feu_inscriptions'));
+	$smarty->assign('feu_contacts', $this->GetPreference('feu_contacts'));
+	$smarty->assign('feu_presences', $this->GetPreference('feu_presences'));
+	$smarty->assign('feu_factures', $this->GetPreference('feu_factures'));
+	$smarty->assign('feu_commandes', $this->GetPreference('feu_fftt'));
+	$smarty->assign('feu_compos', $this->GetPreference('feu_compos'));
 
 	echo $this->ProcessTemplate('config.tpl');
 }

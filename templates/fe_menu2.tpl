@@ -1,7 +1,7 @@
 
 <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
-      <a class="navbar-brand mr-1" href="{cms_action_url action=default display=default record_id=$username}">{sitename} : mon compte</a>
+      <a class="navbar-brand mr-1" href="{cms_action_url action=default display=default record_id=$username}">Bonjour {$prenom}</a>
  	{*$Retour*}
       <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
         <i class="fas fa-bars"></i>
@@ -131,13 +131,13 @@
             <span>Mes convocations</span></a>
         </li>
 {/if}
-
+{if $feu_adhesions ==1}
         <li class="nav-item">
           <a class="nav-link" href="{cms_action_url action=fe_adhesions display=contacts record_id=$username}l">
             <i class="fas fa-fw fa-user-circle"></i>
             <span>Mes adhésions</span></a>
         </li>
-
+{/if}
 		<li class="nav-item">
           <a class="nav-link" href="{cms_action_url action=default display=infos record_id=$username}">
             <i class="fas fa-fw fa-chart-area"></i>

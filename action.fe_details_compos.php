@@ -1,6 +1,6 @@
 <?php
 if (!isset($gCms)) exit;
-//debug_display($params,'Parameters');
+debug_display($params,'Parameters');
 $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
 $username = $feu->GetUserProperty('genid');
@@ -29,9 +29,9 @@ else
 {
 	$error++;
 }
-if(isset($params['ref_equipe']) && $params['ref_equipe'] !='')
+if(isset($params['record_id']) && $params['record_id'] !='')
 {
-	$ref_equipe = $params['ref_equipe'];
+	$ref_equipe = $params['record_id'];
 	$equipe = $comp_ops->get_equipe($ref_equipe);
 	$smarty->assign('equipe', $equipe);
 }

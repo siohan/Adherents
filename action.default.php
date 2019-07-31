@@ -7,7 +7,7 @@ if(isset($params['display']) && $params['display'] =='liste')
 {
 	$display = $params['display'];
 //	require(__DIR__.'/action.adherents.php');
-	echo $display;
+	//echo $display;
 	$this->Redirect($id, 'adherents', $returnid);
 }
 elseif(isset($params['display']) && $params['display'] != 'liste' || !isset($params['display']))
@@ -15,7 +15,7 @@ elseif(isset($params['display']) && $params['display'] != 'liste' || !isset($par
 	$display = $params['display'];
 	$feu = cms_utils::get_module('FrontEndUsers');
 	$userid = $feu->LoggedInId();
-	//echo $display;
+	echo $display;
 	$properties = $feu->GetUserProperties($userid);
 	$email = $feu->LoggedInEmail();
 

@@ -29,7 +29,9 @@ $query = "SELECT * FROM ".cms_db_prefix()."module_adherents_groupes";
 				//les champs disponibles : 
 				$actif = $row['actif'];
 				$public = $row['public'];
+				$id = $row['id'];
 				$onerow->id= $row['id'];
+				$smarty->assign("id", $row['id']);
 				$nb = $group_ops->count_users_in_group($row['id']);
 				$onerow->nom = $row['nom'];
 				

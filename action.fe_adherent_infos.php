@@ -4,7 +4,7 @@ if (!isset($gCms)) exit;
 $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
 $username = $feu->GetUserProperty('genid');
-echo $username;
+//echo $username;
 require_once(dirname(__FILE__).'/include/fe_menu.php');
 
 $db =& $this->GetDb();

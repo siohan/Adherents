@@ -362,6 +362,10 @@ switch($current_version)
 			//fin de la liste des adhérents
 		*/
 	}
+	case "0.3.4":
+	{
+		$this->SetPreference('feu_adhesions', 0);
+	}
 	
 
 }

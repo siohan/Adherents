@@ -3,7 +3,7 @@
 		<i class="fas fa-user-friends"></i>
               Mes convocations</div>
             <div class="card-body">
-              <div class="table-responsive"><p class="info">{*$fe_add_cc*}</p>
+              <div class="table-responsive"><p class="info"></p>
 {if $itemcount >0}
 
 <h3></h3>

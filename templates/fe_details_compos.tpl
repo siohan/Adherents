@@ -3,10 +3,10 @@
 		<i class="fas fa-user-friends"></i>
               Mes convocations</div>
             <div class="card-body">
-              <div class="table-responsive"><p class="info">{*$fe_add_cc*}</p>
+              <div class="table-responsive"><p class="info"><a href="{module_action_url action='fe_compos'}"><= Revenir</a></p>
 {if $itemcount >0}
 
-<h3></h3>
+<h3>Mon équipe</h3>
 		<table class="table table-bordered">
 		 <thead>
 		  <tr>

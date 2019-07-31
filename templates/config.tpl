@@ -1,45 +1,45 @@
-{$startform}
+{form_start action='admin_config_tab'}
 <fieldset>
 	<legend>Activation des éléments de l'espace privé</legend>
 	<p class="warning">Les modules doivent être installés et activés (voir aide)</p>
-		<div class="pageoverflow">
+		
 			<p class="pagetext">Messagerie interne ? (module Messages)</p>
-			<p class="pageinput">{$feu_messages}</p>
-		</div>
+			<select name="feu_messages">{cms_yesno selected=$feu_messages}</select>
+		
 		<div class="pageoverflow">
 			<p class="pagetext">Contacts ?</p>
-			<p class="pageinput">{$feu_contacts}</p>
+			<select name="feu_contacts">{cms_yesno selected=$feu_contacts}</select>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext">Factures ? (Pour les cotisations, commandes etc; module Paiements)</p>
-			<p class="pageinput">{$feu_factures}</p>
+			<select name="feu_factures">{cms_yesno selected=$feu_factures}</select>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext">Commandes ? (module Commandes)</p>
-			<p class="pageinput">{$feu_commandes}</p>
+			<select name="feu_commandes">{cms_yesno selected=$feu_commandes}</select>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext">Inscriptions ? (module Inscriptions)</p>
-			<p class="pageinput">{$feu_inscriptions}</p>
+			<select name="feu_inscriptions">{cms_yesno selected=$feu_inscriptions}</select>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext">Présences ? (module Presence)</p>
-			<p class="pageinput">{$feu_presences}</p>
+			<select name="feu_presences">{cms_yesno selected=$feu_presences}</select>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext">Convocations ? (module Compositions)</p>
-			<p class="pageinput">{$feu_compos}</p>
+			<select name="feu_compos">{cms_yesno selected=$feu_compos}</select>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext">Résultats FFTT ? (module Ping)</p>
-			<p class="pageinput">{$feu_fftt}</p>
+			<select name="feu_fftt">{cms_yesno selected=$feu_fftt}</select>
 		</div>
 
 
 	<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
-			<p class="pageinput">{$submit}</p>
+			<input type="submit" name="submit" value="Envoyer"/>
 		</div>
 </fieldset>
 
-{$endform}
+{form_end}

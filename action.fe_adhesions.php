@@ -5,19 +5,20 @@ $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
 $username = $feu->GetUserProperty('genid');
 require_once(dirname(__FILE__).'/include/fe_menu.php');
-//echo "FEU : le user est : ".$username." ".$userid;
-//$properties = $feu->GetUserProperties($userid);
-//$email = $feu->LoggedInEmail();
-//echo $email;
-//var_dump($email);
+
 //on détermine dans quels groupes figure l'adhérent
 $gp_ops = new groups;
 $adh = $gp_ops->member_of_groups($username);
+//var_dump($adh);
+$quer = 0;
 if(is_array($adh) && count($adh) > 0 )
 {
-	$tab = implode(', ',$adh);	
+	$tab = implode(', ',$adh);
+	$quer = 1;	
 }
-var_dump($adh);
+
+
+//var_dump($adh);
 $delete = '<img src="../assets/modules/Adherents/images/delete.gif" class="systemicon" alt="Supprimer" title="Supprimer">';
 $modif = '<img src="../assets/modules/Adherents/images/edit.gif" class="systemicon" alt="Modifier" title="Modifier">';
 $vrai = '<img src="../assets/modules/Adherents/images/true.gif" class="systemicon" alt="Vrai" title="Vrai">';
@@ -30,7 +31,11 @@ if(isset($params['details']) && $params['details'] !='')
 }
 
 $db = cmsms()->GetDb();
-$query = "SELECT id,nom, description, tarif, groupe FROM ".cms_db_prefix()."module_cotisations_types_cotisations WHERE actif = 1 AND groupe IN ($tab) ";
+$query = "SELECT id,nom, description, tarif, groupe FROM ".cms_db_prefix()."module_cotisations_types_cotisations WHERE actif = 1 ";
+if($quer ==1)
+{
+	$query.=" AND groupe IN ($tab) ";
+}
 $dbresult = $db->Execute($query);
 if($dbresult && $dbresult->RecordCount()>0)
 {
@@ -47,15 +52,23 @@ if($dbresult && $dbresult->RecordCount()>0)
 			$onerow->nom = $row['nom'];
 			$id_option = $row['id'];
 			$onerow->description = $row['description'];
-			$inscrit = $cotis_ops->belongs_exists($username,$row['id']);
-			$ref = $cotis_ops->ref_action($username,$row['id']);
-			var_dump($ref);
-			$is_paid = $pay_ops->is_paid($ref);
+			$inscrit = $cotis_ops->belongs_exists($row['id'],$username);
+			$ref = $cotis_ops->ref_action($username, $row['id']);
+			//var_dump($ref);
+			if(false != $ref)
+			{
+				$is_paid = $pay_ops->is_paid($ref);
+			}
+			else
+			{
+				$is_paid = false;
+			}
+		
 			if(FALSE ===$inscrit )
 			{
 				$onerow->is_inscrit = $faux;
 				$onerow->regle = $faux;
-				$onerow->inscription = $this->CreateLink($id, 'fe_add', $returnid,$contents="M'inscrire", array("id_cotisation"=>$row['id'], "obj"=>"adhesion"));
+				$onerow->inscription = $this->CreateLink($id, 'fe_add', $returnid,$contents="M'inscrire", array("id_cotisation"=>$row['id'], "record_id"=>$username, "obj"=>"adhesion"));
 			}
 			else
 			{
@@ -63,13 +76,15 @@ if($dbresult && $dbresult->RecordCount()>0)
 				if(false != $is_paid)// c'est bien payé !
 				{
 					$onerow->regle = $vrai;
+					$onerow->delete = $false;//this->CreateLink($id, 'fe_delete', $returnid, $delete, array("obj"=>"option_belongs", "record_id"=>$row['id'], "id_inscription"=>$id_inscription, "adherent"=>$username));
 				}
 				else
 				{
 					$onerow->regle = $false;
+					$onerow->delete = $this->CreateLink($id, 'fe_delete', $returnid, $delete, array("obj"=>"cotisation", "ref_action"=>$ref));
 				}
 				$onerow->inscription = $false;
-				$onerow->delete = $this->CreateLink($id, 'fe_delete', $returnid, $delete, array("obj"=>"option_belongs", "record_id"=>$row['id'], "id_inscription"=>$id_inscription, "adherent"=>$username));
+				//$onerow->delete = $this->CreateLink($id, 'fe_delete', $returnid, $delete, array("obj"=>"option_belongs", "record_id"=>$row['id'], "id_inscription"=>$id_inscription, "adherent"=>$username));
 			
 			}
 			

@@ -149,6 +149,7 @@ $this->SetPreference('feu_contacts',0);
 $this->SetPreference('feu_presences',0);
 $this->SetPreference('feu_factures', 0);
 $this->SetPreference('feu_compos', 0);
+$this->SetPreference('feu_adhesions', 0);
 //Permissions
 $this->CreatePermission('Adherents use', 'Utiliser le module Adhérents');
 $this->CreatePermission('Adherents prefs', 'Modifier les données du compte');

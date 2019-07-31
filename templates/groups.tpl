@@ -1,4 +1,4 @@
-<div class="pageoptions"><p><a href="{module_action_url action='add°edit_group'}">{admin_icon icon='newobject'}Ajouter un groupe</a></p></div>
+<div class="pageoptions"><p><a href="{module_action_url action='add_edit_group'}">{admin_icon icon='newobject'}Ajouter un groupe</a></p></div>
 <div class="pageoptions"><p class="pageoptions">{$itemcount}&nbsp;{$itemsfound}</p></div>
 
 {if $itemcount > 0}
@@ -26,7 +26,7 @@
 	<td>{$entry->public}</td>
 	<td>{$entry->send_emails}</td>
 	<td>{$entry->send_sms}</td>
-	<td>{$entry->editlink}</td>
+	<td><a href="{module_action_url action='add_edit_group' record_id=$id}">{admin_icon icon='edit'}{*$entry->editlink*}</td>
 	<td>{$entry->delete}</td>
 	<td>{$entry->add_users}</td>
   </tr>

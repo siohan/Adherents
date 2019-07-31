@@ -4,7 +4,7 @@ if(!isset($gCms)) exit;
 //on vérifie les permissions
 
 $db =& $this->GetDb();
-debug_display($params, 'Parameters');
+//debug_display($params, 'Parameters');
 
 //$template = "";
 if(isset($params['template']) && $params['template'] !="")

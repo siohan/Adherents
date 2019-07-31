@@ -20,6 +20,10 @@ $lang['areyousure_actionmultiple'] = 'Appliquer cette action à toute la sélect
 $lang['send_emails'] = 'Envoyer des mails';
 $lang['true'] = 'Vrai';
 $lang['false'] = 'Faux';
+$lang['groupmembers'] = 'Membres du groupe';
+$lang['apply_to_selection'] = "Appliquer à la sélection";
+$lang['areyousure_actionmultiple']  = "Etes vous certain de faire cette action multiple ?";
+$lang['back'] = 'Revenir';
 
 $lang['help'] = '<h3>Que fait ce module ?</h3>
 

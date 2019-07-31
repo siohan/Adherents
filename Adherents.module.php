@@ -20,7 +20,7 @@ class Adherents extends CMSModule
   
   function GetName() { return 'Adherents'; }   
   function GetFriendlyName() { return $this->Lang('friendlyname'); }   
-  function GetVersion() { return '0.3.4'; }  
+  function GetVersion() { return '0.3.4.1'; }  
   function GetHelp() { return $this->Lang('help'); }   
   function GetAuthor() { return 'Claude SIOHAN'; } 
   function GetAuthorEmail() { return 'claude.siohan@gmail.com'; }
@@ -63,12 +63,6 @@ class Adherents extends CMSModule
 	$this->SetParameterType('phase', CLEAN_INT);
 	$this->SetParameterType('edition', CLEAN_INT);
 	//$this->SetParameterType('record_id', CLEAN_INT);
-	$this->SetParameterType('anniversaire',CLEAN_STRING);
-	$this->SetParameterType('ville',CLEAN_STRING);
-	$this->SetParameterType('code_postal',CLEAN_STRING);
-	$this->SetParameterType('adresse',CLEAN_STRING);
-	$this->SetParameterType('saison',CLEAN_STRING);
-	$this->SetParameterType('retrieve',CLEAN_STRING);
 	$this->SetParameterType('type_contact',CLEAN_STRING);
 	$this->SetParameterType('contact',CLEAN_STRING);
 	$this->SetParameterType('description',CLEAN_STRING);
@@ -87,7 +81,9 @@ class Adherents extends CMSModule
 	$this->SetParameterType('sujet',CLEAN_STRING);
 	$this->SetParameterType('produit_id',CLEAN_INT);
 	$this->SetParameterType('message_id', CLEAN_INT);
-	
+	$this->SetParameterType('id_cotisation', CLEAN_INT);
+	$this->SetParameterType('obj', CLEAN_STRING);
+	$this->SetParameterType('ref_action', CLEAN_STRING);	
 	
 	//form parameters
 	$this->SetParameterType('submit',CLEAN_STRING);

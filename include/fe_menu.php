@@ -18,9 +18,11 @@ if($this->GetPreference('feu_messages') == 1)
 	$nb_messages = $mess_ops->nb_messages_per_user($username);
 	$smarty->assign('nb_messages', $nb_messages);
 }
-
-
+$asso_ops = new Asso_adherents;
+$details = $asso_ops->details_adherent_by_genid($username);
+$prenom = $details['prenom'];
 $smarty->assign('username', $username);
+$smarty->assign('prenom', $prenom);
 $smarty->assign('feu_contacts', $this->GetPreference('feu_contacts'));
 $smarty->assign('feu_commandes', $this->GetPreference('feu_commandes'));
 $smarty->assign('feu_messages', $this->GetPreference('feu_messages'));

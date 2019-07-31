@@ -53,12 +53,6 @@ if ($this->CheckPermission('Adherents prefs'))
 	echo $this->StartTab('config' , $params);
 	include(dirname(__FILE__).'/action.admin_config_tab.php');
 	echo $this->EndTab();
-	
-	/*
-	echo $this->StartTab('compte' , $params);
-	include(dirname(__FILE__).'/action.admin_compte_tab.php');
-	echo $this->EndTab();
-	*/
 }	
 
 echo $this->EndTabContent();

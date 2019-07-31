@@ -32,12 +32,13 @@ if($dbresult && $dbresult->RecordCount()>0)
 		$onerow = new StdClass();
 		//$onerow->nom = $row['nom'];
 		$idepreuve = $comp_ops->get_idepreuve($row['ref_action']);
+		$libelle = $comp_ops->details_epreuve($idepreuve);
 		$onerow->ref_action = $row['ref_action'];
-		$onerow->epreuve = $idepreuve;//$comp_ops->get_epreuve($ref_action);
+		$onerow->epreuve = $libelle['libelle'];//idepreuve;//$comp_ops->get_epreuve($ref_action);
 		$onerow->journee = $comp_ops->get_journee($row['ref_action']);
 		$onerow->equipe =  $row['ref_equipe'];
 		$onerow->genid =  $row['genid'];
-		$onerow->details = $this->CreateLink($id, 'fe_details_compos', $returnid, 'Détails', array('ref_action'=>$row['ref_action'], 'ref_equipe'=>$row['ref_equipe']));
+		$onerow->details = $this->CreateLink($id, 'fe_details_compos', $returnid, 'Détails', array('ref_action'=>$row['ref_action'], 'record_id'=>$row['ref_equipe']));
 		($rowclass == "row1" ? $rowclass= "row2" : $rowclass= "row1");
 		$rowarray[]= $onerow;
 	}
