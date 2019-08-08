@@ -145,7 +145,7 @@ $this->SetPreference('feu_commandes',0);
 $this->SetPreference('feu_fftt',0);
 $this->SetPreference('feu_messages',0);
 $this->SetPreference('feu_inscriptions',0);
-$this->SetPreference('feu_contacts',0);
+$this->SetPreference('feu_contacts',1);
 $this->SetPreference('feu_presences',0);
 $this->SetPreference('feu_factures', 0);
 $this->SetPreference('feu_compos', 0);

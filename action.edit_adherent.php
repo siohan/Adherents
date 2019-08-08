@@ -24,7 +24,7 @@ if( !empty($_POST) ) {
 	$licence = $_POST['licence'];
 	$nom = filter_var(strtoupper($_POST['nom']) , FILTER_SANITIZE_STRING);
 	$prenom = $_POST['prenom'];
-	$anniversaire = $_POST['anniversaire'];
+	$anniversaire = (!empty($_POST['anniversaire'])?$_POST['anniversaire']:"1800-01-01");
 	$sexe = $_POST['sexe'];
 	$adresse = $_POST['adresse'];
 	$code_postal = $_POST['code_postal'];
@@ -86,7 +86,7 @@ else
 		$genid = $params['record_id'];
 		$as_adh = new Asso_adherents;
 		$details = $as_adh->details_adherent_by_genid($record_id);
-		var_dump($details);
+		//var_dump($details);
 		$edit = 1;
 		$actif = $details['actif'];
 		$genid = $details['genid'];

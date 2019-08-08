@@ -13,6 +13,17 @@ if(isset($_POST['submit']))
 	$module = \cms_utils::get_module('Ping');
 	if( is_object( $module ) )
 	{
+		$this->SetPreference('feu_fftt', $_POST['feu_fftt']);
+		
+	}
+	else
+	{
+		$this->SetPreference('feu_fftt', '0');
+		$designation.=" Module Ping absent ou non activé !";
+	}
+	$module = \cms_utils::get_module('Messages');
+	if( is_object( $module ) )
+	{
 		$this->SetPreference('feu_messages', $_POST['feu_messages']);
 		
 	}
@@ -32,6 +43,16 @@ if(isset($_POST['submit']))
 		$this->SetPreference('feu_factures', '0');
 		$designation.=" Module Paiements absent ou non activé !";
 	}
+	$module = \cms_utils::get_module('Cotisations');
+	if( is_object( $module ) )
+	{
+		$this->SetPreference('feu_adhesions', $_POST['feu_adhesions']);		
+	}
+	else
+	{
+		$this->SetPreference('feu_adhesions', '0');
+		$designation.=" Module Cotisations absent ou non activé !";
+	}
 	$module = \cms_utils::get_module('Commandes');
 	if( is_object( $module ) )
 	{
@@ -47,7 +68,6 @@ if(isset($_POST['submit']))
 	if( is_object( $module ) )
 	{
 		$this->SetPreference('feu_inscriptions', $_POST['feu_inscriptions']);
-		
 	}
 	else
 	{
@@ -94,6 +114,7 @@ else
 	$smarty->assign('feu_factures', $this->GetPreference('feu_factures'));
 	$smarty->assign('feu_commandes', $this->GetPreference('feu_fftt'));
 	$smarty->assign('feu_compos', $this->GetPreference('feu_compos'));
+	$smarty->assign('feu_adhesions', $this->GetPreference('feu_adhesions'));
 
 	echo $this->ProcessTemplate('config.tpl');
 }

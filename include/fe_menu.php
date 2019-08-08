@@ -31,6 +31,7 @@ $smarty->assign('feu_presences', $this->GetPreference('feu_presences'));
 $smarty->assign('feu_factures', $this->GetPreference('feu_factures'));
 $smarty->assign('feu_fftt', $this->GetPreference('feu_fftt'));
 $smarty->assign('feu_compos', $this->GetPreference('feu_compos'));
+$smarty->assign('feu_adhesions', $this->GetPreference('feu_adhesions'));
 
 //echo $username;
 echo $this->ProcessTemplate('fe_menu2.tpl');

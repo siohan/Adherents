@@ -44,10 +44,12 @@ if($error<1)
 {
 	//on fait le job
 	//on ajoute le groupe
-	$group_exists = $feu->GroupExistsByName('adherents');
+	$group_exists = $feu->GetGroupId('adherents');
+	var_dump($group_exists);
+//	$group_exists = $feu->GroupExistsByName('adherents');
 	//on dit que l'email n'est pas l'identifiant
 	$feu->SetPreference('username_is_email',0);
-	if(FALSE === $group_exists)
+	if(FALSE === $group_exists || true == is_null($group_exists))
 	{
 		$feu->AddGroup('adherents', 'les adhérents du club');
 		
@@ -104,8 +106,9 @@ if($error<1)
 	$year = date('Y')+5;
 	$expires = mktime(0,0,0,$month, $day,$year);
 	//on créé un mot de passe
-	$mot1 = $this->random_string(8);
-	$motdepasse = $mot1.'1';
+	$mot1 = $this->random_string(7);
+	$motdepasse = 'A'.$mot1.'1';
+//	var_dump($motdepasse);
 	//qqs variables pour le mail
 	$smarty->assign('prenom_joueur', $prenom);
 	$smarty->assign('nom_joueur' , $nom);

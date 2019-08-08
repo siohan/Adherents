@@ -23,6 +23,10 @@
 			<select name="feu_inscriptions">{cms_yesno selected=$feu_inscriptions}</select>
 		</div>
 		<div class="pageoverflow">
+			<p class="pagetext">Pré-inscriptions ? (module Cotisations)</p>
+			<select name="feu_adhesions">{cms_yesno selected=$feu_adhesions}</select>
+		</div>
+		<div class="pageoverflow">
 			<p class="pagetext">Présences ? (module Presence)</p>
 			<select name="feu_presences">{cms_yesno selected=$feu_presences}</select>
 		</div>

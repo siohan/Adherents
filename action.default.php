@@ -15,20 +15,17 @@ elseif(isset($params['display']) && $params['display'] != 'liste' || !isset($par
 	$display = $params['display'];
 	$feu = cms_utils::get_module('FrontEndUsers');
 	$userid = $feu->LoggedInId();
-	echo $display;
-	$properties = $feu->GetUserProperties($userid);
-	$email = $feu->LoggedInEmail();
-
-	$username = $feu->GetUserProperty('genid');//($userid);
-	//var_dump($username);
-	//echo "le username est : ".$username;
-	if($username == '' || 'true' === is_null($username))
+	if($userid =='' || true == is_null($userid))
 	{
-		//echo "pas de résultats, on fait quoi ?";
-		//on redirige vers le formulaire de login
 		$feu->Redirect($id,"login",$returnid);
-	//	exit;
 	}
+	else
+	{
+		$properties = $feu->GetUserProperties($userid);
+	//	$email = $feu->LoggedInEmail();
+		$username = $feu->GetUserProperty('genid');//($userid);
+	}
+//	var_dump($userid);
 
 
 	//$path = pathinfo();

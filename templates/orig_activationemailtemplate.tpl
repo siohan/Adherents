@@ -12,7 +12,7 @@ Le club vient de développer un espace privé pour te permettre de :
 <h3>Tes identifiants</h3>
 <p>Ton identifiant est celui-ci: {$nom_complet},<br /> ton <strong>mot de passe provisoire</strong> est le suivant : {$motdepasse}<br />
 Lors de ta première connexion à cet espace, tu devras changer ton mot de passe en veillant bien à ceci 
-<ul><li>Entre 6 et 20 caractères</li>
-<li>Au moins un chiffre</li>
+<ul><li>Entre 6 et 20 caractères dont une majuscule obligatoire !</li>
+<li>Au moins un chiffre !</li>
 </ul>
 A bientôt ! </p>
