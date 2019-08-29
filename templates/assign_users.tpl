@@ -6,9 +6,9 @@
     <p class="pageinput">{$record_id}</p>
   </div>
 
-{foreach from=$rowarray key=key item=entry}
+{foreach from=$items key=key item=entry}
 <div class="pageoverflow">
-    <p class="pageinput"><input type="checkbox"  name="m1_genid[{$key}]" id="m1_genid[{$key}]" {if $entry['participe'] ==1}checked='checked' {/if} value = '1'>{$entry['name']}</p>
+    <p class="pageinput"><input type="checkbox"  name="{$actionid}licence[{$entry->genid}]"  {if $entry->participe ==1}checked='checked' {/if} value = '1'>{$entry->joueur}</p>
   </div>
 {/foreach}
   <div class="pageoverflow">

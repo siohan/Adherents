@@ -40,39 +40,35 @@ $dbresult = $db->Execute($query);
 			$this->CreateInputText($id,'record_id',$record_id,10,15));	
 	if($dbresult && $dbresult->RecordCount()>0)
 	{
+		$gp_ops = new groups;
 		while($row = $dbresult->FetchRow())
 		{
 			//var_dump($row);
-			
-			$genid = $row['genid'];
-			$joueur = $row['joueur'];
-			$rowarray[$genid]['name'] = $joueur;
-			$rowarray[$genid]['participe'] = false;
-			
-			//on va chercher si le joueur est déjà dans la table participe
-			$query2 = "SELECT genid, id_group FROM ".cms_db_prefix()."module_adherents_groupes_belongs WHERE genid = ? AND id_group = ?";
-			//echo $query2;
-			$dbresultat = $db->Execute($query2, array($genid, $record_id));
-			
-			if($dbresultat->RecordCount()>0)
+			$onerow = new StdClass();
+			$onerow->joueur = $row['joueur'];
+			$onerow->id_group = $record_id;
+			$onerow->genid = $row['genid'];
+			$participe = $gp_ops->is_member($row['genid'], $record_id);
+			if(true === $participe)
 			{
-				while($row2 = $dbresultat->FetchRow())
-				{
-			
-				
-					$rowarray[$genid]['participe'] = true;
-				}
+				$onerow->participe = 1;
 			}
-			//print_r($rowarray);
+			else
+			{
+				$onerow->participe = 0;
+			}
+			
+			$rowarray[]= $onerow;
 			
 			
 						
 			
 			
 		}
-		$smarty->assign('rowarray',$rowarray);	
+			
 			
 	}
+	$smarty->assign('items',$rowarray);
 	$smarty->assign('submit',
 			$this->CreateInputSubmit($id, 'submit', $this->Lang('submit'), 'class="button"'));
 	$smarty->assign('cancel',

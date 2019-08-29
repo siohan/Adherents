@@ -20,7 +20,7 @@ class Adherents extends CMSModule
   
   function GetName() { return 'Adherents'; }   
   function GetFriendlyName() { return $this->Lang('friendlyname'); }   
-  function GetVersion() { return '0.3.4.3'; }  
+  function GetVersion() { return '0.3.4.4'; }  
   function GetHelp() { return $this->Lang('help'); }   
   function GetAuthor() { return 'Claude SIOHAN'; } 
   function GetAuthorEmail() { return 'claude.siohan@gmail.com'; }
@@ -41,7 +41,7 @@ class Adherents extends CMSModule
   
   function GetDependencies()
   {
-	return array('FrontEndUsers'=>'3.0.1');
+	return array('FrontEndUsers'=>'3.1.1');
   }
 
   
@@ -60,6 +60,7 @@ class Adherents extends CMSModule
 	$this->SetParameterType('action',CLEAN_STRING);
 	$this->SetParameterType('record_id', CLEAN_INT);
 	$this->SetParameterType('licence', CLEAN_INT);
+	$this->SetParameterType('genid', CLEAN_INT);
 	$this->SetParameterType('phase', CLEAN_INT);
 	$this->SetParameterType('edition', CLEAN_INT);
 	//$this->SetParameterType('record_id', CLEAN_INT);

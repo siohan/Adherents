@@ -26,7 +26,7 @@
 	<td>{$entry->public}</td>
 	<td>{$entry->send_emails}</td>
 	<td>{$entry->send_sms}</td>
-	<td><a href="{module_action_url action='add_edit_group' record_id=$id}">{admin_icon icon='edit'}{*$entry->editlink*}</td>
+	<td><a href="{cms_action_url action='add_edit_group' record_id=$entry->id}">{admin_icon icon='edit.gif'}</a>{*$entry->editlink*}</td>
 	<td>{$entry->delete}</td>
 	<td>{$entry->add_users}</td>
   </tr>

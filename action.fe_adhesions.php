@@ -21,8 +21,8 @@ if(is_array($adh) && count($adh) > 0 )
 //var_dump($adh);
 $delete = '<img src="../assets/modules/Adherents/images/delete.gif" class="systemicon" alt="Supprimer" title="Supprimer">';
 $modif = '<img src="../assets/modules/Adherents/images/edit.gif" class="systemicon" alt="Modifier" title="Modifier">';
-$vrai = '<img src="../assets/modules/Adherents/images/true.gif" class="systemicon" alt="Vrai" title="Vrai">';
-$faux = '<img src="../assets/modules/Adherents/images/false.gif" class="systemicon" alt="Faux" title="Faux">';
+$vrai = 'Oui';//'<img src="../assets/modules/Adherents/images/true.gif" class="systemicon" alt="Vrai" title="Vrai">';
+$faux = 'Non';//'<img src="../assets/modules/Adherents/images/false.gif" class="systemicon" alt="Faux" title="Faux">';
 
 $details=1;
 if(isset($params['details']) && $params['details'] !='')
@@ -42,6 +42,7 @@ if($dbresult && $dbresult->RecordCount()>0)
 	if($details ==1)//on affiche le détail sans permettre de changer
 	{
 	
+		//$cotis_ops = cms_utils::get_module('Cotisations');
 		$cotis_ops = new cotisationsbis;
 		$pay_ops = new paiementsbis;
 		$rowarray= array();
@@ -76,14 +77,14 @@ if($dbresult && $dbresult->RecordCount()>0)
 				if(false != $is_paid)// c'est bien payé !
 				{
 					$onerow->regle = $vrai;
-					$onerow->delete = $false;//this->CreateLink($id, 'fe_delete', $returnid, $delete, array("obj"=>"option_belongs", "record_id"=>$row['id'], "id_inscription"=>$id_inscription, "adherent"=>$username));
+					$onerow->delete = $faux;//this->CreateLink($id, 'fe_delete', $returnid, $delete, array("obj"=>"option_belongs", "record_id"=>$row['id'], "id_inscription"=>$id_inscription, "adherent"=>$username));
 				}
 				else
 				{
-					$onerow->regle = $false;
-					$onerow->delete = $this->CreateLink($id, 'fe_delete', $returnid, $delete, array("obj"=>"cotisation", "ref_action"=>$ref));
+					$onerow->regle = $faux;
+					$onerow->delete = $this->CreateLink($id, 'fe_delete', $returnid, 'Supprimer', array("obj"=>"cotisation", "ref_action"=>$ref));
 				}
-				$onerow->inscription = $false;
+				$onerow->inscription = '';
 				//$onerow->delete = $this->CreateLink($id, 'fe_delete', $returnid, $delete, array("obj"=>"option_belongs", "record_id"=>$row['id'], "id_inscription"=>$id_inscription, "adherent"=>$username));
 			
 			}

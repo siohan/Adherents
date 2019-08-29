@@ -8,7 +8,7 @@
 
 {foreach from=$items key=key item=entry}
 <div class="pageoverflow">
-    <p class="pageinput"><input type="checkbox"  name="m1_group[{$entry->id_group}]" id="m1_{$entry->id_group}" {if $entry->participe ==1}checked='checked' {/if} value = '1'>{$entry->nom} - {$entry->description}</p>
+    <p class="pageinput"><input type="checkbox"  name="{$actionid}group[{$entry->id_group}]" id="{$actionid}{$entry->id_group}" {if $entry->participe ==1}checked='checked' {/if} value = '1'>{$entry->nom} - {$entry->description}</p>
   </div>
 {/foreach}
   <div class="pageoverflow">

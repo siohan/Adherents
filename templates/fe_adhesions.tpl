@@ -11,6 +11,7 @@
 		 <thead>
 		  <tr>
 			<th>Nom</th>
+			<th>Description</th>
 			<th>Inscrit ?</th>
 			<th>Réglé ?</th>
 			<th>Action(s)</th>
@@ -20,6 +21,7 @@
 		{foreach from=$items item=entry}
 		  <tr class="{$entry->rowclass}">
 			<td>{$entry->nom}</td>
+			<td>{$entry->description}</td>
 		    <td>{$entry->is_inscrit}</td>	
 			<td>{$entry->regle}</td>
 			<td>{$entry->inscription} {$entry->details} {$entry->delete}</td>

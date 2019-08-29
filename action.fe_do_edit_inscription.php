@@ -1,6 +1,6 @@
 <?php
 if (!isset($gCms)) exit;
-debug_display($params, 'Parameters');
+//debug_display($params, 'Parameters');
 $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
 $username = $feu->GetUserProperty('genid');
@@ -61,6 +61,6 @@ $alert = 0;//pour savoir si certains champs doivent contenir une valeur ou non
 		
 
 $this->SetMessage('Inscription ajoutée/modifiée.');
-$this->Redirect($id,'fe_inscriptions', $returnid, array("record_id"=>$username));
+$this->Redirect($id,'fe_adhesions', $returnid, array("record_id"=>$username));
 
 ?>

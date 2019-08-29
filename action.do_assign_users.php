@@ -1,7 +1,7 @@
 <?php
 if (!isset($gCms)) exit;
 //require_once(dirname(__FILE__).'/include/prefs.php');
-debug_display($params, 'Parameters');
+//debug_display($params, 'Parameters');
 
 
 if (!$this->CheckPermission('Adherents use'))
@@ -39,13 +39,13 @@ $error = 0;
 			
 			if($dbquery)
 			{
-				$genid = '';
-				if (isset($params['genid']) && $params['genid'] != '')
+				$licence = '';
+				if (isset($params['licence']) && $params['licence'] != '')
 				{
-					$genid = $params['genid'];
+					$licence = $params['licence'];
 					$error++;
 				}
-				foreach($genid as $key=>$value)
+				foreach($licence as $key=>$value)
 				{
 					$query2 = "INSERT INTO ".cms_db_prefix()."module_adherents_groupes_belongs (id_group,genid) VALUES ( ?, ?)";
 					//echo $query2;

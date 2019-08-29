@@ -1,10 +1,10 @@
 <?php
-$lang['friendlyname'] = 'T2T Adhérents';
+$lang['friendlyname'] = 'Asso members';
 $lang['submit'] = 'Submit';
 $lang['cancel'] = 'Cancel';
 $lang['resultsfoundtext'] = 'Found results';
-$lang['moddescription'] = 'Ce module gère les adhérents de votre club de ping.';
-$lang['welcome_text'] = '<p>Bienvenue dans le module T2T Adhérents</p>';
+$lang['moddescription'] = 'Helps manage your members.';
+$lang['welcome_text'] = '<p>Bienvenue dans le module Asso Adhérents</p>';
 $lang['changelog'] = '<ul>
 <li>Version 0.1beta3, Nov 2014 Sc Améliorations du front-office et déboguage du back</li>
 <ul>

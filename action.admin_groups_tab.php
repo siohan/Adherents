@@ -18,7 +18,8 @@ $query = "SELECT * FROM ".cms_db_prefix()."module_adherents_groupes";
 	$rowclass = '';
 	$group_ops = new groups();
 	$contact_ops = new contact();
-	$img_sms = '<img src="../assets/modules/Adherents/images/sms2.png" class="systemicon" alt="Envoyer des SMS" title="Envoyer des SMS">';
+	$dir = dirname(__FILE__);
+	//	$img_sms = '<img src="../Adherents/images/sms2.png" class="systemicon" alt="Envoyer des SMS" title="Envoyer des SMS">';
 		if ($dbresult && $dbresult->RecordCount() > 0)
   		{
     			while ($row= $dbresult->FetchRow())
@@ -58,7 +59,7 @@ $query = "SELECT * FROM ".cms_db_prefix()."module_adherents_groupes";
 				// = $row['actif'];			
 				
 				$onerow->send_emails= $this->CreateLink($id, 'envoi_emails', $returnid, $themeObject->DisplayImage('icons/topfiles/cmsmailer.gif', $this->Lang('send_emails'), '', '', 'systemicon'),array("group"=>$row['id'])) ;
-				$onerow->send_sms= $this->CreateLink($id, 'envoi_sms', $returnid, $img_sms,array("group"=>$row['id'])) ;
+				$onerow->send_sms= $this->CreateLink($id, 'envoi_sms', $returnid, 'SMS',array("group"=>$row['id'])) ;
 				$onerow->editlink= $this->CreateLink($id, 'add_edit_group', $returnid, $themeObject->DisplayImage('icons/system/edit.gif', $this->Lang('edit'), '', '', 'systemicon'), array('record_id'=>$row['id']));
 				$onerow->delete = $this->CreateLink($id, 'chercher_adherents_spid',$returnid, $themeObject->DisplayImage('icons/system/delete.gif', $this->Lang('delete'), '', '', 'systemicon'), array('obj'=>'delete_group','record_id'=>$row['id']));
 				$onerow->add_users = $this->CreateLink($id, 'assign_users',$returnid, $themeObject->DisplayImage('icons/system/groupassign.gif', $this->Lang('add'), '', '', 'systemicon'), array('record_id'=>$row['id']));

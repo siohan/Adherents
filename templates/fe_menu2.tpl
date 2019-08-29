@@ -54,7 +54,7 @@
             <a class="dropdown-item" href="#">Settings</a>
             <a class="dropdown-item" href="#">Activity Log</a>
             <div class="dropdown-divider"></div>-->
-            <a class="dropdown-item" href="{cms_action_url module=FrontEndUsers action=logout}" data-toggle="modal" data-target="#logoutModal">Déconnexion</a>
+            <a class="dropdown-item" href="{module_action_url module=FrontEndUsers action=logout}" data-toggle="modal" data-target="#logoutModal">Déconnexion</a>
           </div>
         </li>
       </ul>
