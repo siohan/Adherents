@@ -20,7 +20,7 @@ $(document).ready(function(){
   {/if}
 });
 //]]>
-</script><div class="pageoptions"><p class="pageoptions">{if $alert == "1"}<p class="warning">{$link_alert}</p>{elseif $alert == "2"}<p class="warning">{$link_alert}</p>{/if}{$itemcount}&nbsp;{$itemsfound}.&nbsp;&nbsp;| <a href="{module_action_url action=edit_adherent}">{admin_icon icon='newobject'}Ajouter</a> | {if $act ==0}<a href="{module_action_url action=defaultadmin actif=1}">Actifs</a>{else} <a href="{module_action_url action=defaultadmin actif=0}">Inactifs</a>{/if} </p></div>
+</script><div class="pageoptions"><p class="pageoptions">{if $alert == "1"}<p class="warning">{$link_alert}</p>{elseif $alert == "2"}<p class="warning">{$link_alert}</p>{/if}{$itemcount}&nbsp;{$itemsfound}.&nbsp;&nbsp;| <a href="{module_action_url action=edit_adherent}">{admin_icon icon='newobject.gif'}Ajouter</a> | {if $act ==0}<a href="{module_action_url action=defaultadmin actif=1}">Actifs</a>{else} <a href="{module_action_url action=defaultadmin actif=0}">Inactifs</a>{/if} </p></div>
 {if $itemcount > 0}
 {$form2start}
 	<table border="0" cellspacing="0" cellpadding="0" class="pagetable tablesorter">
@@ -46,7 +46,11 @@ $(document).ready(function(){
 	</thead>
 	 <tbody>
 	{foreach from=$items item=entry}
-	  <tr class="{$entry->rowclass}">		
+	{if $entry->activated =="0"}
+	  <tr style="background:#DCDCDC;">
+	{else}
+	 <tr>
+	{/if}		
 		<td>{$entry->genid}</td>
 		<td>{$entry->thumbnail}</td>
 		<td>{$entry->nom}</td>

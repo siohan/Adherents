@@ -16,19 +16,7 @@ global $themeObject;
 $aujourdhui = date('Y-m-d');
 //$ping = new Ping();
 $act = 1;//par defaut on affiche les actifs (= 1 )
-$shopping = '<img src="../modules/Adherents/images/shopping.jpg" class="systemicon" alt="Commandes" title="Commandes">';
-$cotis = '<img src="../modules/Adherents/images/cotisations.png" class="systemicon" alt="Cotisations" title="Cotisations">';
-$smarty->assign('shopping', $shopping);
-$smarty->assign('cotis', $cotis);
-$smarty->assign('inactifs',
-		$this->CreateLink($id, 'defaultadmin', $returnid, 'Inactifs', array("actif"=>"0", "active_tab"=>"adherents")));
-$smarty->assign('actifs',
-				$this->CreateLink($id, 'defaultadmin', $returnid, 'Actifs', array("active_tab"=>"adherents")));
-if($this->GetPreference('club_number') !="")
-{
-	$smarty->assign('chercher_adherents_spid',
-					$this->CreateLink($id, 'chercher_adherents_spid', $returnid, $contents='Importer les adhérents depuis le Spid',array("obj"=>"all"),$warn_message='Attention, ce script est long (1 min) et peut provoquer une erreur, il faut patienter. Merci de patienter'));
-}
+
 
 
 if(isset($params['group']) && $params['group'] != '')
@@ -69,6 +57,7 @@ else
 	}
 	$act = 1;
 }
+
 $query.=" ORDER BY adh.nom ASC ";
 $smarty->assign('act', $act);
 if($req == 1)
@@ -132,6 +121,7 @@ if($dbresult && $dbresult->RecordCount() >0)
 		{
 			$onerow->actif = $this->CreateLink($id, 'chercher_adherents_spid',$returnid,$themeObject->DisplayImage('icons/system/false.gif', $this->Lang('false'), '', '', 'systemicon'), array("obj"=>"activate", "genid"=>$row['genid']));
 		}
+		$onerow->activated = $actif;
 		$onerow->sexe= $row['sexe'];
 		$onerow->certif= $row['certif'];
 		$onerow->date_validation = $row['validation'];
@@ -161,7 +151,7 @@ if($dbresult && $dbresult->RecordCount() >0)
 		$onerow->groups= $this->CreateLink($id, 'assign_groups', $returnid,$themeObject->DisplayImage('icons/system/groupassign.gif', $this->Lang('assign'), '', '', 'systemicon'),array("genid"=>$row['genid']));//$row['closed'];
 		$onerow->edit = $this->CreateLink($id, 'edit_adherent',$returnid,$themeObject->DisplayImage('icons/system/edit.gif', $this->Lang('edit'), '', '', 'systemicon'), array("record_id"=>$row['genid']));
 		$onerow->view_contacts= $this->CreateLink($id, 'view_contacts', $returnid,$themeObject->DisplayImage('icons/topfiles/groupmembers.gif', $this->Lang('groupmembers'), '', '', 'systemicon'),array("genid"=>$row['genid']));//$row['closed'];
-		
+		//$onerow->delete =$this->CreateLink($id, 'delete', $returnid, $themeObject->DisplayImage('icons/system/delete.gif', $this->Lang('delete'), '', '', 'systemicon'), array("genid"=>$row['genid']);
 		($rowclass == "row1" ? $rowclass= "row2" : $rowclass= "row1");
 		$rowarray[]= $onerow;
 		

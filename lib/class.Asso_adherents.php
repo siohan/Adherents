@@ -167,6 +167,21 @@ function add_adherent_from_ping($genid,$actif, $nom, $prenom, $sexe, $licence)
 		return false;
 	}
 }
+//modification depuis le frontend
+ function fe_edit_adherent($username, $anniversaire,$adresse, $code_postal, $ville)
+{
+	$db = cmsms()->GetDb();
+	$query = "UPDATE ".cms_db_prefix()."module_adherents_adherents SET anniversaire = ?, adresse = ?, code_postal = ?, ville = ? WHERE genid = ?";
+	$dbresult = $db->Execute($query, array($anniversaire,$adresse, $code_postal, $ville, $username));
+	if($dbresult)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
 function get_name($genid)
 {
 	global $gCms;
@@ -237,12 +252,31 @@ function liste_adherents()
 		{
 			while($row= $dbresult->FetchRow())
 			{
-				$nom[$row['joueur']] = $row['genid'];
+				$nom[$row['genid']] = $row['joueur'];
 				//$indivs = $row['indivs'];
 			}
 		return $nom;	
 		}	
 }
+
+#
+	function liste_adherents_dropdown()
+	{
+		$db = cmsms()->GetDb();
+		//on fait une requete pour completer l'input dropdown du formulaire
+		$query = "SELECT genid , CONCAT_WS(' ',nom, prenom) AS joueur FROM ".cms_db_prefix()."module_adherents_adherents WHERE actif = 1 ORDER BY nom ASC, prenom ASC";
+		$dbresult = $db->Execute($query);
+
+			if($dbresult && $dbresult->RecordCount() >0)
+			{
+				while($row= $dbresult->FetchRow())
+				{
+					$nom[$row['joueur']] = $row['genid'];
+					//$indivs = $row['indivs'];
+				}
+			return $nom;	
+			}	
+	}
 
 #
 #

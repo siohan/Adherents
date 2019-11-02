@@ -80,7 +80,7 @@ else
 	$edit = 0;
 	
 	$anniversaire = date('Y-m-d');
-	if(isset($params['record_id']) && $params['record_id'] != '')
+	if(isset($params['record_id']) && $params['record_id'])
 	{
 		$record_id = $params['record_id'];
 		$genid = $params['record_id'];
@@ -100,11 +100,10 @@ else
 		$ville = $details['ville'];
 		$pays = $details['pays'];	
 	}
-	else
-	{
+	
 	
 
-	}			
+				
 	$tpl = $smarty->CreateTemplate($this->GetTemplateResource('edit_adherent.tpl'), null, null, $smarty);
 	$tpl->assign('edit', $edit);
 	$tpl->assign('genid', $genid);

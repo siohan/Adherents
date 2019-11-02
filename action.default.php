@@ -95,6 +95,11 @@ elseif(isset($params['display']) && $params['display'] != 'liste' || !isset($par
 		case 'validate' :
 		require(__DIR__.'/action.fe_validate.php');
 		break;
+		
+		case 'add_edit_compo':
+		require(__DIR__.'/action.fe_add_edit_compos_equipe.php');
+		break;
+		
 
 		case 'default' :
 		require(__DIR__.'/action.fe_adherent_infos.php');

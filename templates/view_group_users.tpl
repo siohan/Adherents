@@ -21,6 +21,7 @@ $(document).ready(function(){
 });
 //]]>
 </script>
+<a href="{cms_action_url action='defaultadmin' activetab=groups}">{admin_icon icon="back.gif"}Revenir</a>
 <div class="pageoptions"><p class="pageoptions">{$itemcount}&nbsp;{$itemsfound}&nbsp;&nbsp;</p></div>
 {if $itemcount > 0}
 {*$form2start*}
@@ -34,7 +35,7 @@ $(document).ready(function(){
 			<th>Email ?</th> 
 			<th>Portable ?</th> 
 			<th>Action</th>
-		<!--	<th><input type="checkbox" id="selectall" name="selectall"></th>-->
+	<!--		<th><input type="checkbox" id="selectall" name="selectall"></th>-->
 			
 		</tr>
 	</thead>
@@ -48,17 +49,16 @@ $(document).ready(function(){
 		<td>{$entry->has_email}</td>
 		<td>{$entry->has_mobile}</td>
 		<td>{$entry->deletefromgroup}</td>
-		<!--<td><input type="checkbox" name="{$actionid}sel[]" value="{$entry->licence}" class="select"></td>-->
+<!--		<td><input type="checkbox" name="{$actionid}sel[]" value="{$entry->genid}" class="select"></td>-->
 	   </tr>
 	{/foreach}
 	 </tbody>
 	</table>
 	<!-- SELECT DROPDOWN -->
-	<!--
+<!--	
 	<div class="pageoptions" style="float: right;">
 	<br/>{$actiondemasse}{$submit_massaction}
-	  </div>
-	{$form2end}	
-	-->
+	  </div>-->
+	{*$form2end*}	
 {/if}
 	

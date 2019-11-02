@@ -14,8 +14,8 @@ require_once(dirname(__FILE__).'/include/fe_menu.php');
 //var_dump($email);
 $del = '<img src="modules/Adherents/images/delete.gif" class="systemicon" alt="Supprimer" title="Supprimer">';
 $view = '<img src="modules/Adherents/images/view.gif" class="systemicon" alt="Modifier" title="Modifier">';
-$vrai = '<img src="modules/Adherents/images/true.gif" class="systemicon" alt="Vrai" title="Vrai">';
-$faux = '<img src="modules/Adherents/images/false.gif" class="systemicon" alt="Faux" title="Faux">';
+$vrai = 'Oui';//'<img src="modules/Adherents/images/true.gif" class="systemicon" alt="Vrai" title="Vrai">';
+$faux = 'Non';//'<img src="modules/Adherents/images/false.gif" class="systemicon" alt="Faux" title="Faux">';
 
 $designation = '';
 $smarty->assign('fe_envoi_message',
@@ -49,8 +49,8 @@ $smarty->assign('fe_envoi_message',
 			{
 				$onerow->lu =$faux;
 			}
-			$onerow->delete = $this->CreateLink($id, 'fe_delete',$returnid, $del,array("licence"=>$username,"obj"=>"message","record_id"=>$row['mess_id']));
-			$onerow->view = $this->CreateLink($id, 'fe_view_message', $returnid,$view,array("licence"=>$username, "message_id"=>$row['id_message'], "recip_id"=>$row['mess_id']),$warn_message='',$onlyhref='',$inline='true');
+			$onerow->delete = $this->CreateLink($id, 'fe_delete',$returnid, 'Supprimer',array("licence"=>$username,"obj"=>"message","record_id"=>$row['mess_id']));
+			$onerow->view = $this->CreateLink($id, 'fe_view_message', $returnid,'Voir',array("licence"=>$username, "message_id"=>$row['id_message'], "recip_id"=>$row['mess_id']),$warn_message='',$onlyhref='',$inline='true');
 			
 			($rowclass == "row1" ? $rowclass= "row2" : $rowclass= "row1");
 			$rowarray[]= $onerow;

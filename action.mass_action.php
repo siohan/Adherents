@@ -13,8 +13,8 @@ if (isset($params['submit_massaction']) && isset($params['actiondemasse']) )
 		switch($params['actiondemasse'])
 		{
 			case "email" :
-				$id_sel = implode("-",$params['sel']);
-				$this->Redirect($id,'envoi_emails',$returnid, array("sel"=>$id_sel));
+			//	$id_sel = implode("-",$params['sel']);
+				$this->Redirect($id,'envoi_emails',$returnid, array("sel"=>$params['sel']));
 			break;
 			
 			case "sms" :

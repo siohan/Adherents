@@ -12,7 +12,7 @@ global $themeObject;
 $mod = 'Messages';
 $module = \cms_utils::get_module($mod);
 $result = 0;
-if( is_object( $module ) ) $result = 1;//on vérifie que le module adhérents est bien installé et activé
+if( is_object( $module ) ) $result = 1;//on vérifie que le module Messages est bien installé et activé
 //var_dump( $result);
 if(false == $result)
 {
@@ -22,7 +22,10 @@ if(false == $result)
 }
 else
 {
-	//debug_display($params, 'Parameters');
+	debug_display($params, 'Parameters');
+	//on affiche soit les groupes
+	//soit les personnes sélectionnées en particulier
+	
 	$aujourdhui = date('Y-m-d');
 	$cont_ops = new contact;// = new Ping();
 	$group = $cont_ops->liste_groupes();

@@ -13,6 +13,7 @@ require_once(dirname(__FILE__).'/include/fe_menu.php');
 
 $error = 0;
 $comp_ops = new compositionsbis;
+
 if(isset($params['ref_action']) && $params['ref_action'] !='')
 {
 	$ref_action = $params['ref_action'];
@@ -26,9 +27,9 @@ else
 {
 	$error++;
 }
-if(isset($params['record_id']) && $params['record_id'] !='')
+if(isset($params['ref_equipe']) && $params['ref_equipe'] !='')
 {
-	$ref_equipe = $params['record_id'];
+	$ref_equipe = $params['ref_equipe'];
 	$equipe = $comp_ops->get_equipe($ref_equipe);
 	$smarty->assign('equipe', $equipe);
 }
@@ -42,10 +43,10 @@ if($error <1)
 	$db = cmsms()->GetDb();
 	$query = "SELECT id, ref_action, ref_equipe, genid, statut FROM ".cms_db_prefix()."module_compositions_compos_equipes WHERE ref_action = ? AND ref_equipe = ?";
 	$dbresult = $db->Execute($query, array($ref_action, $ref_equipe));
-	if($dbresult && $dbresult->RecordCount()>0)
+	if($dbresult)
 	{
-
-
+		if($dbresult->RecordCount()>0)
+		{
 			$asso_ops = new Asso_adherents;
 			$rowarray= array();
 			$rowclass = '';
@@ -60,9 +61,22 @@ if($error <1)
 			$smarty->assign('itemsfound', $this->Lang('resultsfoundtext'));
 			$smarty->assign('itemcount', count($rowarray));
 			$smarty->assign('items', $rowarray);
+			
+			echo $this->ProcessTemplate('fe_mes_compos.tpl');
+		}
+		else
+		{
+			//pas encore de compo effectuée...
+		}
+	}
+	else
+	{
+
+
+			
 
 	}
-		echo $this->ProcessTemplate('fe_details_compos.tpl');
+		
 
 	
 }

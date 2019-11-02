@@ -161,7 +161,7 @@ function delete_user_feu($genid)
 	$feu = cms_utils::get_module('FrontEndUsers');
 	//$feu_ops = new FrontEndUsersManipulator;//cms_utils::get_module('FrontEndUsers');
 	//on récupére le id de l'utilisateur
-	$id = $feu->GetUserProperty($genid);
+	$id = $feu->GetUserInfoByProperty('genid',$genid);
 	$supp_user = $feu->DeleteUserFull($id);
 }
 //créé une liste de tous les groupes actifs
@@ -187,7 +187,30 @@ function liste_groupes()
 		return false;
 	}
 }
-//Fais la liste des genids d'un groupe donné'
+//crée une liste des groupes actifs pour un formulaire dropdown
+function liste_groupes_dropdown()
+{
+	
+	$liste = array();
+	$db = cmsms()->GetDb();
+	$query = "SELECT id, nom FROM ".cms_db_prefix()."module_adherents_groupes WHERE actif = 1 ORDER BY nom ASC";
+	$dbresult = $db->Execute($query);
+	if($dbresult)
+	{
+		while($row = $dbresult->fetchRow())
+		{
+			$liste[$row['id']] = $row['nom'];
+		}
+		
+		//$this->assign_user_to_group($id_group, $licence);
+		return $liste;
+	}
+	else
+	{
+		return false;
+	}
+}
+//Fais la liste des genids d'un groupe donné
 function liste_licences_from_group($id_group)
 {
 	$db = cmsms()->GetDb();
@@ -209,7 +232,30 @@ function liste_licences_from_group($id_group)
 	}
 	
 }
-
+//
+//Fais la liste des genids et nom d'un groupe donné (pour formulaire)
+function liste_nom_genid_from_group($id_group)
+{
+	$db = cmsms()->GetDb();
+	$query = "SELECT be.genid, CONCAT_WS(' ', adh.nom, adh.prenom) AS joueur FROM ".cms_db_prefix()."module_adherents_groupes_belongs AS be, ".cms_db_prefix()."module_adherents_adherents AS adh WHERE adh.genid = be.genid AND  be.id_group = ? ORDER BY adh.nom ASC";
+	$dbresult = $db->Execute($query, array($id_group));
+	$liste_genids = array();
+	if($dbresult && $dbresult->RecordCount()>0)
+	{
+		$ass_ops = new Asso_adherents;
+		
+		while($row = $dbresult->FetchRow())
+		{
+			$genid = $row['genid'];
+			$nom = $ass_ops->get_name($genid);
+			
+			$liste_genids[$row['genid']] = $row['joueur'];
+		}
+		return $liste_genids;
+	}
+	
+	
+}
 //liste les groupes auxquels appartient un utilisateur
 function member_of_groups($genid)
 {

@@ -83,6 +83,49 @@ switch($obj)
 				$this->Redirect($id, 'fe_adhesions', $returnid, array("record_id"=>$username));
 			}
 	break;
+	
+	case "fe_lock_unlock" :
+	{
+		$error = 0;if(isset($params['ref_action']) && $params['ref_action'] != '')
+		{
+			$ref_action = $params['ref_action'];
+		}
+		else
+		{
+			$error++;
+		}
+		if(isset($params['ref_equipe']) && $params['ref_equipe'] != '')
+		{
+			$ref_equipe = $params['ref_equipe'];
+		}
+		else
+		{
+			$error++;
+		}
+		if(isset($params['statut']) && $params['statut'] != '')
+		{
+			$statut = $params['statut'];
+		}
+		else
+		{
+			$error++;
+		}
+		if($error <1)
+		{
+			$query = "UPDATE ".cms_db_prefix()."module_compositions_compos_equipes SET statut = ? WHERE ref_action = ? AND ref_equipe = ?";
+			$dbresult = $db->Execute($query, array($statut,$ref_action, $ref_equipe));
+			if($dbresult)
+			{
+				$this->SetMessage('Changement de statut Ok');
+			}
+		}
+		else
+		{
+			$this->SetMessage('une erreur est survenue');
+		}
+		
+		$this->Redirect($id, 'fe_compos_equipes', $returnid, array("record_id"=>$username));
+	}
 }
 
 #

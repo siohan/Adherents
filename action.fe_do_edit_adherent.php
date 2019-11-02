@@ -58,10 +58,10 @@ $alert = 0;//pour savoir si certains champs doivent contenir une valeur ou non
 		else // pas d'erreurs on continue
 		{
 			
-			$service = new adherents_spid();
+			$service = new Asso_adherents;
 			
 			
-				$update_adherent = $service->fe_edit_adherent($username,$licence,$anniversaire,$adresse,$code_postal,$ville);
+				$update_adherent = $service->fe_edit_adherent($username,$anniversaire,$adresse,$code_postal,$ville);
 			
 			
 		

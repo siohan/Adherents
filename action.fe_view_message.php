@@ -1,6 +1,6 @@
 <?php
 if (!isset($gCms)) exit;
-//debug_display($params,'Parameters');
+debug_display($params,'Parameters');
 $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
 $username = $feu->GetUserProperty('genid');

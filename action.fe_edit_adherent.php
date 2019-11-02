@@ -34,7 +34,7 @@ if(isset($params['record_id']) && $params['record_id'] != '' && $params['record_
 			$anniversaire = $row['anniversaire'];
 						
 		}
-		$smarty->assign('formstart',
+		$smarty->assign('form_start',
 				    $this->CreateFormStart( $id, 'fe_do_edit_adherent', $returnid ) );
 		$smarty->assign('genid',
 				$this->CreateInputHidden($id,'genid',$record_id));
@@ -54,11 +54,11 @@ if(isset($params['record_id']) && $params['record_id'] != '' && $params['record_
 							$this->Lang('cancel')));
 
 
-		$smarty->assign('formend',
+		$smarty->assign('form_end',
 				$this->CreateFormEnd());
 				
 		//$query.=" ORDER BY date_compet";
-	echo $this->ProcessTemplate('edit_adherent.tpl');
+	echo $this->ProcessTemplate('fe_edit_adherent.tpl');
 	}
 	elseif(!$dbresult)
 	{

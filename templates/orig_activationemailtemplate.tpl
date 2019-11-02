@@ -1,7 +1,7 @@
 {* email pour l'activation d'un compte *}
 {* Conseil : mettre l'url de la page d'accès au compte *}
 <p>Bonjour {$prenom_joueur},<br />
-Le club vient de développer un espace privé pour te permettre de : 
+L'association vient de développer un espace privé pour te permettre de : 
 <ul><li>Commander du matériel et suivre ta commande</li>
 <li>Gérer tes contacts(tél, mail) et tes infos persos (adresse, etc...)</li>
 <li>Recevoir des emails du club et lui en envoyer</li>

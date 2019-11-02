@@ -8,9 +8,9 @@
 //	debug_display($params, 'Parameters');
 
 echo $this->StartTabheaders();
-if (FALSE == empty($params['active_tab']))
+if (FALSE == empty($params['activetab']))
   {
-    $tab = $params['active_tab'];
+    $tab = $params['activetab'];
   } else {
   $tab = 'Adherents';
  }	

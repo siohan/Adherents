@@ -85,7 +85,7 @@ if($dbresult && $dbresult->RecordCount() >0)
 	$smarty->assign('itemsfound', $this->Lang('resultsfoundtext'));
 	$smarty->assign('itemcount', count($rowarray));
 	$smarty->assign('items', $rowarray);
-	/*
+	
 	$smarty->assign('form2start',
 			$this->CreateFormStart($id,'mass_action',$returnid));
 	$smarty->assign('form2end',
@@ -95,7 +95,7 @@ if($dbresult && $dbresult->RecordCount() >0)
 			$this->CreateInputDropdown($id,'actiondemasse',$articles));
 	$smarty->assign('submit_massaction',
 			$this->CreateInputSubmit($id,'submit_massaction',$this->Lang('apply_to_selection'),'','',$this->Lang('areyousure_actionmultiple')));
-	*/
+	
 }
 elseif(!$dbresult)
 {

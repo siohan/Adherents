@@ -37,12 +37,11 @@ Collectez les photos de vos membres en cliquant sur le chevron trombines, et cho
 <p>Constituez des groupes afin d\'affiner votre communication, ces groupes seront repris dans les autres modules de la suite. Le statut privé (ou non) sera utilisé pour un affichage sur le site et pour la communication. En clair, si le groupe est privé, vous ne pourrez pas l\'afficher plus tard sur votre site.
 <h3>Espace privé</h3>
 <p>Un espace privé a été créé pour vous permettre de communiquer davantage avec chaque adhérent. Il sera étoffé au fil de l\'eau.<br />Pour l\'implémenter dans votre site, il suffit de mettre le tag suivant dans une de vos pages : {cms_module module=Adherents}.
-Pour agrémenter cet espace,un thème visuel Bootstrap 4 appelé "SB ADMIN" a été utilisé. Il est disponible en téléchargement ici
+Pour agrémenter cet espace,un thème visuel Bootstrap 4 appelé "SB ADMIN" a été utilisé. Il est disponible en téléchargement ici : <a href="http://s3.amazonaws.com/cmsms/downloads/14532/SB_Admin__1_.xml">SB Admin</a>
 <h3>Bogues et Github</h3>
 <p>Certaines corrections de bogues mineurs ne font pas l\'objet d\'une version officielle mais peuvent toutefois se trouver sur le github dont l\'adresse figure ci-dessous.<br />Il vous suffit alors de télécharger le fichier zip disponible(via le bouton vert "Clone or download") et de le déployer si votre serveur.</p><ul>
 <li>Pour obtenir la dernière version en cours (avant release officielle)
 <a href="https://github.com/siohan/adherents" target="_blank">Version github</a>.</li>
-<li>L\'auteur peut aussi être contacté via skype sous le pseudo agiwebconseil.</li>
 <li>Enfin, vous pouvez aussi m\'envoyer un mail.</li>  
 </ul>
 <p>En tant que licence GPL, ce module est livré tel quel. Merci de lire le texte complet de la license pour une information complête.</p>

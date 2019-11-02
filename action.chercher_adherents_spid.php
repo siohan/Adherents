@@ -7,6 +7,7 @@ if(!$this->CheckPermission('Adherents use'))
 	echo $this->ShowErrors($this->Lang('needpermission'));
 	return;
 }
+//debug_display($params,'Parameters');
 $db =& $this->GetDb();
 global $themeObject;
 $aujourdhui = date('Y-m-d');
@@ -56,9 +57,9 @@ switch($obj)
 	case "delete_user_feu" :
 		//cms_utils::get_module('FrontEndUsers');
 		//on récupére le id de l'utilisateur
-		$username = $prenom.''.$nom;
-		$id = $feu->GetUserID($username);
+		$id = $feu->GetUserInfoByProperty('genid',$genid);
 		$supp_user = $feu->DeleteUserFull($id);
+		
 		
 		$this->RedirectToAdminTab('feu');
 	break;
@@ -118,7 +119,7 @@ switch($obj)
 
 		}
 		
-		$this->Redirect($id, 'defaultadmin',$returnid, array("active_tab"=>"feu"));
+		$this->Redirect($id, 'defaultadmin',$returnid, array("activetab"=>"feu"));
 	break;
 	
 	
@@ -154,6 +155,11 @@ switch($obj)
 		$this->SetMessage('Adhérent désactivé, retiré de tous les groupes et accès espace privé supprimé');
 		$this->Redirect($id, 'defaultadmin', $returnid);
 	break;
+	
+	case "suppr" :
+	{
+		
+	}
 }
 
 //$this->RedirectToAdminTab('adherents');
