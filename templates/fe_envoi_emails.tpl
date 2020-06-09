@@ -7,10 +7,7 @@
 
 {$formstart}
 
-	<div class="pageoverflow">
-		<p class="pagetext">Destinataires</p>
-		<p class="pageinput">{$destinataires}</p>
-	</div>
+	
 	<div class="pageoverflow">
 		<p class="pagetext">Priorité du message</p>
 		<p class="pageinput">{$priority}</p>

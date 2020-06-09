@@ -33,7 +33,7 @@ if( !empty($_POST) )
 	if (isset($_POST['ref_equipe']) && $_POST['ref_equipe'] != '')
 	{
 		$ref_equipe = $_POST['ref_equipe'];
-		var_dump($ref_equipe);
+		//var_dump($ref_equipe);
 		$details = $eq_comp->details_equipe($ref_equipe);
 		$nb_joueurs_mini = $details['nb_joueurs'];
 	}

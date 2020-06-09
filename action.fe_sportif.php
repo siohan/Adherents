@@ -9,7 +9,7 @@ require_once(dirname(__FILE__).'/include/fe_menu.php');
 $asso_ops = new Asso_adherents;
 $details = $asso_ops->details_adherent_by_genid($username);
 $licence = $details['licence'];
-var_dump($licence);
+//var_dump($licence);
 global $themeObject;
 $ping = new Ping();
 $saison = (isset($params['saison'])?$params['saison']:$ping->GetPreference('saison_en_cours'));

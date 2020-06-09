@@ -1,7 +1,7 @@
 <?php
 if (!isset($gCms)) exit;
 //require_once(dirname(__FILE__).'/include/prefs.php');
-debug_display($params, 'Parameters');
+debug_display($_POST, 'Parameters');
 
 
 if (!$this->CheckPermission('Adherents use'))
@@ -10,7 +10,7 @@ if (!$this->CheckPermission('Adherents use'))
 	$this->SetMessage("$designation");
 	$this->RedirectToAdminTab('situation');
 }
-if(isset($params['cancel']))
+if(isset($_POST['cancel']))
 {
 	$this->RedirectToAdminTab('groups');
 }
@@ -19,10 +19,10 @@ $annee = date('Y');
 //pour l'instant pas d'erreur
 $error = 0;
 		
-		$record_id = '';
-		if (isset($params['record_id']) && $params['record_id'] != '')
+		$genid = '';
+		if (isset($_POST['genid']) && $_POST['genid'] != '')
 		{
-			$record_id = $params['record_id'];
+			$record_id = $_POST['genid'];
 		}
 		else
 		{
@@ -40,16 +40,16 @@ $error = 0;
 			if($dbquery)
 			{
 				$group = '';
-				if (isset($params['group']) && $params['group'] != '')
+				if (isset($_POST['group']) && $_POST['group'] != '')
 				{
-					$group = $params['group'];
-					$error++;
+					$group = $_POST['group'];
+					//$error++;
 				}
 				foreach($group as $key=>$value)
 				{
 					$query2 = "INSERT INTO ".cms_db_prefix()."module_adherents_groupes_belongs (id_group,genid) VALUES ( ?, ?)";
 					//echo $query2;
-					$dbresultat = $db->Execute($query2, array($key,$record_id));
+					$dbresultat = $db->Execute($query2, array($value,$record_id));
 				}
 			$this->SetMessage('Membres du groupe modifiés ajoutés !');
 			}
@@ -67,6 +67,6 @@ $error = 0;
 		
 
 
-$this->RedirectToAdminTab('groups');
+$this->Redirect($id, 'view_adherent_details', $returnid, array('record_id'=>$record_id));
 
 ?>

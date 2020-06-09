@@ -13,6 +13,7 @@ global $themeObject;
 if(isset($params['genid']) && $params['genid'] != '')
 {
 	$genid = $params['genid'];
+	$smarty->assign('genid', $genid);
 }
 else
 {

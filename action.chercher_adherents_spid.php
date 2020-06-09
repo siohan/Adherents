@@ -52,12 +52,13 @@ switch($obj)
 	case "delete_contact" : 
 		$del_contact = new contact;
 		$adhrents_spid = $del_contact->delete_contact($record_id);
-		$this->Redirect($id, 'view_contacts',$returnid, array("genid"=>$genid));
+		$this->Redirect($id, 'view_adherent_details',$returnid, array("record_id"=>$genid));
 	break;
 	case "delete_user_feu" :
 		//cms_utils::get_module('FrontEndUsers');
 		//on récupére le id de l'utilisateur
-		$id = $feu->GetUserInfoByProperty('genid',$genid);
+		$id = $params['genid'];//$feu->GetUserInfoByProperty('genid',$genid);
+		var_dump($id);
 		$supp_user = $feu->DeleteUserFull($id);
 		
 		
@@ -159,6 +160,121 @@ switch($obj)
 	case "suppr" :
 	{
 		
+	}
+	
+	//Active un groupe
+	case "activate_group" :
+	{
+		$group_ops->activate_group($record_id);
+		$this->SetMessage('Groupe activé');
+		$this->Redirect($id, 'defaultadmin', $returnid, array("active_tab"=>"groups"));
+	}
+	//Désactive un groupe
+	case "desactivate_group" :
+	{
+		$group_ops->desactivate_group($record_id);
+		$this->SetMessage('Groupe désactivé, non public, tags effacés');
+		$this->Redirect($id, 'defaultadmin', $returnid, array("active_tab"=>"groups"));
+	}
+	//Publie : rend un groupe public ->tag à prévoir en conséquence
+	case "publish_group" :
+	{
+		$pub_group = $group_ops->publish_group($record_id);
+		if(true == $pub_group)
+		{
+			$message = "Groupe publié.";
+			$crea_tag = $group_ops->create_tag($record_id);
+			if(true == $crea_tag)
+			{
+				$message.=" Tag créé (voir détails).";
+			}
+			else
+			{
+				$message.="Tag non créé !";
+			}
+		}
+		else
+		{
+			$message = "Erreur ! Le groupe n'est pas public !";
+		}
+		$this->SetMessage($message);
+		$this->Redirect($id, 'defaultadmin', $returnid, array("active_tab"=>"groups"));
+	}
+	
+	//dépublie un groupe et supprime le tag en conséquence
+	case "unpublish_group" :
+	{
+		$unpub_group = $group_ops->unpublish_group($record_id);
+		if(true == $unpub_group)
+		{
+			$message = "Groupe rendu non public. ";
+			$del_tag = $group_ops->delete_tag($record_id);
+			if(true == $del_tag)
+			{
+				$message.= "Tag effacé";
+			}
+			else
+			{
+				$message.= "Tag non effacé";
+			}
+		}
+		else
+		{
+			$message = "Erreur ! Le groupe est toujours public !";
+		}
+		$this->SetMessage($message);
+		$this->Redirect($id, 'defaultadmin', $returnid, array("active_tab"=>"groups"));
+	}
+	
+	//Permet l'auto-enregistrement des utilisateurs avec génération d'un tag
+	case "ok_auto" :
+	{
+		$ok_auto = $group_ops->ok_auto($record_id);
+		if(true == $ok_auto)
+		{
+			$message = "Auto-enregistrement autorisé. ";
+			$crea_tag = $group_ops->create_tag_auto($record_id);
+			if(true == $crea_tag)
+			{
+				$message.= "Tag auto-enregistrement créé (voir détails)";
+			}
+			else
+			{
+				$message.= "Tag auto-enregistrement non créé !!";
+			}
+		}
+		else
+		{
+			$message = "Erreur ! L'auto-enregistrement n'a pas fonctionné !";
+		}
+		$this->SetMessage($message);
+		$this->Redirect($id, 'defaultadmin', $returnid, array("active_tab"=>"groups"));
+	}
+	
+	//empeche l'auto-enregistrement dans un groupe
+	//Permet l'auto-enregistrement des utilisateurs avec génération d'un tag
+	case "ko_auto" :
+	{
+		$ko_auto = $group_ops->ko_auto($record_id);
+		if(true == $ko_auto)
+		{
+			$message = "Auto-enregistrement non autorisé. ";
+			$del_tag = $group_ops->delete_tag_auto($record_id);
+			if(true == $del_tag)
+			{
+				$message.= "Tag auto-enregistrement supprimé";
+			}
+			else
+			{
+				$message.= "Tag auto-enregistrement non supprimé !!";
+			}
+		}
+		else
+		{
+			$message = "Erreur ! L'auto-enregistrement n'a pas fonctionné !";
+		}
+		$this->SetMessage($message);
+		$this->Redirect($id, 'defaultadmin', $returnid, array("active_tab"=>"groups"));
 	}
 }
 

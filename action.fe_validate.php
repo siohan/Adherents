@@ -3,23 +3,24 @@ if( !isset($gCms)) exit;
 debug_display($params,'Parameters');
 $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
-$username = $feu->GetUserName($userid);
+$username = $feu->GetUserProperty('genid');
 
 $db =& $this->GetDb();
 debug_display($params, 'Parameters');
 if(isset($params['record_id']) && $params['record_id'] != '')
 {
 	$record_id = $params['record_id'];
+
 }
 $commandes = new commandes();
-$query = "UPDATE ".cms_db_prefix()."module_commandes_cc_items SET user_validation =  1 WHERE id = ? AND fk_id = ?";
+$query = "UPDATE ".cms_db_prefix()."module_commandes_cc_items SET user_validation =  1 WHERE id = ? AND genid = ?";
 $dbresult= $db->Execute($query, array($record_id, $username));
 if($dbresult)
 {
 	
 	//on va chercher les infos pour les mettre dans le message au gestionnaire des commandes
 	
-	$query2 = "SELECT it.fournisseur, it.categorie_produit, it.libelle_commande, it.quantite, it.ep_manche_taille, it.couleur, it.prix_total FROM ".cms_db_prefix()."module_commandes_cc_items AS it WHERE id = ? AND fk_id = ?";
+	$query2 = "SELECT it.fournisseur, it.categorie_produit, it.libelle_commande, it.quantite, it.ep_manche_taille, it.couleur, it.prix_total FROM ".cms_db_prefix()."module_commandes_cc_items AS it WHERE id = ? AND genid = ?";
 	$dbresult2 = $db->Execute($query2, array($record_id, $username));
 	$rowclass= 'row1';
 	$rowarray= array();
@@ -42,31 +43,30 @@ if($dbresult)
 		
 	}
 	
-	
-	$smarty->assign('commande_number', $commande_number);
-	$smarty->assign('libelle_commande', $libelle_commande);
-	$smarty->assign('quantite', $quantite);
-	$smarty->assign('ep_manche_taille', $ep_manche_taille);
-	$smarty->assign('couleur', $couleur);
-	$smarty->assign('prix_total', $prix_total);
+	$montpl = $this->GetTemplateResource('orig_newcommandemail_Sample.tpl');						
+	$smarty = cmsms()->GetSmarty();
+	// do not assign data to the global smarty
+	$tpl = $smarty->createTemplate($montpl);
+	$tpl->assign('fournisseur', $fournisseur);
+	$tpl->assign('categorie_produit', $categorie_produit);
+	$tpl->assign('libelle_commande', $libelle_commande);
+	$tpl->assign('quantite', $quantite);
+	$tpl->assign('ep_manche_taille', $ep_manche_taille);
+	$tpl->assign('couleur', $couleur);
+	$output = $tpl->fetch();
 	
 	$user_email = $feu->LoggedInEmail();
 	$admin_email = $commandes->GetPreference('admin_email'); 
 	//echo $to;
 	$subject = $commandes->GetPreference('new_command_subject');
-	$message = $commandes->GetTemplate('newcommandemail_Sample');
-	$body = $commandes->ProcessTemplateFromData($message);
-	$headers = "From: ".$user_email."\n";
-	$headers .= "Reply-To: ".$admin_email."\n";
-	$headers .= "Content-Type: text/html; charset=\"utf-8\"";
-
+	
 	$cmsmailer = new \cms_mailer();
 	$cmsmailer->reset();
 	$cmsmailer->AddAddress($admin_email);
 //	$cmsmailer->AddAddress('claude@agi-webconseil.fr');
 	//$cmsmailer->AddAddress($admin_email);
 	//$cmsmailer->AddAddress($admin_email);
-	$cmsmailer->SetBody($body);
+	$cmsmailer->SetBody($output);
 	$cmsmailer->SetSubject($subject);
 	$cmsmailer->IsHTML(true);
 	$cmsmailer->SetPriority(1);
@@ -96,7 +96,11 @@ if($dbresult)
 	// idem pour le message
 	$ar = 0;
 	$mess_ops = new T2t_messages;
-	$mess_ops->add_message($user_email, $senddate, $sendtime, $replyto, $group_id,$recipients_number, $subject, $message, $sent);
+	$priority = 3;
+	$timbre = time();
+	$relance = 0;
+	$occurence = 0; 
+	$mess_ops->add_message($user_email, $senddate, $sendtime, $replyto, $group_id,$recipients_number, $subject, $message, $sent, $priority, $timbre, $ar, $relance, $occurence);
 	$message_id = $db->Insert_ID();
 	echo $message_id;
 	$mess_ops->add_messages_to_recipients($message_id, '0', $admin_email,$sent,$status, $ar);

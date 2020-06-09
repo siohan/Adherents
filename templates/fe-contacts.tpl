@@ -4,7 +4,7 @@
 		<i class="fas fa-user-plus"></i>
               Mes contacts</div>
             <div class="card-body">
-              <div class="table-responsive"><p>{$add_edit_contact}</p>
+              <div class="table-responsive"><p><a role="button" class="btn btn-primary" href="{cms_action_url action='fe_add_edit_contact' genid=$genid}">Ajouter un contact</a></p>
 
 
 					{if $itemcount > 0}

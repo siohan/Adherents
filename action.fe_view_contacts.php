@@ -3,7 +3,9 @@ if( !isset($gCms) ) exit;
 $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
 $username = $feu->GetUserProperty('genid');
+$smarty->assign('genid', $username);
 //global $themeObject;
+
 require_once(dirname(__FILE__).'/include/fe_menu.php');
 
 $db =& $this->GetDb();
@@ -17,12 +19,12 @@ else
 {
 	//on renvoie à une erreur
 	$this->SetMessage('Erreur !');
-	$this->Redirect($id, 'default', $returnid, array("record_id"=>$username));
+//	$this->Redirect($id, 'default', $returnid, array("record_id"=>$username));
 }
 $rowarray= array();
 $rowclass = '';
 //on prépare un lien pour ajouetre un nouveau contact
-$smarty->assign('add_edit_contact', $this->CreateLink($id, 'fe_add_edit_contact', $returnid, $contents='<strong>Info !</strong> Nouveau contact',array("licence"=>$licence),'' , '', true, $addtext='class="alert alert-info"'));
+
 $query  = "SELECT id, genid, type_contact, contact, description FROM ".cms_db_prefix()."module_adherents_contacts WHERE genid = ?";
 $dbresult = $db->Execute($query, array($username));
 if($dbresult)

@@ -1,7 +1,7 @@
 <?php
 #-------------------------------------------------------------------------
 # Module: Adherents
-# Version: 0.3.4, Claude SIOHAN
+# Version: 0.3.5, AssoSimple
 # Method: Install
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2008 by Ted Kulp (wishy@cmsmadesimple.org)
@@ -50,7 +50,8 @@ $flds = "
 	ville C(200),
 	pays C(255),
 	role C(255),
-	externe I(1) DEFAULT 0";
+	externe I(1) DEFAULT 0,
+	image C(4)";
 	$sqlarray = $dict->CreateTableSQL( cms_db_prefix()."module_adherents_adherents", $flds, $taboptarray);
 	$dict->ExecuteSQLArray($sqlarray);			
 //
@@ -80,7 +81,12 @@ $flds = "
 	nom C(100),
 	description C(255),
 	actif I(1),
-	public I(1) DEFAULT 0";
+	public I(1) DEFAULT 0,
+	auto_subscription I(1) DEFAULT 0,
+	admin_valid I(1) DEFAULT 1,
+	tag C(255),
+	tag_subscription C(255), 
+	pageid_aftervalid C(255)";
 	$sqlarray = $dict->CreateTableSQL( cms_db_prefix()."module_adherents_groupes", $flds, $taboptarray);
 	$dict->ExecuteSQLArray($sqlarray);			
 //
@@ -97,7 +103,7 @@ $flds = "
 	$sqlarray = $dict->CreateTableSQL( cms_db_prefix()."module_adherents_groupes_belongs", $flds, $taboptarray);
 	$dict->ExecuteSQLArray($sqlarray);			
 //
-
+/*
 // table schema description pour la table roles
 $flds = "
 	id I(11) AUTO KEY,
@@ -116,7 +122,7 @@ $flds = "
 //
 // mysql-specific, but ignored by other database
 $taboptarray = array( 'mysql' => 'ENGINE=MyISAM' );
-
+*/
 $dict = NewDataDictionary( $db );
 
 		
@@ -150,11 +156,62 @@ $this->SetPreference('feu_presences',0);
 $this->SetPreference('feu_factures', 0);
 $this->SetPreference('feu_compos', 0);
 $this->SetPreference('feu_adhesions', 0);
+$this->SetPreference('pageid_subscription', '');
+//Préférences pour les photos
+$this->SetPreference('max_size', 100000);
+$this->SetPreference('max_width', 800);
+$this->SetPreference('max_height', 800);
+$this->SetPreference('allowed_extensions', 'jpg, gif, png, jpeg');
 //Permissions
 $this->CreatePermission('Adherents use', 'Utiliser le module Adhérents');
+$this->CreatePermission('Adherents delete', 'Autoriser à supprimer');
 $this->CreatePermission('Adherents prefs', 'Modifier les données du compte');
 
+$uid = null;
+if( cmsms()->test_state(CmsApp::STATE_INSTALL) ) {
+  $uid = 1; // hardcode to first user
+} else {
+  $uid = get_userid();
+}
+//Design pour la liste des adhérents
+try {
+    $adh_type = new CmsLayoutTemplateType();
+    $adh_type->set_originator($this->GetName());
+    $adh_type->set_name('liste_adherents');
+    $adh_type->set_dflt_flag(TRUE);
+    $adh_type->set_description('Template pour liste des membres');
+    $adh_type->set_lang_callback('Adherents::page_type_lang_callback');
+    $adh_type->set_content_callback('Adherents::reset_page_type_defaults');
+    $adh_type->reset_content_to_factory();
+    $adh_type->save();
+}
 
+catch( CmsException $e ) {
+    // log it
+    debug_to_log(__FILE__.':'.__LINE__.' '.$e->GetMessage());
+    audit('',$this->GetName(),'Installation Error: '.$e->GetMessage());
+    return $e->GetMessage();
+}
+
+try {
+    $fn = cms_join_path(dirname(__FILE__),'templates','orig_liste_adherents.tpl');
+    if( file_exists( $fn ) ) {
+        $template = @file_get_contents($fn);
+        $tpl = new CmsLayoutTemplate();
+        $tpl->set_name(\CmsLayoutTemplate::generate_unique_name('Adherents Liste'));
+        $tpl->set_owner($uid);
+        $tpl->set_content($template);
+        $tpl->set_type($adh_type);
+        $tpl->set_type_dflt(TRUE);
+        $tpl->save();
+    }
+}
+catch( \Exception $e ) {
+  debug_to_log(__FILE__.':'.__LINE__.' '.$e->GetMessage());
+  audit('',$this->GetName(),'Installation Error: '.$e->GetMessage());
+  return $e->GetMessage();
+}
+//fin de la liste des adhérents
 // put mention into the admin log
 $this->Audit( 0, 
 	      $this->Lang('friendlyname'), 

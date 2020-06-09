@@ -21,7 +21,11 @@ $(document).ready(function(){
 });
 //]]>
 </script>
-<a href="{cms_action_url action='defaultadmin' activetab=groups}">{admin_icon icon="back.gif"}Revenir</a>
+<h3>{$nom_groupe} : Les membres du groupe</h3>
+{if true == $feu_accept}
+<p class="information">Ce groupe est un groupe commun qui nécessite un compte FEU.</p>{/if}
+<br /><a href="{cms_action_url action='defaultadmin' active_tab=groups}">{admin_icon icon="back.gif"}Revenir</a>
+
 <div class="pageoptions"><p class="pageoptions">{$itemcount}&nbsp;{$itemsfound}&nbsp;&nbsp;</p></div>
 {if $itemcount > 0}
 {*$form2start*}
@@ -34,6 +38,12 @@ $(document).ready(function(){
 			<th>Actif ?</th>
 			<th>Email ?</th> 
 			<th>Portable ?</th> 
+			
+			{if true == $feu_accept}
+			<th> Compte FEU ?</th>
+			<th>Groupe FEU</th>
+			{/if}
+			
 			<th>Action</th>
 	<!--		<th><input type="checkbox" id="selectall" name="selectall"></th>-->
 			
@@ -48,6 +58,12 @@ $(document).ready(function(){
 		<td>{$entry->actif}</td>
 		<td>{$entry->has_email}</td>
 		<td>{$entry->has_mobile}</td>
+		
+		{if true == $feu_accept}
+		<td>{$entry->has_feu_account}</td>
+		<td>{$entry->has_gp_account}</td>
+		{/if}
+		
 		<td>{$entry->deletefromgroup}</td>
 <!--		<td><input type="checkbox" name="{$actionid}sel[]" value="{$entry->genid}" class="select"></td>-->
 	   </tr>

@@ -2,16 +2,15 @@
 
 #-------------------------------------------------------------------------
 # Module : Adherents - 
-# Version : 0.3.4.5, Sc
-# Auteur : Claude SIOHAN
+# Version : 0.4, Sc
+# Auteur : AssoSimple
 #-------------------------------------------------------------------------
 /**
  *
- * @author Claude SIOHAN
+ * @author AssoSimple
  * @since 0.1
  * @version $Revision: 1 $
  * @modifiedby $LastChangedBy: Claude
- * @lastmodified $Date: 2017-03-26 11:56:16 +0200 (Mon, 28 Juil 2015) $
  * @license GPL
  **/
 
@@ -20,10 +19,10 @@ class Adherents extends CMSModule
   
   function GetName() { return 'Adherents'; }   
   function GetFriendlyName() { return $this->Lang('friendlyname'); }   
-  function GetVersion() { return '0.3.4.5'; }  
+  function GetVersion() { return '0.4'; }  
   function GetHelp() { return $this->Lang('help'); }   
-  function GetAuthor() { return 'Claude SIOHAN'; } 
-  function GetAuthorEmail() { return 'claude.siohan@gmail.com'; }
+  function GetAuthor() { return 'AssoSimple'; } 
+  function GetAuthorEmail() { return 'contact@asso-simple.fr'; }
   function GetChangeLog() { return $this->Lang('changelog'); }
     
   function IsPluginModule() { return true; }
@@ -41,7 +40,7 @@ class Adherents extends CMSModule
   
   function GetDependencies()
   {
-	return array('FrontEndUsers'=>'3.1.5');
+	return array('FrontEndUsers'=>'3.2.2');
   }
 
   
@@ -84,10 +83,16 @@ class Adherents extends CMSModule
 	$this->SetParameterType('message_id', CLEAN_INT);
 	$this->SetParameterType('recip_id', CLEAN_INT);
 	$this->SetParameterType('id_cotisation', CLEAN_INT);
+	$this->SetParameterType('id_inscription', CLEAN_INT);
+	$this->SetParameterType('id_group', CLEAN_INT);
 	$this->SetParameterType('obj', CLEAN_STRING);
 	$this->SetParameterType('ref_action', CLEAN_STRING);
 	$this->SetParameterType('ref_equipe', CLEAN_INT);
-	$this->SetParameterType('statut', CLEAN_INT);	
+	$this->SetParameterType('statut', CLEAN_INT);
+	$this->SetParameterType('reponse', CLEAN_INT);
+	$this->SetParameterType('affichage', CLEAN_INT);
+	$this->SetParameterType('letter', CLEAN_STRING);
+	
 	
 	//form parameters
 	$this->SetParameterType('submit',CLEAN_STRING);
@@ -153,6 +158,28 @@ function random_int($car) {
     //...
   }
 
+  final public static function page_type_lang_callback($str)
+    {
+        $mod = cms_utils::get_module(__CLASS__);
+        if( is_object($mod) ) return $mod->Lang('type_'.$str);
+    }
+
+    public static function reset_page_type_defaults(CmsLayoutTemplateType $type)
+    {
+        if( $type->get_originator() != __CLASS__ ) throw new CmsLogicException('Cannot reset contents for this template type');
+
+        $fn = null;
+        switch( $type->get_name() ) {
+        case 'liste_adherents':
+            $fn = 'orig_liste_adherents.tpl';
+            break;
+        
+
+        }
+
+        $fn = cms_join_path(dirname(__FILE__),'templates',$fn);
+        if( file_exists($fn) ) return @file_get_contents($fn);
+    }
 
 
 

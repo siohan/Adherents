@@ -2,15 +2,35 @@
 if( !isset($gCms) ) exit;
 //echo "Cool !";
 //debug_display($params, 'Parameters');
+$asso_ops = new Asso_adherents;
 $display = 'default';
-if(isset($params['display']) && $params['display'] =='liste')
+if(isset($params['display']) && $params['display'] =='liste') //pour afficher des liste en front end
 {
 	$display = $params['display'];
 //	require(__DIR__.'/action.adherents.php');
 	//echo $display;
-	$this->Redirect($id, 'adherents', $returnid);
+	$this->Redirect($id, 'adherents', $returnid, array("record_id"=>$params['record_id']));
 }
-elseif(isset($params['display']) && $params['display'] != 'liste' || !isset($params['display']))
+elseif($params['display'] == 'crea')
+{
+	//ajout d'un nouvel adhérent depuis le frontend
+	//on redirige
+	//le record_id est le id_group
+	if($params['id_inscription'] >0 && $params['id_group'] >0)
+	{
+		$this->Redirect($id, 'feu_edit_adherent', $returnid, array("id_group"=>$params['id_group'], "id_inscription"=>$params['id_inscription']));
+	}
+	else
+	{
+		echo "Erreur !!";
+	}
+	
+}
+elseif($params['display'] == 'activate')
+{
+	$this->Redirect($id, 'feu_activate', $returnid, array("record_id"=>$params['record_id'], "id_inscription"=>$params['id_inscription'], "id_group"=>$params['id_group']));
+}
+elseif((isset($params['display']) && $params['display'] != 'liste') || !isset($params['display']))
 {
 	$display = $params['display'];
 	$feu = cms_utils::get_module('FrontEndUsers');
@@ -100,7 +120,10 @@ elseif(isset($params['display']) && $params['display'] != 'liste' || !isset($par
 		require(__DIR__.'/action.fe_add_edit_compos_equipe.php');
 		break;
 		
-
+		case 'contacts':
+		require(__DIR__.'/action.fe_view_contacts.php');
+		break;
+		
 		case 'default' :
 		require(__DIR__.'/action.fe_adherent_infos.php');
 		break;

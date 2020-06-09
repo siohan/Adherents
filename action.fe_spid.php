@@ -60,8 +60,7 @@ if($current_day < 10)
 
 $smarty->assign('itemsfound', $this->Lang('resultsfoundtext'));
 $smarty->assign('itemcount', count($rowarray));
-$smarty->assign('retour',
- 		$this->CreateReturnLink($id, $returnid,'Retour'));
+
 $smarty->assign('items', $rowarray);
 $smarty->assign('resultats',
 		$this->CreateLink($id,'spid',$returnid,$contents = 'Tous ses résultats', array('record_id'=>$licence)));

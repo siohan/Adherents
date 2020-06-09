@@ -66,7 +66,7 @@ $smarty->assign('fe_add_cc',
 				if($user_validation==0)
 				{
 					$onerow->fe_edit = $this->CreateLink($id, 'default', $returnid,$modif,array("display"=>"add_cc_items","produit_id"=>$row['commande_id']),'',$onlyhref='',$inline='true');
-					$onerow->fe_delete = $this->CreateLink($id, 'default', $returnid,$delete,array("display"=>"delete","record_id"=>$row['commande_id']),$warn_message='Cet article sera supprimé',$onlyhref='',$inline='true');
+					$onerow->fe_delete = $this->CreateLink($id, 'default', $returnid,$delete,array("display"=>"delete","record_id"=>$row['commande_id'], "obj"=>"commandes_cc_items"),$warn_message='Cet article sera supprimé',$onlyhref='',$inline='true');
 					$onerow->fe_confirm = $this->CreateLink($id, 'default', $returnid,'Confirmer',array("display"=>"validate","record_id"=>$row['commande_id']),$warn_message='Cet article sera confirmé, non modifiable et envoyé vers le responsable des commandes',$onlyhref='',$inline='true');
 				}
 				

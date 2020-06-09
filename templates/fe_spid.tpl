@@ -5,7 +5,7 @@
               Mes résultats virtuels (Estimation)</div>
             <div class="card-body">
               <div class="table-responsive">
-				<p class="alert alert-info"> {$rafraichir}</p>
+			<!--	<p class="alert alert-info"> {$rafraichir}</p>-->
 
 				{if $itemcount >0}
 

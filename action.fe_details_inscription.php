@@ -5,28 +5,24 @@ $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
 $username = $feu->GetUserProperty('genid');
 require_once(dirname(__FILE__).'/include/fe_menu.php');
-//echo "FEU : le user est : ".$username." ".$userid;
-//$properties = $feu->GetUserProperties($userid);
-//$email = $feu->LoggedInEmail();
-//echo $email;
-//var_dump($email);
-$delete = '<img src="modules/Adherents/images/delete.gif" class="systemicon" alt="Supprimer" title="Supprimer">';
-$modif = '<img src="modules/Adherents/images/edit.gif" class="systemicon" alt="Modifier" title="Modifier">';
-$vrai = '<img src="modules/Adherents/images/true.gif" class="systemicon" alt="Vrai" title="Vrai">';
-$faux = '<img src="modules/Adherents/images/false.gif" class="systemicon" alt="Faux" title="Faux">';
-if(isset($params['id_inscription']) && $params['id_inscription'] !='')
+
+
+if(isset($params['record_id']) && $params['record_id'] !='')
 {
-	$id_inscription = $params['id_inscription'];
+	$id_inscription = $params['record_id'];
 	//choix multi ou pas ?
 	$insc_ops = new T2t_inscriptions;
 	$detailsInsc = $insc_ops->details_inscriptions($id_inscription);
 	$choix_multi = $detailsInsc['choix_multi'];
-//	var_dump($choix_multi); 
 }
-$details=1;
-if(isset($params['details']) && $params['details'] !='')
+else
 {
-	$details = $params['details'];
+	//il y a une erreur !
+}
+$affichage=1;
+if(isset($params['affichage']) && $params['affichage'] !='')
+{
+	$details = $params['affichage'];
 }
 
 $db = cmsms()->GetDb();
@@ -50,13 +46,13 @@ if($dbresult && $dbresult->RecordCount()>0)
 			$inscrit = $insc_ops->is_inscrit_opt($row['id'], $username);
 			if(FALSE ===$inscrit )
 			{
-				$onerow->is_inscrit = $faux;
+				$onerow->is_inscrit = 'Non';
 			
 			}
 			else
 			{
-				$onerow->is_inscrit = $vrai;
-				$onerow->delete = $this->CreateLink($id, 'fe_delete', $returnid, $delete, array("obj"=>"option_belongs", "record_id"=>$row['id'], "id_inscription"=>$id_inscription, "adherent"=>$username));
+				$onerow->is_inscrit = 'Oui';
+				$onerow->delete = $this->CreateLink($id, 'fe_delete', $returnid, 'Supprimer ce choix', array("obj"=>"option_belongs", "record_id"=>$row['id'], "id_inscription"=>$id_inscription, "genid"=>$username));
 			
 			}
 			
@@ -70,15 +66,15 @@ if($dbresult && $dbresult->RecordCount()>0)
 	}
 	else //on affiche le formulaire
 	{
-		
+		//
+		$compteur = 0;
 		$i = 0;
-		$smarty->assign('formstart',
-				$this->CreateFormStart($id,  'fe_do_edit_inscription', $returnid));
-		$smarty->assign('id_inscription', 
-				$this->CreateInputHidden($id, 'id_inscription', $id_inscription));
-		$smarty->assign('licence', 
-				$this->CreateInputHidden($id, 'licence', $username));//attention choix multi ou pas ?
-				$it = array();
+		$tpl = $smarty->CreateTemplate($this->GetTemplateResource('fe_edit_inscription.tpl'), null, null, $smarty);
+		$tpl->assign('id_inscription', $id_inscription);
+		$tpl->assign('genid', $username);
+		$tpl->assign('compteur', $compteur);
+		$i = 0;
+		
 		while($row = $dbresult->FetchRow())
 		{
 			
@@ -87,38 +83,37 @@ if($dbresult && $dbresult->RecordCount()>0)
 			$nom[] = $row['nom'];
 			$id_opt[] = $row['id'];
 			$it[$row['nom']] = $row['id'];
-			$smarty->assign('nom_'.$i, $row['nom']);			
+			$tpl->assign('nom_'.$i, $row['nom']);
+			$tpl->assign('it_'.$i, $row['id']);	
+					
 		}
+	
+		$tpl->assign('iteration', $i);
 		//$it = array("V1"=>"1", "V2"=>"2", "V3"=>"3");
 		//var_dump($nom_1);
-		$smarty->assign('compteur',  $i);
-		$smarty->assign('choix_multi', $choix_multi);
-		$smarty->assign('choix_multi2', $this->createInputHidden($id, 'choix_multi2',$choix_multi));
+		$tpl->assign('choix_multi', $choix_multi);
+		$tpl->assign('choix_multi2', $choix_multi);
 		
-				for($a=1; $a<=$i;$a++)
-				{
-					//echo $a;
-					if($choix_multi == '0')//bouton radio
-					{
-						$smarty->assign('nom', $this->CreateInputRadioGroup($id, 'nom', $it,$selectedvalue='', '','<br />'));//${'nom_'.$a}, ''));
-					}
-					else
-					{
-						$smarty->assign('name_'.$a, $this->CreateInputCheckbox($id, 'nom[]', ${'nom_'.$a}, ''));
-					}
-				}
+		
+		for($a=1; $a<=$i;$a++)
+		{
+			//echo $a;
+			if($choix_multi == '0')//bouton radio
+			{
+				$tpl->assign('nom', $it);
+			}
+			else
+			{
+				$tpl->assign('name_'.$a,  ${'nom_'.$a});
+			}
+		}
 	
-		$smarty->assign('submit',
-				$this->CreateInputSubmit($id, 'submit', $this->Lang('submit'), 'class="button"'));
-		$smarty->assign('cancel',
-				$this->CreateInputSubmit($id,'cancel',
-							$this->Lang('cancel')));
-
-
-		$smarty->assign('formend',
-				$this->CreateFormEnd());
-	echo $this->ProcessTemplate('fe_edit_inscription.tpl');
+		$tpl->display();
 	}
+}
+else
+{
+	echo "Aucune option disponible !";
 }
 
 

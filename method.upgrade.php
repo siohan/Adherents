@@ -1,7 +1,7 @@
 <?php
 #-------------------------------------------------------------------------
 # Module: Adhérents
-# Version: 0.3
+# Version: 0.3.5
 # Method: Upgrade
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2008 by Ted Kulp (wishy@cmsmadesimple.org)
@@ -320,51 +320,93 @@ switch($current_version)
 		$sqlarray = $dict->AddColumnSQL( cms_db_prefix()."module_adherents_adherents", $flds);
 		$dict->ExecuteSQLArray($sqlarray);
 		
-		/*
-			//Design pour la liste des adhérents
-			try {
-			    $adh_type = new CmsLayoutTemplateType();
-			    $adh_type->set_originator($this->GetName());
-			    $adh_type->set_name('liste_adherents');
-			    $adh_type->set_dflt_flag(TRUE);
-			    $adh_type->set_description('Adherents Liste');
-			    $adh_type->set_lang_callback('Adherents::page_type_lang_callback');
-			    $adh_type->set_content_callback('Adherents::reset_page_type_defaults');
-			    $adh_type->reset_content_to_factory();
-			    $adh_type->save();
-			}
-
-			catch( CmsException $e ) {
-			    // log it
-			    debug_to_log(__FILE__.':'.__LINE__.' '.$e->GetMessage());
-			    audit('',$this->GetName(),'Installation Error: '.$e->GetMessage());
-			    return $e->GetMessage();
-			}
-
-			try {
-			    $fn = cms_join_path(dirname(__FILE__),'templates','orig_sitprov.tpl');
-			    if( file_exists( $fn ) ) {
-			        $template = @file_get_contents($fn);
-			        $tpl = new CmsLayoutTemplate();
-			        $tpl->set_name(\CmsLayoutTemplate::generate_unique_name('Adherents Liste'));
-			        $tpl->set_owner($uid);
-			        $tpl->set_content($template);
-			        $tpl->set_type($adh_type);
-			        $tpl->set_type_dflt(TRUE);
-			        $tpl->save();
-			    }
-			}
-			catch( \Exception $e ) {
-			  debug_to_log(__FILE__.':'.__LINE__.' '.$e->GetMessage());
-			  audit('',$this->GetName(),'Installation Error: '.$e->GetMessage());
-			  return $e->GetMessage();
-			}
-			//fin de la liste des adhérents
-		*/
+	
 	}
 	case "0.3.4":
 	{
 		$this->SetPreference('feu_adhesions', 0);
+	}
+	case "0.3.4.1" :
+	case "0.3.4.2" :
+	case "0.3.4.3" :
+	case "0.3.4.4" :
+	case "0.3.4.5" :
+	case "0.3.4.6" :
+	{
+		$uid = null;
+		if( cmsms()->test_state(CmsApp::STATE_INSTALL) ) {
+		  $uid = 1; // hardcode to first user
+		} else {
+		  $uid = get_userid();
+		}
+		//Design pour la liste des adhérents
+		try {
+		    $adh_type = new CmsLayoutTemplateType();
+		    $adh_type->set_originator($this->GetName());
+		    $adh_type->set_name('liste_adherents');
+		    $adh_type->set_dflt_flag(TRUE);
+		    $adh_type->set_description('Template pour liste des membres');
+		    $adh_type->set_lang_callback('Adherents::page_type_lang_callback');
+		    $adh_type->set_content_callback('Adherents::reset_page_type_defaults');
+		    $adh_type->reset_content_to_factory();
+		    $adh_type->save();
+		}
+
+		catch( CmsException $e ) {
+		    // log it
+		    debug_to_log(__FILE__.':'.__LINE__.' '.$e->GetMessage());
+		    audit('',$this->GetName(),'Installation Error: '.$e->GetMessage());
+		    return $e->GetMessage();
+		}
+
+		try {
+		    $fn = cms_join_path(dirname(__FILE__),'templates','orig_liste_adherents.tpl');
+		    if( file_exists( $fn ) ) {
+		        $template = @file_get_contents($fn);
+		        $tpl = new CmsLayoutTemplate();
+		        $tpl->set_name(\CmsLayoutTemplate::generate_unique_name('Adherents Liste'));
+		        $tpl->set_owner($uid);
+		        $tpl->set_content($template);
+		        $tpl->set_type($adh_type);
+		        $tpl->set_type_dflt(TRUE);
+		        $tpl->save();
+		    }
+		}
+		catch( \Exception $e ) {
+		  debug_to_log(__FILE__.':'.__LINE__.' '.$e->GetMessage());
+		  audit('',$this->GetName(),'Installation Error: '.$e->GetMessage());
+		  return $e->GetMessage();
+		}
+	}
+	case "0.3.5" :
+	{
+		
+		//on crée le nouveau champ tag ds la table groupes
+		$dict = NewDataDictionary( $db );
+		$flds = "auto_subscription I(1) DEFAULT 0, admin_valid I(1) DEFAULT 1, tag C(255), tag_subscription C(255), pageid_aftervalid C(255)";
+		$sqlarray = $dict->AddColumnSQL( cms_db_prefix()."module_adherents_groupes", $flds);
+		$dict->ExecuteSQLArray($sqlarray);
+		
+		//on modifie un  champ dans la table adhérents 
+		$dict = NewDataDictionary( $db );
+		
+		$sqlarray = $dict->AlterColumnSQL( cms_db_prefix()."module_adherents_adherents", "certif D");
+		$dict->ExecuteSQLArray($sqlarray);
+		
+		//on créé un nouveau champ dans la table adhérents =>external
+		$dict = NewDataDictionary( $db );
+		$flds = "image C(4)";
+		$sqlarray = $dict->AddColumnSQL( cms_db_prefix()."module_adherents_adherents", $flds);
+		$dict->ExecuteSQLArray($sqlarray);
+		
+		
+		//fin de la liste des adhérents
+		
+		$this->SetPreference('max_size', 100000);
+		$this->SetPreference('max_width', 800);
+		$this->SetPreference('max_height', 800);
+		$this->SetPreference('allowed_extensions', 'jpg, gif, png, jpeg');
+		$this->SetPreference('pageid_subscription', '');
 	}
 	
 

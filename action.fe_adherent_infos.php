@@ -37,7 +37,7 @@ $OuiNon = array("Oui"=>"1","Non"=>"0");
 		$smarty->assign('itemsfound', $this->Lang('resultsfoundtext'));
 		$smarty->assign('itemcount', count($rowarray));
 		$smarty->assign('items', $rowarray);			
-		$smarty->assign('fe_edit', $this->CreateLink($id, 'fe_edit_adherent', $returnid, 'Modifier', array("record_id"=>$username)));
+		$smarty->assign('fe_edit', $this->CreateLink($id, 'fe_edit_adherent', $returnid, 'Modifier', array("genid"=>$username)));
 				
 		//$query.=" ORDER BY date_compet";
 	echo $this->ProcessTemplate('adherent_infos.tpl');

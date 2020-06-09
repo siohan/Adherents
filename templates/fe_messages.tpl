@@ -3,7 +3,7 @@
 		<i class="fas fa-envelope"></i>
               Ma messagerie interne</div>
             <div class="card-body">
-              <div class="table-responsive"><p class="info">{$fe_envoi_message}</p>
+              <div class="table-responsive"><p class="info">{*$fe_envoi_message*}</p>
 {*if $itemcount > 0*}
 
 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">

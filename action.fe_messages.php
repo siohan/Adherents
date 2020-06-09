@@ -18,8 +18,8 @@ $vrai = 'Oui';//'<img src="modules/Adherents/images/true.gif" class="systemicon"
 $faux = 'Non';//'<img src="modules/Adherents/images/false.gif" class="systemicon" alt="Faux" title="Faux">';
 
 $designation = '';
-$smarty->assign('fe_envoi_message',
-		$this->CreateLink($id, 'fe_envoi_message', $returnid, 'Ecrire un nouveau message', array("record_id"=>$username,$inline='true')));
+//$smarty->assign('fe_envoi_message',
+	//	$this->CreateLink($id, 'fe_envoi_message', $returnid, 'Ecrire un nouveau message', array("record_id"=>$username,$inline='true')));
 	
 	$query = " SELECT mess.id AS id_message,mess.sender, mess.senddate, mess.sendtime, mess.replyto, mess.group_id, mess.subject, mess.message, recip.genid, recip.id AS mess_id, recip.ar FROM ".cms_db_prefix()."module_messages_messages AS mess, ".cms_db_prefix()."module_messages_recipients AS recip  WHERE mess.id = recip.message_id AND recip.genid = ? AND mess.sent = '1' AND recip.actif = '1' ORDER BY senddate DESC, sendtime DESC";
 	$dbresult = $db->Execute($query, array($username));

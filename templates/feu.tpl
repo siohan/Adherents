@@ -1,4 +1,11 @@
-<p>Pour figurer ici, les adhérents doivent avoir une adresse email dans les contacts.</p>
+<div class="alert alert-info warning">Pour figurer ici, les adhérents doivent avoir une adresse email dans les contacts.</div>
+<div>
+	<ul>
+		<li>{admin_icon icon='import.gif'} : Insére le membre dans l'espace privé (envoi d'un email)</li>
+		<li>{admin_icon icon='true.gif'} Membre déjà inséré.</li>
+		<li>{admin_icon icon='delete.gif'} Supprime le membre de l'espace privé.</li>
+	</ul>
+	</div>
 {if $itemcount > 0}
 	<table border="0" cellspacing="0" cellpadding="0" class="pagetable tablesorter">
 	 <thead>

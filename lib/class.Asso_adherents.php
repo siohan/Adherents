@@ -45,6 +45,10 @@ function details_adherent($record_id)
 		return $details_adherent;	
 			
 	}
+	else
+	{
+		return false;
+	}
 }
 function details_adherent_by_genid($record_id)
 {
@@ -221,8 +225,11 @@ function activate ($genid)
 	$dbresult = $db->Execute($query, array($genid));
 	if($dbresult)
 	{
-		$gp_ops = new groups;
-		$id_group = $gp_ops->assign_to_adherent($genid);
+		return true;
+	}
+	else
+	{
+		return false;
 	}
 	
 }
@@ -277,7 +284,39 @@ function liste_adherents()
 			return $nom;	
 			}	
 	}
-
+	function add_image_extension($genid, $extension)
+	{
+		$db = cmsms()->GetDb();
+		$query = "UPDATE ".cms_db_prefix()."module_adherents_adherents SET image = ? WHERE genid = ?";
+		$dbresult = $db->Execute($query, array($extension, $genid));
+	}
+	//indique l'extension de la photo du membre si elle existe
+	function has_image($genid)
+	{
+		$db = cmsms()->GetDb();
+		$query = "SELECT image FROM ".cms_db_prefix()."module_adherents_adherents WHERE genid = ?";
+		$dbresult = $db->Execute($query, array($genid));
+		if($dbresult && $dbresult->RecordCount() >0)
+		{
+			$row = $dbresult->FetchRow();
+			$image = $row['image'];
+			return $image;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	function clean_nom($nom)
+	{
+		$nom = mb_convert_encoding($nom, "UTF-8", "Windows-1252");
+		$nom = stripslashes($nom);
+		$nom = str_replace("&#39;", "", $nom);
+		$nom = str_replace(" ", "",$nom);
+		
+		return $nom;
+	}
 #
 #
 #

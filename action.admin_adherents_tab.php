@@ -7,28 +7,45 @@ if(!$this->CheckPermission('Adherents use'))
 	echo $this->ShowErrors($this->Lang('needpermission'));
 	return;
 }
+//debug_display($_POST, 'Parameters');
 $db =& $this->GetDb();
 global $themeObject;
-//debug_display($params, 'Parameters');
+$gp_ops = new groups;
+$adh_feu = new AdherentsFeu;
+$group = '';
+if(isset($_POST['record_id']) && $_POST['record_id'] >0)
+{
+	$group = (int) $_POST['record_id'];
+	$details = $gp_ops->details_groupe($group);
+	$smarty->assign('group_name', $details['nom']);
+}
+
 //on va vérifier que les données du compte sont renseignées et le n° du club aussi.
-
-
+include 'include/action.navigation.php';
+$parms = array();
 $aujourdhui = date('Y-m-d');
+$any = array("0"=>"Tous");
+$liste_groupes = $gp_ops->liste_groupes_dropdown();
+$liste_groupes = array_merge($any, $liste_groupes);
+//var_dump($liste_groupes);
+$smarty->assign('liste_groupes', $liste_groupes);
+$smarty->assign('group', $group);
 //$ping = new Ping();
 $act = 1;//par defaut on affiche les actifs (= 1 )
 
 
 
-if(isset($params['group']) && $params['group'] != '')
+if(isset($_POST['record_id']) && $_POST['record_id'] != '0')
 {
-	$group = $params['group'];
+	$group = $_POST['record_id'];
 	$req = 1;
-	$query = "SELECT adh.id, adh.licence, adh.nom, adh.prenom, adh.actif,adh.genid, adh.anniversaire, adh.sexe, adh.certif, adh.validation, adh.adresse, adh.code_postal, adh.ville, adh.maj FROM ".cms_db_prefix()."module_adherents_adherents AS adh, ".cms_db_prefix()."module_adherents_groupes_belongs AS be WHERE adh.licence = be.licence AND be.id_group = ?";//" WHERE actif = 1";
+	$query = "SELECT adh.id, adh.licence, adh.nom, adh.prenom, adh.actif,adh.genid, adh.anniversaire, adh.sexe, adh.certif, adh.validation, adh.adresse, adh.code_postal, adh.ville, adh.maj, adh.image FROM ".cms_db_prefix()."module_adherents_adherents AS adh, ".cms_db_prefix()."module_adherents_groupes_belongs AS be WHERE adh.genid = be.genid AND be.id_group = ?";//" WHERE actif = 1";
+	$parms['id_group'] = $group;
 }
 else
 {
 	$req = 2;
-	$query = "SELECT id, genid, licence, nom, prenom, actif, anniversaire, sexe, certif, validation, adresse, code_postal, ville, maj FROM ".cms_db_prefix()."module_adherents_adherents AS adh";
+	$query = "SELECT id, genid, licence, nom, prenom, actif, anniversaire, sexe, certif, validation, adresse, code_postal, ville, maj, image FROM ".cms_db_prefix()."module_adherents_adherents AS adh";
 }
 
 
@@ -57,17 +74,18 @@ else
 	}
 	$act = 1;
 }
-
-$query.=" ORDER BY adh.nom ASC ";
+if(isset($params['letter']) && $params['letter'] != '')
+{
+	$letter = $params['letter'];
+	$query.= " AND SUBSTRING(nom, 1, 1) = ? ";
+	$parms['letter'] = $letter;
+}
+$query.=" ORDER BY nom ASC ";
+//echo $query;
 $smarty->assign('act', $act);
-if($req == 1)
-{
-	$dbresult = $db->Execute($query,array($group));
-}
-else
-{
-	$dbresult = $db->Execute($query);	
-}
+
+	$dbresult = $db->Execute($query,$parms);	
+
 $rowarray = array();
 $rowclass = 'row1';
 $contact_ops = new contact;
@@ -82,33 +100,26 @@ if($dbresult && $dbresult->RecordCount() >0)
 		$onerow = new StdClass();
 		$onerow->rowclass = $rowclass;
 		$genid = $row['genid'];
-		$tabExt = array('jpg','gif','png','jpeg');    // Extensions autorisees
-		foreach($tabExt as $value)
+		$image = $row['image'];
+		$separator = ".";
+		$myimage = $config['root_url']."/uploads/images/trombines/".$genid.$separator.$image;
+	//	$monimage = file_exists($config['root_url']."/uploads/images/trombines/".$genid.$separator.$image);
+	
+		if($image != '')
 		{
-			$right_extension = file_exists("../uploads/images/trombines/".$genid.".".$value);
-			if(true == $right_extension)
-			{
-				$has_image = true;
-				$myimage = "../uploads/images/trombines/".$genid.".".$value;
-			}
-			else
-			{
-				$has_image = false;
-			}
-		}
-		
-		//var_dump($has_image);
-		if(true == $has_image)//file_exists("http://localhost:8888/1.0/uploads/images/trombines/".$genid.".jpg"))
-		{
+			$myimage = $config['root_url']."/uploads/images/trombines/".$genid.$separator.$image;
+			
 			$img = '<img src="'.$myimage.'" alt="ma trombine" width="24" height="24">';
-			$thumb = $this->CreateLink($id, 'upload_image', $returnid,$contents=$img, array("genid"=>$genid));
+			$thumb = $img;//$this->CreateLink($id, 'upload_image', $returnid,$contents=$img, array("genid"=>$genid));
 		}
 		else
 		{
-			$thumb = $this->CreateLink($id, 'upload_image', $returnid,$contents=$themeObject->DisplayImage('icons/system/false.gif', $this->Lang('false'), '', '', 'systemicon'), array("genid"=>$genid));
+			$thumb = $themeObject->DisplayImage('icons/system/false.gif', $this->Lang('false'), '', '', 'systemicon');
 		}
-		$onerow->genid= $genid;
-		
+	//	unset($has_image);
+	//	unset($myimage);
+		$onerow->gen= $this->CreateLink($id, 'view_adherent_details',$returnid,$themeObject->DisplayImage('icons/system/view.gif', $this->Lang('view'), '', '', 'systemicon'), array("record_id"=>$row['genid']));$genid;
+		$onerow->genid = $row['genid'];
 		$onerow->thumbnail = $thumb;
 		$onerow->nom= $row['nom'];
 		$onerow->prenom= $row['prenom'];
@@ -148,10 +159,17 @@ if($dbresult && $dbresult->RecordCount() >0)
 		{
 			$onerow->has_mobile = $this->CreateLink($id, 'add_edit_contact', $returnid,$themeObject->DisplayImage('icons/system/false.gif', $this->Lang('false'), '', '', 'systemicon'), array("genid"=>$row['genid'], "type_contact"=>'2'));
 		}
-		$onerow->groups= $this->CreateLink($id, 'assign_groups', $returnid,$themeObject->DisplayImage('icons/system/groupassign.gif', $this->Lang('assign'), '', '', 'systemicon'),array("genid"=>$row['genid']));//$row['closed'];
-		$onerow->edit = $this->CreateLink($id, 'edit_adherent',$returnid,$themeObject->DisplayImage('icons/system/edit.gif', $this->Lang('edit'), '', '', 'systemicon'), array("record_id"=>$row['genid']));
-		$onerow->view_contacts= $this->CreateLink($id, 'view_contacts', $returnid,$themeObject->DisplayImage('icons/topfiles/groupmembers.gif', $this->Lang('groupmembers'), '', '', 'systemicon'),array("genid"=>$row['genid']));//$row['closed'];
-		//$onerow->delete =$this->CreateLink($id, 'delete', $returnid, $themeObject->DisplayImage('icons/system/delete.gif', $this->Lang('delete'), '', '', 'systemicon'), array("genid"=>$row['genid']);
+		$uid = $adh_feu->GetUserInfoByProperty($row['genid']);
+	
+		if(!false == $uid)
+		{
+			$onerow->has_feu_account = $themeObject->DisplayImage('icons/system/true.gif', $this->Lang('true'), '', '', 'systemicon');
+		}
+		else
+		{
+			$onerow->has_feu_account = $themeObject->DisplayImage('icons/system/false.gif', $this->Lang('false'), '', '', 'systemicon');
+		}
+	
 		($rowclass == "row1" ? $rowclass= "row2" : $rowclass= "row1");
 		$rowarray[]= $onerow;
 		

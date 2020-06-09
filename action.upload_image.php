@@ -11,7 +11,7 @@ if(isset($params['genid']) && $params['genid'] !='')
  
 // Constantes
     // Repertoire cible
-
+$target = "../uploads/images/trombines";
 
 
 
@@ -19,13 +19,13 @@ if(isset($params['genid']) && $params['genid'] !='')
 /************************************************************
  * Creation du repertoire cible si inexistant
  *************************************************************/
-/*
-if( !is_dir(TARGET) ) {
-  if( !mkdir(TARGET, 0755) ) {
+
+if( !is_dir($target) ) {
+  if( !mkdir($target, 0755) ) {
     exit('Erreur : le répertoire cible ne peut-être créé ! Vérifiez que vous diposiez des droits suffisants pour le faire ou créez le manuellement !');
   }
 }
-*/
+
 $tpl = $smarty->CreateTemplate( $this->GetTemplateResource('upload_image.tpl'), null, null, $smarty );
     $tpl->assign('genid',$genid);
     $tpl->display();

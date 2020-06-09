@@ -5,37 +5,41 @@ if(!isset($gCms)) exit;
 
 $db =& $this->GetDb();
 //debug_display($params, 'Parameters');
-
+$gp_ops = new groups;
 //$template = "";
 if(isset($params['template']) && $params['template'] !="")
 {
 	$template = trim($params['template']);
 }
-/*
 else {
-    $tpl = CmsLayoutTemplate::load_dflt_by_type('Adherents::Liste Adhérents');
+    $tpl = CmsLayoutTemplate::load_dflt_by_type('Adherents::liste_adherents');
     if( !is_object($tpl) ) {
         audit('',$this->GetName(),'Template liste adhérents introuvable');
         return;
     }
     $template = $tpl->get_name();
 }
-*/
 
-if(isset($params['group']) && $params['group'] != '')
+if(isset($params['record_id']) && $params['record_id'] != '')
 {
-	$group = $params['group'];
+	$group = (int) $params['record_id'];
+	//on vérifie si la liste est publique
+	$details = $gp_ops->details_groupe($group);
+	$public = $details['public'];
+	
+	$smarty->assign('nom_liste', $details['nom']);
+	
 	$req = 1;
-	$query = "SELECT adh.genid, adh.nom, adh.prenom FROM ".cms_db_prefix()."module_adherents_adherents AS adh, ".cms_db_prefix()."module_adherents_groupes_belongs AS be WHERE adh.licence = be.licence AND be.id_group = ?";//" WHERE actif = 1";
+	$query = "SELECT adh.genid, adh.nom, adh.prenom, adh.image FROM ".cms_db_prefix()."module_adherents_adherents AS adh, ".cms_db_prefix()."module_adherents_groupes_belongs AS be WHERE adh.genid = be.genid AND be.id_group = ? ";//" WHERE actif = 1";
 }
 else
 {
 	$req = 2;
-	$query = "SELECT  adh.genid,  adh.nom, adh.prenom FROM ".cms_db_prefix()."module_adherents_adherents AS adh";
+	$query = "SELECT  adh.genid,  adh.nom, adh.prenom,adh.image FROM ".cms_db_prefix()."module_adherents_adherents AS adh";
 }
 
-
-
+if(true == $public)
+{
 	if($req==1)
 	{
 		$query.=" AND adh.actif = 1";
@@ -47,7 +51,6 @@ else
 	$act = 1;
 
 $query.=" ORDER BY adh.nom ASC ";
-echo $query;
 if($req == 1)
 {
 	$dbresult = $db->Execute($query,array($group));
@@ -67,34 +70,27 @@ if($dbresult && $dbresult->RecordCount() >0)
 	
 		$onerow = new StdClass();
 		$onerow->rowclass = $rowclass;
-		/*
-		foreach($tabExt as $value)
+		$genid = $row['genid'];
+		$image = $row['image'];
+		$separator = ".";
+		
+		
+		
+		if($image !='')
 		{
-			$right_extension = file_exists("../uploads/images/trombines/".$genid.".".$value);
-			if(true == $right_extension)
-			{
-				//return $value; 
-				$has_image = true;
-				$myimage = "../uploads/images/trombines/".$genid.".".$value;
-				echo $myimage;
-			}
-			else
-			{
-				$has_image = false;
-			}
-		}
-		var_dump($has_image);
-		//var_dump($has_image);
-		if(true == $has_image)//file_exists("http://localhost:8888/1.0/uploads/images/trombines/".$genid.".jpg"))
-		{
+			$myimage = $config['root_url']."/uploads/images/trombines/".$genid.$separator.$image;
+			
 			$img = '<img src="'.$myimage.'" alt="ma trombine" width="24" height="24">';
 			$onerow->thumb = $img;
 		}
 		else
 		{
-			$onerow->thumb = $themeObject->DisplayImage('icons/system/false.gif', $this->Lang('false'), '', '', 'systemicon'));
+			$myimage = $config['root_url']."/assets/modules/Adherents/images/no-image.png";
+			$img = '<img src="'.$myimage.'" alt="ma trombine" width="24" height="24">';
+			$onerow->thumb = $img;
 		}
-		*/
+		
+	
 		$onerow->genid= $row['genid'];
 		$onerow->nom= $row['nom'];
 		$onerow->prenom= $row['prenom'];	
@@ -112,11 +108,14 @@ elseif(!$dbresult)
 {
 	echo $db->ErrorMsg();
 }
-/*
+
 $tpl = $smarty->CreateTemplate($this->GetTemplateResource($template),null,null,$smarty);
 $tpl->display();
-*/
-//$query.=" ORDER BY date_compet";
-echo $this->ProcessTemplate('liste_adherents.tpl');
+}
+else
+{
+	echo "Cette liste n'est pas publique...";
+}
+	
 
 ?>

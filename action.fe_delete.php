@@ -37,9 +37,9 @@ switch($obj)
 	break;
 	
 	case "option_belongs" : 
-		if(isset($params['adherent']) && $params['adherent'] != '')
+		if(isset($params['genid']) && $params['genid'] != '')
 		{
-			$adherent = $params['adherent'];
+			$adherent = $params['genid'];
 		}
 		if(isset($params['id_inscription']) && $params['id_inscription'] != '')
 		{
@@ -50,7 +50,7 @@ switch($obj)
 			if($dbresult)
 			{
 				$this->SetMessage('Inscription à cette option supprimée');
-				$this->Redirect($id, 'fe_inscriptions', $returnid, array("record_id"=>$params['adherent']));
+				$this->Redirect($id, 'fe_inscriptions', $returnid, array("record_id"=>$adherent));
 			}
 			else
 			{
@@ -86,7 +86,8 @@ switch($obj)
 	
 	case "fe_lock_unlock" :
 	{
-		$error = 0;if(isset($params['ref_action']) && $params['ref_action'] != '')
+		$error = 0;
+		if(isset($params['ref_action']) && $params['ref_action'] != '')
 		{
 			$ref_action = $params['ref_action'];
 		}
@@ -125,6 +126,23 @@ switch($obj)
 		}
 		
 		$this->Redirect($id, 'fe_compos_equipes', $returnid, array("record_id"=>$username));
+	}
+	
+	//supprime un choix de présence pour un utilisateur
+	case "delete_reponse" :
+	{
+		if(isset($params['record_id']) && $params['record_id'] != '')
+		{
+			$id_presence = $params['record_id'];
+		}
+		
+		if(isset($params['genid']) && $params['genid'] != '')
+		{
+			$genid = $params['genid'];
+		}
+		$pres = new T2t_presence;
+		$pres->delete_reponse($id_presence,$genid);
+		$this->Redirect($id, 'fe_presences', $returnid, array("record_id"=>$username));
 	}
 }
 

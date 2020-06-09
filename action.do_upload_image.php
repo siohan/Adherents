@@ -1,6 +1,6 @@
 <?php
  if( !isset($gCms) ) exit;
-//debug_display($params, 'Parameters');
+debug_display($_POST, 'Parameters');
 /************************************************************
  * Script realise par Emacs
  * Crée le 19/12/2004
@@ -17,18 +17,21 @@
  *
  *************************************************************/
  // Tableaux de donnees
-$tabExt = array('jpg','gif','png','jpeg');    // Extensions autorisees
-$infosImg = array();
+//$tabExt = array('jpg','gif','png','jpeg');    // Extensions autorisees
+$tabExt = $this->GetPreference('allowed_extensions');//
+$tabExt = explode(',', trim($tabExt));
 
+$infosImg = array();
+$adh_ops = new Asso_adherents;
 // Variables
 $extension = '';
 $message = '';
 $nomImage = '';
 $target =  '../uploads/images/trombines/';
-$max_size = 100000;    // Taille max en octets du fichier
-$width_max =  800;    // Largeur max de l'image en pixels
-$height_max = 800;    // Hauteur max de l'image en pixels
-
+$max_size = $this->GetPreference('max_size');//100000;    // Taille max en octets du fichier
+$width_max =  $this->GetPreference('max_width');//800;    // Largeur max de l'image en pixels
+$height_max = $this->GetPreference('max_height');//800;    // Hauteur max de l'image en pixels
+var_dump($width_max);
 //if(isset($params[''])) 
 /************************************************************
  * Script d'upload
@@ -45,18 +48,22 @@ if(isset($_POST['genid']))
   {
     // Recuperation de l'extension du fichier
     $extension  = pathinfo($_FILES['fichier']['name'], PATHINFO_EXTENSION);
+//var_dump($extension);
+
  
     // On verifie l'extension du fichier
     if(in_array(strtolower($extension),$tabExt))
     {
       // On recupere les dimensions du fichier
       $infosImg = getimagesize($_FILES['fichier']['tmp_name']);
- 
+var_dump($infosImg);
       // On verifie le type de l'image
       if($infosImg[2] >= 1 && $infosImg[2] <= 14)
       {
         // On verifie les dimensions et taille de l'image
-        if(($infosImg[0] <= $width_max) && ($infosImg[1] <= $height_max) && (filesize($_FILES['fichier']['tmp_name']) <= $max_size))
+	$poids = filesize($_FILES['fichier']['tmp_name']);
+	var_dump($poids);
+        if($infosImg[0] <= $width_max && $infosImg[1] <= $height_max && filesize($_FILES['fichier']['tmp_name']) <= $max_size)
         {
           // Parcours du tableau d'erreurs
           if(isset($_FILES['fichier']['error']) 
@@ -70,6 +77,8 @@ if(isset($_POST['genid']))
             if(move_uploaded_file($_FILES['fichier']['tmp_name'], $target.$nomImage))
             {
               $message = 'Upload réussi !';
+	      //on ajoute l'extension à la table adhérents
+	      $adh_ops->add_image_extension($genid, $extension);
             }
             else
             {
@@ -85,7 +94,7 @@ if(isset($_POST['genid']))
         else
         {
           // Sinon erreur sur les dimensions et taille de l'image
-          $message = 'Erreur dans les dimensions de l\'image !';
+          $message = 'Erreur dans les dimensions de l\'image ou fichier trop lourd !';
         }
       }
       else
@@ -106,5 +115,6 @@ if(isset($_POST['genid']))
     $message = 'Veuillez remplir le formulaire svp !';
   }
 }
-$this->RedirectToAdminTab('joueurs');
+$this->SetMessage($message);
+$this->Redirect($id, 'view_adherent_details', $returnid, array("record_id"=>$genid));
 ?>

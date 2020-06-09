@@ -1,10 +1,8 @@
+<h3>Ajout/mofification des membres du groupe</h3>
 <div class="pageoverflow">
 {$formstart}
 
-<div class="pageoverflow">
-    <p class="pagetext">Groupe id:</p>
-    <p class="pageinput">{$record_id}</p>
-  </div>
+{$record_id}
 
 {foreach from=$items key=key item=entry}
 <div class="pageoverflow">

@@ -8,99 +8,44 @@ $feu = cms_utils::get_module('FrontEndUsers');
 $error = 0;//on instancie un compteur d'erreurs
 // variables à contrôler :  l'email , la licence
 $asso_ops = new Asso_adherents;
-if(isset($params['nom']) && $params['nom'] !='')
+$cont = new contact;
+if(isset($params['record_id']) && $params['record_id'] !='')
 {
-	$nom = mb_convert_encoding($params['nom'], "UTF-8", "Windows-1252");
+	//on vérifie d'abord que le membre a bien une adresse email
+	$email = $cont->has_email($params['record_id']);
+	if(false == $email)
+	{
+		$error++;
+		$this->SetMessage('Le membre doit avoir une adresse email !');
+		$this->Redirect($id, 'view_adherent_details', $returnid, array("record_id"=>$params['record_id']));
+	}
+	$user_email = $cont->email_address($params['record_id']);
+	
+	$details = $asso_ops->details_adherent_by_genid($params['record_id']);
+	$nom = $details['nom'];
+	$nom = mb_convert_encoding($nom, "UTF-8", "Windows-1252");
 	$nom = stripslashes($nom);
-	$nom = str_replace("&#39;", "", $params['nom']);
+	$nom = str_replace("&#39;", "", $nom);
 	$nom = str_replace(" ", "",$nom);
-//	var_dump($nom);
+	
+	$prenom = $details['prenom'];
+	$prenom = str_replace("&#39", "",$prenom);
+	$prenom = $asso_ops->clean_name($prenom);
+
+	$nom_complet = strtolower($prenom. ''.$nom);
 	
 }
-if(isset($params['prenom']) && $params['prenom'] !='')
-{
-	$prenom = str_replace("&#39", "",$params['prenom']);
-	$prenom = $asso_ops->clean_name($prenom);
-}
-$nom_complet = strtolower($prenom. ''.$nom);
-if(isset($params['genid']) && $params['genid'] !='')
-{
-	$genid = $params['genid'];
-}
 else
 {
 	$error++;
 }
-if(isset($params['email']) && $params['email'] !='')
-{
-	$user_email = $params['email'];
-}
-else
-{
-	$error++;
-}
+
+
+
 //echo $error;
 if($error<1)
 {
-	//on fait le job
-	//on ajoute le groupe
-	$group_exists = $feu->GetGroupId('adherents');
-	var_dump($group_exists);
-//	$group_exists = $feu->GroupExistsByName('adherents');
-	//on dit que l'email n'est pas l'identifiant
-	$feu->SetPreference('username_is_email',0);
-	if(FALSE === $group_exists || true == is_null($group_exists))
-	{
-		$feu->AddGroup('adherents', 'les adhérents du club');
-		
-		/* On récupère l'id du group créé à savoir adherents */
-		$gid = $feu->GetGroupId('adherents');
-		
-		/*
-		on créé les propriétés de ce groupe à savoir
-		1- Ton email
-		2- Ton nom
-		*/
-		$name = "email";
-		$prompt = "Ton email";
-		$type = 2;//0 = text; 1 = checkbox; 2 = email;3 = textarea; 4,5 = count(options)?;6 = image;7= radiobuttons; 8= date
-		$length = 80;
-		$maxlength = 255;		
-		$feu->AddPropertyDefn($name, $prompt, $type, $length,$maxlength,$attribs = '', $force_unique = 0, $encrypt = 0 );
-		
-		$sortkey = 1;
-		$required = 2; //2= requis, 1 optionnel, 0 = off
-		/* on peut assigner les propriétés au groupe adhérents */
-		$feu->AddGroupPropertyRelation($gid,$name,$sortkey, -1, $required);
-		
-		/*On fait la même chose pour la deuxième propriété */
-		$name = "nom";
-		$prompt = "Ton nom";
-		$type = 0;
-		$length = 80;
-		$maxlength = 255;		
-		$feu->AddPropertyDefn($name, $prompt, $type, $length,$maxlength,$attribs = '', $force_unique = 0, $encrypt = 0 );
-		
-		$sortkey = 1;
-		$required = 2; //2= requis, 1 optionnel, 0 = off
-		/* on peut assigner les propriétés au groupe adhérents */
-		$feu->AddGroupPropertyRelation($gid,$name,$sortkey, -1, $required);
-		
-		/*On fait la même chose pour la troisième propriété */
-		$name = "genid";
-		$prompt = "Ton ID";
-		$type = 0;
-		$length = 10;
-		$maxlength = 15;		
-		$feu->AddPropertyDefn($name, $prompt, $type, $length,$maxlength,$attribs = '', $force_unique = 0, $encrypt = 0 );
-		
-		$sortkey = 1;
-		$required = 0; //2= requis, 1 optionnel, 0 = off
-		/* on peut assigner les propriétés au groupe adhérents */
-		$feu->AddGroupPropertyRelation($gid,$name,$sortkey, -1, $required);
-		
-	}
-	
+
 	$day = date('j');
 	$month = date('n');
 	$year = date('Y')+5;
@@ -108,7 +53,7 @@ if($error<1)
 	//on créé un mot de passe
 	$mot1 = $this->random_string(7);
 	$motdepasse = 'A'.$mot1.'1';
-//	var_dump($motdepasse);
+
 	//qqs variables pour le mail
 	$smarty->assign('prenom_joueur', $prenom);
 	$smarty->assign('nom_joueur' , $nom);
@@ -116,44 +61,56 @@ if($error<1)
 	//$motdepasse = 'UxzqsUIM1';
 	$smarty->assign('motdepasse', $motdepasse);
 	
-	//$add_user = $feu->AddUser($licence, $motdepasse,$expires);
+	
 	$add_user = $feu->AddUser($nom_complet, $motdepasse,$expires);
 	
-	//on récupère le userid ($uid)
-	$uid = $feu->GetUserId($nom_complet);
-	//on force le changement de mot de passe ?
-	$feu->ForcePasswordChange($uid, $flag = TRUE);	
-	$gid = $feu->GetGroupId('adherents');
-	/* on peut maintenant assigner cet utilisateur au groupe */
-	$feu->AssignUserToGroup($uid,$gid);
-	/* on remplit les propriétés de lutilisateur */
-	$feu->SetUserPropertyFull('email',$user_email, $uid);
-	$feu->SetUserPropertyFull('nom', $nom_complet,$uid);
-	$feu->SetUserPropertyFull('genid',$genid, $uid);
-	
-	/* On essaie d'envoyer un message à l'utilisateur pour lui dire qu'il est enregistré */	
-
-	$admin_email = $this->GetPreference('admin_email'); 
-	//echo $to;
-	$subject = $this->GetPreference('email_activation_subject');
-	$message = $this->GetTemplate('newactivationemail_Sample');
-	$body = $this->ProcessTemplateFromData($message);
-	$headers = "From: ".$admin_email."\n";
-	$headers .= "Reply-To: ".$admin_email."\n";
-	$headers .= "Content-Type: text/html; charset=\"utf-8\"";
-	/*
-	$headers = 'From: claude.siohan@gmail.com' . "\r\n" . 'Reply-To: claude.siohan@gmail.com' . "\r\n" . 'X-Mailer: PHP/' . phpversion(); 
-	*/
-	$designation.= 'Compte actif pour ! '.$prenom;
-	if(mail($user_email, utf8_encode($subject), $body, $headers))
+	if(true == $add_user)
 	{
-	
-		$designation.= ' Email envoyé !';
-	
+		//on récupère le userid ($uid)
+		$uid = $feu->GetUserId($nom_complet);
+		//on force le changement de mot de passe ?
+		$uid = (int) $uid;
+		$feu->SetUserPropertyFull('email',$user_email, $uid);
+		$feu->SetUserPropertyFull('nom', $nom_complet,$uid);
+		$feu->SetUserPropertyFull('genid',$params['record_id'], $uid);
+
+		/* On essaie d'envoyer un message à l'utilisateur pour lui dire qu'il est enregistré */	
+
+		$admin_email = $this->GetPreference('admin_email'); 
+		//echo $to;
+		$subject = $this->GetPreference('email_activation_subject');
+		$priority = 3;
+		//$montpl = $this->GetTemplateResource('newactivationemail_Sample.tpl');
+		$montpl = $this->GetTemplateResource('newactivationemail_Sample.tpl');						
+		$smarty = cmsms()->GetSmarty();
+		// do not assign data to the global smarty
+		$tpl = $smarty->createTemplate($montpl);
+		$tpl->assign('prenom_joueur',$prenom);
+		$tpl->assign('nom_joueur',$nom);
+		$tpl->assign('nom_complet',$nom_complet);
+		$tpl->assign('motdepasse',$motdepasse);
+	 	$output = $tpl->fetch();
+
+		$cmsmailer = new \cms_mailer();
+		$cmsmailer->reset();
+		$cmsmailer->AddAddress($user_email);
+		$cmsmailer->IsHTML(true);
+		$cmsmailer->SetPriority($priority);
+		$cmsmailer->SetBody($output);
+		$cmsmailer->SetSubject($subject);
+
+	        if( !$cmsmailer->Send() ) 
+		{			
+	            	return false;
+			//$mess_ops->not_sent_emails($message_id, $recipients);
+	        }
+	}
+	else
+	{
+		$designation.= "Une erreur est apparue lors de la création du compte";
 	}
 	
 	$this->SetMessage($designation);
-	$this->RedirectToAdminTab('feu');
 	
 }
 else
@@ -161,8 +118,9 @@ else
 	//les conditions ne sont pas remplis, on renvoit à la page précédente
 	//echo $error;
 	$this->SetMessage('parametres manquants');
-	$this->Redirect($id, 'defaultadmin',$returnid, array("activetab"=>"feu"));
+	
 }
+$this->Redirect($id, 'view_adherent_details', $returnid, array("record_id"=>$params['record_id']));
 
 
 # EOF

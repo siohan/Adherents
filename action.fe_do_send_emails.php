@@ -9,55 +9,17 @@ $db = cmsms()->GetDb();
 global $themeObject;
 debug_display($params, 'Parameters');
 $error = 0;
-if(isset($params['destinataires']) && $params['destinataires'])
-{
-	$destinataires = $params['destinataires'];
-	//on va chercher les membres du groupe et leurs adresses emails
-	$contact_ops = new contact;
-	$groupe_licencies = $contact_ops->UsersFromGroup($destinataires);
-	$nb = $contact_ops->CountUsersFromGroup($destinataires);
-	if(is_array($groupe_licencies) || array_count_values($groupe_licencies)>0)
-	{
-		//$dest1 = array();
-		$dest = array();
-		foreach($groupe_licencies as $tab )
-		{
-			//on va chercher les mails de chacun maintenant
-			
-			$dest1 = $contact_ops->email_address($tab);
-			//var_dump($dest1);
-			if(FALSE !== $dest1)//l'utilisateur n'a pas de mail enregistré !!
-			{
-				//il faut signaler l'erreur !
-				$dest[] = $dest1;
-				
-			}
-			else
-			{
-				//on va le mettre en erreur
-			}
-			
-		}
-	}
-	
-	
-}
-else
-{
-	$error++;
-}
-var_dump($groupe_licencies);
-var_dump($dest);
+
+$destinataires = 'claude.siohan@gmail.com';//$params['destinataires'];	
+
+$contact_ops = new contact;
 $expediteur = $contact_ops->email_address($username);
 
 if(isset($params['priority']) && $params['priority'])
 {
 	$priority = $params['priority'];
 }
-else
-{
-	$error++;
-}
+
 if(isset($params['sujet']) && $params['sujet'])
 {
 	$sujet = $params['sujet'];
@@ -87,8 +49,8 @@ else
 	$senddate = date('Y-m-d');
 	$sendtime = date('H:i:s');
 	$replyto = $username;
-	$group_id = $destinataires;
-	$recipients_number = $nb;
+	$group_id = 0;
+	$recipients_number = 1;
 	$subject = $sujet;
 	$sent = 1;
 	$mess_ops = new T2t_messages;
@@ -96,15 +58,14 @@ else
 	
 	
 
-	foreach($dest as $item=>$v)
-	{
+	
 	
 	//var_dump($item);
 	
 		$cmsmailer = new \cms_mailer();
 		$cmsmailer->reset();
 		$cmsmailer->SetFrom($expediteur);//$this->GetPreference('admin_email'));
-		$cmsmailer->AddAddress($v,$name='');
+		$cmsmailer->AddAddress('claude.siohan@gmail.com',$name='Claude SIOHAN');
 		$cmsmailer->IsHTML(false);
 		$cmsmailer->SetPriority($priority);
 		$cmsmailer->SetBody($message);
@@ -119,7 +80,7 @@ else
 		{
 			$send = TRUE;
 		}
-	}
+	
 	
 }
 $this->Redirect($id, 'default', $returnid);

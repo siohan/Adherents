@@ -14,135 +14,95 @@ $username = $feu->GetUserName($userid);
 require_once(dirname(__FILE__).'/include/fe_menu.php');
 //on va chercher les différents fournisseurs disponibles
 $service = new commandes_ops();
-$liste_fournisseurs = $service->liste_fournisseurs();
-
-//var_dump($liste_fournisseurs);
-
-//$liste_fournisseurs = array("WACK SPORT"=>"WACK SPORT", "BUTTERFLY"=>"BUTTERFLY", "AUTRES"=>"AUTRES");
-$liste_categories = array("BOIS"=>"BOIS","REVETEMENTS"=>"REVETEMENTS","BALLES"=>"BALLES","TEXTILES"=>"TEXTILES","ACCESSOIRES"=>"ACCESSOIRES","AUTRES"=>"AUTRES");
-
-$liste_dispo = array("DISPONIBLE"=>"1","NON DISPONIBLE"=>"0");
-
-$db =& $this->GetDb();
-//s'agit-il d'une modif ou d'une créa ?
-$record_id = '';
-$index = 0;
-
-$edit = 0;//pour savoir si on édite ou on créé, 0 par défaut c'est une créa
-
-//
-if(isset($params['commande_id']) && $params['commande_id'] != '')
+if(!empty($_POST))
 {
-	$commande_id = $params['commande_id'];
+	if(isset($_POST['cancel']))
+	{
+		$this->Redirect($id, 'default', $returnid, array("display"=>"fe_commandes"));
+	}
+	if(isset($_POST['categorie']) && $_POST['categorie'] != '')
+	{
+		$categorie = $_POST['categorie'];
+	}
+	if(isset($_POST['fournisseur']) && $_POST['fournisseur'] != '')
+	{
+		$fournisseur = $_POST['fournisseur'];
+	}
+	if(isset($_POST['libelle']) && $_POST['libelle'] != '')
+	{
+		$libelle = $_POST['libelle'];
+	}
+	if(isset($_POST['reference']) && $_POST['reference'] != '')
+	{
+		$reference = $_POST['reference'];
+	}
+	if(isset($_POST['marque']) && $_POST['marque'] != '')
+	{
+		$marque = $_POST['marque'];
+	}
+	
+}
+else
+{
+	$liste_fournisseurs = $service->liste_fournisseurs();
+
+	//var_dump($liste_fournisseurs);
+
+	//$liste_fournisseurs = array("WACK SPORT"=>"WACK SPORT", "BUTTERFLY"=>"BUTTERFLY", "AUTRES"=>"AUTRES");
+	$liste_categories = array("BOIS"=>"BOIS","REVETEMENTS"=>"REVETEMENTS","BALLES"=>"BALLES","TEXTILES"=>"TEXTILES","ACCESSOIRES"=>"ACCESSOIRES","AUTRES"=>"AUTRES");
+
+	$liste_dispo = array("DISPONIBLE"=>"1","NON DISPONIBLE"=>"0");
+
+	$db =& $this->GetDb();
+	//s'agit-il d'une modif ou d'une créa ?
+	$record_id = '';
+	$reference = '';
+	$marque = '';
+	$libelle = 'Mon produit';
+	
+
+	$edit = 0;//pour savoir si on édite ou on créé, 0 par défaut c'est une créa
+
+	
+	if(isset($params['record_id']) && $params['record_id'] !="")
+	{
+			$record_id = $params['record_id'];
+			$edit = 1;//on est bien en trai d'éditer un enregistrement
+			//ON VA CHERCHER l'enregistrement en question
+			$query = "SELECT id, categorie, fournisseur, reference, libelle, marque, prix_unitaire, reduction, statut_item FROM ".cms_db_prefix()."module_commandes_items WHERE id = ?";
+			$dbresult = $db->Execute($query, array($record_id));
+			$compt = 0;
+			while ($dbresult && $row = $dbresult->FetchRow())
+			{
+				$compt++;
+				$id = $row['id'];
+				$categorie = $row['categorie'];
+				$fournisseur = $row['fournisseur'];
+				$reference = $row['reference'];
+				$libelle = $row['libelle'];
+				$marque = $row['marque'];
+				$prix_unitaire = $row['prix_unitaire'];
+				$reduction = $row['reduction'];
+				$statut_item = $row['statut_item'];
+
+			}
+	}
+	//on construit le formulaire
+	$tpl = $smarty->CreateTemplate($this->GetTemplateResource('fe_add_item.tpl'));
+	$tpl->assign('record_id',$record_id);
+	$tpl->assign('categorie',$categorie);
+	$tpl->assign('fournisseur',$fournisseur);
+	$tpl->assign('liste_fournisseurs', $liste_fournisseurs);
+	$tpl->assign('liste_categories', $liste_categories);
+	$tpl->assign('reference',$reference);
+	$tpl->assign('libelle',$libelle);
+	$tpl->assign('marque',$marque);		
+	$tpl->display();
+		
+		
+	#
 }
 
-if(isset($params['record_id']) && $params['record_id'] !="")
-	{
-		$record_id = $params['record_id'];
-		$edit = 1;//on est bien en trai d'éditer un enregistrement
-		//ON VA CHERCHER l'enregistrement en question
-		$query = "SELECT id, categorie, fournisseur, reference, libelle, marque, prix_unitaire, reduction, statut_item FROM ".cms_db_prefix()."module_commandes_items WHERE id = ?";
-		$dbresult = $db->Execute($query, array($record_id));
-		$compt = 0;
-		while ($dbresult && $row = $dbresult->FetchRow())
-		{
-			$compt++;
-			$id = $row['id'];
-			$categorie = $row['categorie'];
-			$fournisseur = $row['fournisseur'];
-			$reference = $row['reference'];
-			$libelle = $row['libelle'];
-			$marque = $row['marque'];
-			$prix_unitaire = $row['prix_unitaire'];
-			$reduction = $row['reduction'];
-			$statut_item = $row['statut_item'];
-				
-		}
-	}
-
-	if(isset($fournisseur))	
-	{
-		$key_fournisseur = array_values($liste_fournisseurs);
-		//var_dump($key_statut_commande);
-		$key2_fournisseur = array_search($fournisseur,$key_fournisseur);
-		//var_dump($key2_statut_commande);
-	}
-	else
-	{
-		$key2_fournisseur = 0;
-		$fournisseur = "WACK SPORT";
-	}
-	if(isset($categorie))	
-	{
-		$key_categorie = array_values($liste_categories);
-		//var_dump($key_statut_commande);
-		$key2_categorie = array_search($categorie,$key_categorie);
-		//var_dump($key2_statut_commande);
-	}
-	else
-	{
-		$key2_categorie = 0;
-		$categorie = "REVETEMENTS"; //par défaut
-	}
-	if(isset($statut_item))
-	{
-		$key_statut_item = array_values($liste_dispo);
-	}
-	else
-	{
-		$statut_item = 1;
-	}
-	//$key = array_values($liste_fournisseur);
-	 
-	//on construit le formulaire
-	$smarty->assign('formstart',
-			    $this->CreateFormStart( $id, 'fe_do_add_item', $returnid ) );
-	if($edit==1)
-	{
-		$smarty->assign('record_id',
-				$this->CreateInputHidden($id,'record_id',$record_id));
-	}
-	/*
-	$smarty->assign('idepreuve',
-			$this->CreateInputDropdown($id,'idepreuve',$type_compet,$selectedindex = $index, $selectedvalue=$name));
-	*/
-	$smarty->assign('categorie',
-			$this->CreateInputDropdown($id, 'categorie',$liste_categories,$selectedIndex=$key2_categorie,$selectedvalue=$categorie));
-	$smarty->assign('fournisseur',
-			$this->CreateInputDropdown($id, 'fournisseur',$liste_fournisseurs,$selectedindex=$key2_fournisseur,$selectedalue=$fournisseur));
-	$smarty->assign('reference',
-			$this->CreateInputText($id,'reference',(isset($reference)?$reference:"000000"),7,10));
-			
-	$smarty->assign('libelle',
-			$this->CreateInputText($id,'libelle',(isset($libelle)?$libelle:""),50,200));
-			
-			
-	$smarty->assign('marque',
-			$this->CreateInputText($id,'marque',(isset($marque)?$marque:""),30,150));
-	$smarty->assign('prix_unitaire',
-			$this->CreateInputText($id,'prix_unitaire',(isset($prix_unitaire)?$prix_unitaire:""),7,15));
-	$smarty->assign('reduction',
-			$this->CreateInputText($id,'reduction',(isset($reduction)?$reduction:""),5,10));					
-	$smarty->assign('statut_item',
-			$this->CreateInputDropdown($id,'statut_item',$liste_dispo,$selectedindex='',$selectedalue=$statut_item));	
-				
-	$smarty->assign('submit',
-			$this->CreateInputSubmit($id, 'submit', $this->Lang('submit'), 'class="button"'));
-	$smarty->assign('cancel',
-			$this->CreateInputSubmit($id,'cancel',
-						$this->Lang('cancel')));
-
-
-	$smarty->assign('formend',
-			$this->CreateFormEnd());
-	
-	
-
-
-
-echo $this->ProcessTemplate('fe_add_item.tpl');
-
-#
 # EOF
 #
 ?>

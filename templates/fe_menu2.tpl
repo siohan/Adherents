@@ -130,13 +130,6 @@
             <i class="fas fa-fw fa-user-friends"></i>
             <span>Mes convocations</span></a>
         </li>
-		{if $cap ==1}
-			<!-- 	<li class="nav-item">
-		          <a class="nav-link" href="{cms_action_url action=fe_compos_equipes record_id=$username}">
-		            <i class="fas fa-fw fa-users-cog"></i>
-		            <span>Mes compos d'équipes</span></a>
-		        </li> -->
-		{/if}
 {/if}
 
 {if $feu_adhesions ==1}
@@ -153,7 +146,7 @@
         </li>
 {if $feu_contacts == 1}
         <li class="nav-item">
-          <a class="nav-link" href="{cms_action_url action=fe_view_contacts display=contacts record_id=$username}l">
+          <a class="nav-link" href="{cms_action_url action=fe_view_contacts display=contacts record_id=$username}">
             <i class="fas fa-fw fa-user"></i>
             <span>Mes contacts</span></a>
         </li>
@@ -181,7 +174,7 @@
 	                  <div class="card-body-icon">
 	                    <i class="fas fa-fw fa-envelope"></i>
 	                  </div>
-	                  <div class="mr-5">Mes Messages ({$nb_messages})</div>
+	                  <div class="mr-5">Mes Messages ({$nb_messages} nouveaux)</div>
 	                </div>
 	                <a class="card-footer text-white clearfix small z-1" href="{cms_action_url action=fe_messages  record_id=$username}">
 	                  <span class="float-left">Détails</span>

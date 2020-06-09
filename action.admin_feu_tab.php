@@ -43,7 +43,7 @@ if($dbresult && $dbresult->RecordCount() >0)
 		{
 			
 			$onerow->last_logged = $themeObject->DisplayImage('icons/system/false.gif', $this->Lang('false'), '', '', 'systemicon');
-			$onerow->push_customer= $this->CreateLink($id, 'push_customer', $returnid, $themeObject->DisplayImage('icons/system/groupassign.gif', $this->Lang('push'), '', '', 'systemicon'), array("genid"=>$row['genid'], "email"=>$row['contact'], "nom"=>$row['nom'], "prenom"=>$row['prenom']));
+			$onerow->push_customer= $this->CreateLink($id, 'push_customer', $returnid, $themeObject->DisplayImage('icons/system/import.gif', $this->Lang('push'), '', '', 'systemicon'), array("genid"=>$row['genid'], "email"=>$row['contact'], "nom"=>$row['nom'], "prenom"=>$row['prenom']));
 		}
 		else
 		{
@@ -56,7 +56,7 @@ if($dbresult && $dbresult->RecordCount() >0)
 			{
 				$onerow->last_logged = $themeObject->DisplayImage('icons/system/false.gif', $this->Lang('false'), '', '', 'systemicon');
 			}
-			$onerow->delete_user_feu = $this->CreateLink($id, 'chercher_adherents_spid', $returnid, $themeObject->DisplayImage('icons/system/delete.gif', $this->Lang('delete'), '', '', 'systemicon'), array("obj"=>"delete_user_feu","genid"=>$row['genid'], "email"=>$row['contact'], "nom"=>$row['nom'], "prenom"=>$row['prenom']));
+			$onerow->delete_user_feu = $this->CreateLink($id, 'chercher_adherents_spid', $returnid, $themeObject->DisplayImage('icons/system/delete.gif', $this->Lang('delete'), '', '', 'systemicon'), array("obj"=>"delete_user_feu","genid"=>$est_present ));
 		}
 		($rowclass == "row1" ? $rowclass= "row2" : $rowclass= "row1");
 		$rowarray[]= $onerow;

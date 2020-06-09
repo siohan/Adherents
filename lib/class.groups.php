@@ -11,17 +11,13 @@ class groups
 ##
 ##
 
-function add_group()
-{
-	
-}
 	
 
 //Tous les détails d'un groupe
 function details_groupe($record_id)
 {
 	$db = cmsms()->GetDb();
-	$query = "SELECT id,nom, description, actif, public FROM ".cms_db_prefix()."module_adherents_groupes WHERE id = ?";
+	$query = "SELECT id,nom, description, actif, public, auto_subscription, admin_valid, tag, tag_subscription, pageid_aftervalid FROM ".cms_db_prefix()."module_adherents_groupes WHERE id = ?";
 	$dbresult = $db->Execute($query, array($record_id));
 	$details_groupe = array();
 	if($dbresult && $dbresult->RecordCount()>0)
@@ -33,6 +29,11 @@ function details_groupe($record_id)
 			$details_groupe['description'] = $row['description'];
 			$details_groupe['actif'] = $row['actif'];
 			$details_groupe['public'] = $row['public'];
+			$details_groupe['auto_subscription'] = $row['auto_subscription'];
+			$details_groupe['admin_valid'] = $row['admin_valid'];
+			$details_groupe['tag'] = $row['tag'];
+			$details_groupe['tag_subscription'] = $row['tag_subscription'];
+			$details_groupe['pageid_aftervalid'] = $row['pageid_aftervalid'];
 		}
 		return $details_groupe;
 	}
@@ -42,7 +43,37 @@ function details_groupe($record_id)
 	}
 	
 }
-
+//ajoute un nouveau groupe
+function add_group($nom, $description, $actif, $public, $auto_subscription, $admin_valid, $pageid_aftervalid)
+{
+	$db = cmsms()->GetDb();
+	$query = "INSERT INTO ".cms_db_prefix()."module_adherents_groupes (nom, description, actif, public, auto_subscription, admin_valid, pageid_aftervalid) VALUES ( ?, ?, ?, ?, ?, ?, ?)";
+	$dbresult = $db->Execute($query, array($nom, $description, $actif, $public, $auto_subscription, $admin_valid, $pageid_aftervalid));
+	if($dbresult)
+	{
+	 	$insertid = $db->Insert_ID();
+		return $insertid;
+	}
+	else
+	{
+		return false;
+	}
+}
+//modifie un groupe existant
+function edit_group($nom, $description, $actif, $public,$auto_subscription, $admin_valid,$pageid_aftervalid, $record_id)
+{
+	$db = cmsms()->GetDb();
+	$query = "UPDATE ".cms_db_prefix()."module_adherents_groupes SET nom = ?, description = ?, actif = ?, public = ?, auto_subscription = ?, admin_valid = ?, pageid_aftervalid = ? WHERE id = ?";
+	$dbresult = $db->Execute($query, array($nom, $description, $actif, $public,$auto_subscription, $admin_valid,$pageid_aftervalid, $record_id));
+	if($dbresult)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
 //supprime un groupe completement
 function delete_group($record_id)
 {
@@ -158,11 +189,17 @@ function delete_user_from_all_groups($genid)
 //supprime l'accès à l'espace privé
 function delete_user_feu($genid)
 {
-	$feu = cms_utils::get_module('FrontEndUsers');
-	//$feu_ops = new FrontEndUsersManipulator;//cms_utils::get_module('FrontEndUsers');
-	//on récupére le id de l'utilisateur
-	$id = $feu->GetUserInfoByProperty('genid',$genid);
-	$supp_user = $feu->DeleteUserFull($id);
+	$feu = cms_utils::get_module('FrontEndUsers');	
+	$supp_user = $feu->DeleteUserFull($genid);
+	if(true == $supp_user)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+	
 }
 //créé une liste de tous les groupes actifs
 function liste_groupes()
@@ -290,6 +327,162 @@ function is_member($genid, $id_group)
 	$query = "SELECT DISTINCT id_group FROM ".cms_db_prefix()."module_adherents_groupes_belongs WHERE genid = ? AND id_group = ?";
 	$dbresult = $db->Execute($query, array($genid, $id_group));
 	if($dbresult && $dbresult->RecordCount()>0)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+//créé un tag pour afficher la liste en Frontend
+function create_tag($record_id)
+{
+	$db = cmsms()->GetDb();
+	$tag = "{Adherents display=\"liste\" record_id=\"$record_id\"}";
+	$query = "UPDATE ".cms_db_prefix()."module_adherents_groupes SET tag = ? WHERE id = ?";
+	$dbresult = $db->Execute($query, array($tag, $record_id));
+	if($dbresult)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+//créé un tag pour l'auto-enregistrement en frontend la liste en Frontend
+function create_tag_auto($record_id)
+{
+	$db = cmsms()->GetDb();
+	$tag = "{Adherents display=\"crea\" record_id=\"$record_id\"}";
+	$query = "UPDATE ".cms_db_prefix()."module_adherents_groupes SET tag_subscription = ? WHERE id = ?";
+	$dbresult = $db->Execute($query, array($tag, $record_id));
+}
+//delete the existing tag
+function delete_tag_auto($record_id)
+{
+	$db = cmsms()->GetDb();
+	$query = "UPDATE ".cms_db_prefix()."module_adherents_groupes SET tag_subscription = '' WHERE id = ?";
+	$dbresult = $db->Execute($query, array($record_id));
+	if($dbresult)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+//delete the existing tag
+function delete_tag($record_id)
+{
+	$db = cmsms()->GetDb();
+	$query = "UPDATE ".cms_db_prefix()."module_adherents_groupes SET tag = '' WHERE id = ?";
+	$dbresult = $db->Execute($query, array($record_id));
+	if($dbresult && $dbresult->RecordCount() >0)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+//check if the list is private or public
+function public_private($record_id)
+{
+	//
+	$db = cmsms()->GetDb();
+	$query = "SELECT public FROM ".cms_db_prefix()."module_adherents_groupes WHERE id = ?";
+	$dbresult = $db->Execute($query, array($record_id));
+	$row = $dbresult->FetchRow();
+	$public = $row['public'];
+	return $public;
+}
+//Active un groupe
+function activate_group($record_id)
+{
+	$db = cmsms()->GetDb();
+	$query = "UPDATE ".cms_db_prefix()."module_adherents_groupes SET actif = 1 WHERE id = ?";
+	$dbresult = $db->Execute($query, array($record_id));
+	if($dbresult && $dbresult->RecordCount() >0)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+//Désactive un groupe
+function desactivate_group($record_id)
+{
+	$db = cmsms()->GetDb();
+	$query = "UPDATE ".cms_db_prefix()."module_adherents_groupes SET actif = 0 , public = 0 , auto_subscription = 0, tag = '' , tag_subscription = '' WHERE id = ?";
+	$dbresult = $db->Execute($query, array($record_id));
+	if($dbresult && $dbresult->RecordCount() >0)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+//rend un groupe public et génére un tag pour l'affichage
+function publish_group($record_id)
+{
+	$db = cmsms()->GetDb();
+	$query = "UPDATE ".cms_db_prefix()."module_adherents_groupes SET  public = 1  WHERE id = ?";
+	$dbresult = $db->Execute($query, array($record_id));
+	if($dbresult)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+//dépublie un groupe 
+function unpublish_group($record_id)
+{
+	$db = cmsms()->GetDb();
+	$query = "UPDATE ".cms_db_prefix()."module_adherents_groupes SET  public = 0, tag = ''  WHERE id = ?";
+	$dbresult = $db->Execute($query, array($record_id));
+	if($dbresult)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+//Permet l'auto-enregistrement dans un groupe 
+function ok_auto($record_id)
+{
+	$db = cmsms()->GetDb();
+	$query = "UPDATE ".cms_db_prefix()."module_adherents_groupes SET  auto_subscription = 1  WHERE id = ?";
+	$dbresult = $db->Execute($query, array($record_id));
+	if($dbresult)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+//Supprime l'auto-enregistrement à un groupe
+
+function ko_auto($record_id)
+{
+	$db = cmsms()->GetDb();
+	$query = "UPDATE ".cms_db_prefix()."module_adherents_groupes SET  auto_subscription = 0  WHERE id = ?";
+	$dbresult = $db->Execute($query, array($record_id));
+	if($dbresult)
 	{
 		return true;
 	}

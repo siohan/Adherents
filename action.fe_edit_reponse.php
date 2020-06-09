@@ -10,9 +10,9 @@ $delete = '<img src="modules/Adherents/images/delete.gif" class="systemicon" alt
 $modif = '<img src="modules/Adherents/images/edit.gif" class="systemicon" alt="Modifier" title="Modifier">';
 $vrai = '<img src="modules/Adherents/images/true.gif" class="systemicon" alt="Vrai" title="Vrai">';
 $faux = '<img src="modules/Adherents/images/false.gif" class="systemicon" alt="Faux" title="Faux">';
-if(isset($params['id_presence']) && $params['id_presence'] !='')
+if(isset($params['record_id']) && $params['record_id'] !='')
 {
-	$id_presence = $params['id_presence'];
+	$id_presence = $params['record_id'];
 }
 if(isset($params['reponse']) && $params['reponse'] !='')
 {

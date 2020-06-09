@@ -53,6 +53,35 @@ $dict->ExecuteSQLArray($sqlarray);
 $sqlarray = $dict->DropTableSQL( cms_db_prefix()."module_adherents_groupes_belongs" );
 $dict->ExecuteSQLArray($sqlarray);
 
+$sqlarray = $dict->DropTableSQL( cms_db_prefix()."module_adherents_roles" );
+$dict->ExecuteSQLArray($sqlarray);
+
+
+$sqlarray = $dict->DropTableSQL( cms_db_prefix()."module_adherents_roles_belongs" );
+$dict->ExecuteSQLArray($sqlarray);
+
+// templates
+$this->DeleteTemplate();
+
+try {
+    $types = CmsLayoutTemplateType::load_all_by_originator($this->GetName());
+    if( is_array($types) && count($types) ) {
+        foreach( $types as $type ) {
+            $templates = $type->get_template_list();
+            if( is_array($templates) && count($templates) ) {
+                foreach( $templates as $template ) {
+                    $template->delete();
+                }
+            }
+            $type->delete();
+        }
+    }
+}
+catch( Exception $e ) {
+    // log it
+    audit('',$this->GetName(),'Uninstall Error: '.$e->GetMessage());
+} 
+
 // remove the permissions
 $this->RemovePermission('Adherents use');
 $this->RemovePermission('Adherents prefs');

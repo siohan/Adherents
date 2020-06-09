@@ -1,3 +1,6 @@
+{if isset($validation)}
+{redirect_page page='mon-compte'}
+{else}
 <!-- DataTables Example -->
 <div class="card mb-3">
 	<div class="card-header">
@@ -5,46 +8,36 @@
               Ajouter un article manquant dans la liste</div>
             <div class="card-body">
               <div class="table-responsive">
-					{$formstart}
-					{$record_id}
-					<div class="pageoverflow">
-					  <p class="pagetext">Catégorie </p>
-					  <p class="pageinput">{$categorie}</p>
+	<p class="alert alert-info"> Les champs marqués d'un astérisque sont obligatoires.</p>
+					{form_start action=fe_add_item}
+					<input type="hidden" name="record_id" value="{$record_id}" />
+					 <div  class="form-group">
+						<label for="categorie">Catégorie : * </label>
+					  	<select class="form-control" name="categorie">{html_options options=$liste_categories selected=$categorie}</select>
 					</div>
-					<div class="pageoverflow">
-					  <p class="pagetext">Libellé:</p>
-					  <p class="pageinput">{$libelle}</p>
+					<div class="form-group">
+					  <label for="libelle">Libellé:*</label>
+					  <input class="form-control" type="text" name="libelle" value="{$libelle}"  placeholder="{$libelle}" />
 					</div>
-					<div class="pageoverflow">
-					  <p class="pagetext">Fournisseur :</p>
-					  <p class="pageinput">{$fournisseur}</p>
+					<div class="form-group">
+					  <label for="">Fournisseur : *</label>
+					  <select class="form-control" name="fournisseur">{html_options options=$liste_fournisseurs selected=$fournisseur}</select>
 					</div>
-					<div class="pageoverflow">
-					  <p class="pagetext">Référence catalogue:</p>
-					  <p class="pageinput">{$reference}</p>
+					<div class="form-group">
+					  <label for="">Référence catalogue:</label>
+					  <input class="form-control" type="text" name="reference" value="{$reference}" />
 					</div>
-					<div class="pageoverflow">
-						<p class="pagetext">Marque :</p>
-						<p class="pageinput">{$marque}</p>
+					<div class="form-group">
+						<label for="">Marque :</label>
+						<input class="form-control" type="text" name="marque" value="{$marque}"/>
 					</div>
-					<div class="pageoverflow">
-						<p class="pagetext">Prix unitaire : (utilisez le point(.) comme séparateur décimal ex : 99.99)</p>
-						<p class="pageinput">{$prix_unitaire}€</p>
-					</div>
-					<div class="pageoverflow">
-						<p class="pagetext">Réduction (en %) :</p>
-						<p class="pageinput">{$reduction}</p>
-					</div>
-					<div class="pageoverflow">
-						<p class="pagetext">Statut de l'article :</p>
-						<p class="pageinput">{$statut_item}</p>
-					</div>
-					<div class="pageoverflow">
-					    <p class="pagetext">&nbsp;</p>
-					    <p class="pageinput">{$submit}{$cancel}</p>
-					  </div>
-					{$formend}
+				
+					    <input class="btn btn-primary"type="submit" name="submit" value="Envoyer" />
+						<input class="btn btn-primary"type="submit" name="cancel" value="Annuler" />
+					  
+					{form_end}
 						</div>
 					</div>
 				</div>
 			</div>
+{/if}

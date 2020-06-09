@@ -1,5 +1,5 @@
-<div class="pageoptions"><p class="pageoptions">{$retour}</p></div>
-<div class="pageoptions"><p class="pageoptions">{$itemcount}&nbsp;{$itemsfound}&nbsp;|&nbsp;{$add_edit_contact}</p></div>
+<div class="pageoptions"><p class="pageoptions"><a href="{cms_action_url action="defaultadmin"}">{admin_icon icon="back.gif"} Retour</a></p></div>
+<div class="pageoptions"><p class="pageoptions">{$itemcount}&nbsp;{$itemsfound}&nbsp;|&nbsp;<a  href="{cms_action_url action="add_edit_contact" genid=$genid}">{admin_icon icon="newobject.gif"} Nouveau contact</a></p></div>
 {if $itemcount > 0}
 	<table border="0" cellspacing="0" cellpadding="0" class="pagetable tablesorter">
 	 <thead>

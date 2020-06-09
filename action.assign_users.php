@@ -1,5 +1,10 @@
 <?php
 if( !isset($gCms) ) exit;
+if(!$this->CheckPermission('Adherents use'))
+{
+	echo $this->ShowErrors($this->Lang('needpermission'));
+	return;
+}
 ####################################################################
 ##                                                                ##
 ####################################################################
@@ -37,7 +42,7 @@ $dbresult = $db->Execute($query);
 	$smarty->assign('formstart',
 			$this->CreateFormStart( $id, 'do_assign_users', $returnid ) );
 	$smarty->assign('record_id',
-			$this->CreateInputText($id,'record_id',$record_id,10,15));	
+			$this->CreateInputHidden($id,'record_id',$record_id,10,15));	
 	if($dbresult && $dbresult->RecordCount()>0)
 	{
 		$gp_ops = new groups;
@@ -58,11 +63,7 @@ $dbresult = $db->Execute($query);
 				$onerow->participe = 0;
 			}
 			
-			$rowarray[]= $onerow;
-			
-			
-						
-			
+			$rowarray[]= $onerow;			
 			
 		}
 			

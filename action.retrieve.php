@@ -2,7 +2,7 @@
 //ce fichier fait des actions de masse, il est appelé depuis l'onglet de récupération des infos sur les joueurs
 if( !isset($gCms) ) exit;
 
-//debug_display($params, 'Parameters');
+debug_display($params, 'Parameters');
 //var_dump($params['sel']);
 $db =& $this->GetDb();
 $feu = cms_utils::get_module('FrontEndUsers');
@@ -57,12 +57,9 @@ switch($params['retrieve'])
 			{
 			    while ($row= $dbretour->FetchRow())
 			      	{
-					$player = $row['player'];
-					
-					//return $player;
-					
+					$player = $row['player'];					
 					$resultats = $service->retrieve_parties_fftt($licence,$player,$cat);
-					$maj_spid = $ping_ops->compte_spid($licence);
+					$maj_spid = $ping_ops->compte_fftt($licence);
 					//var_dump($resultats);
 				}
 

@@ -10,29 +10,14 @@ global $themeObject;
 //debug_display($params, 'Parameters');
 $aujourdhui = date('Y-m-d');
 //$ping = new Ping();
-
-$destinataires = array();
-$groupes = array();
-
-	$query = "SELECT id, nom,  CONCAT_WS('-',nom, description) AS gp_desc  FROM ".cms_db_prefix()."module_adherents_groupes WHERE actif = 1 AND public = 1";
-	$dbresult = $db->Execute($query);
-	if($dbresult && $dbresult->RecordCount()>0)
-	{
-		while($row = $dbresult->FetchRow())
-		{
-			$groupes[$row['gp_desc']] = $row['id'];
-		}
-		
-	}
-		
+	
 
 //var_dump($groupes);
 
 $smarty->assign('formstart',
 		    $this->CreateFormStart( $id, 'fe_do_send_emails', $returnid ) );
 $smarty->assign('endform', $this->CreateFormEnd());
-$smarty->assign('destinataires',
-		$this->CreateInputDropdown($id,'destinataires',$groupes));
+
 $smarty->assign('from', 
 		$this->CreateInputHidden($id, 'from', $username));
 $array_priorities = array("Normale"=>"3","Haute"=>"1","Basse"=>"5");
