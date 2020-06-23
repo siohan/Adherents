@@ -129,6 +129,11 @@ if(isset($_POST['submit']))
 		$this->SetPreference('pann_cotisations', '0');
 		$designation.=" Module Cotisations absent ou non activé !";
 	}
+	
+	//pour les images
+	$this->SetPreference('pann_images', $_POST['pann_images']);
+	
+	
 	$module = \cms_utils::get_module('Commandes');
 	if( is_object( $module ) )
 	{
@@ -225,6 +230,7 @@ else
 	$tpl->assign('pann_paiements', $this->GetPreference('pann_paiements'));	
 	$tpl->assign('pann_compos', $this->GetPreference('pann_compos'));
 	$tpl->assign('pann_cotisations', $this->GetPreference('pann_cotisations'));
+	$tpl->assign('pann_images', $this->GetPreference('pann_images'));
 	
 	
 	//pour le réglage des images

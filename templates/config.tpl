@@ -62,6 +62,10 @@
 		<legend>Activation des éléments du panneau adhérent</legend>
 		<p class="warning">Les modules doivent être installés et activés (voir aide)</p>
 			<div class="pageoverflow">
+				<p class="pagetext">Images ? </p>
+				<select name="pann_images">{cms_yesno selected=$pann_images}</select>
+			</div>
+			<div class="pageoverflow">
 				<p class="pagetext">Factures ? (Pour les cotisations, commandes etc; module Paiements)</p>
 				<select name="pann_paiements">{cms_yesno selected=$pann_paiements}</select>
 			</div>

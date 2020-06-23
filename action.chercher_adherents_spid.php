@@ -139,7 +139,7 @@ switch($obj)
 	case "delete_group" :
 		$del_group = $group_ops->delete_group($record_id);
 		$del_group_belongs = $group_ops->delete_group_belongs($record_id);
-		$this->Redirect($id, 'defaultadmin',$returnid, array("active_tab"=>"group"));
+		$this->Redirect($id, 'defaultadmin',$returnid, array("active_tab"=>"groups"));
 	break;
 	
 	case "activate" :

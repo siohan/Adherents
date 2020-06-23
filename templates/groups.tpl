@@ -14,7 +14,7 @@
 		<th>Public ?</th>
 		<th>Auto-enregistrement ?</th>
 		<th>FEU</th>
-		<th colspan="2">Actions</th>
+		<th colspan="4">Actions</th>
 	</tr>
  </thead>
  <tbody>
@@ -28,8 +28,10 @@
 	<td>{$entry->public}</td>
 	<td>{$entry->auto_subscription}</td>
 	<td>{$entry->feu}</td>
-	<td><a href="{cms_action_url action='add_edit_group' record_id=$entry->id}">{admin_icon icon="edit.gif"}</a>
-	<td><a href="{cms_action_url action='view_group_users' group=$entry->id}">{admin_icon icon="view.gif"}</a>
+	<td><a href="{cms_action_url action='assign_users' record_id=$entry->id}">{admin_icon icon="groupassign.gif"}</a></td>
+	<td><a href="{cms_action_url action='add_edit_group' record_id=$entry->id}">{admin_icon icon="edit.gif"}</a></td>
+	<td><a href="{cms_action_url action='view_group_users' group=$entry->id}">{admin_icon icon="view.gif"}</a></td>
+	<td><a href="{cms_action_url action='chercher_adherents_spid' obj=delete_group record_id=$entry->id}">{admin_icon icon="delete.gif"}</a></td>
   </tr>
 {/foreach}
  </tbody>

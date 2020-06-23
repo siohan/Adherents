@@ -137,7 +137,7 @@ if (!$this->CheckPermission('Adherents use'))
 //on instancie un compteur pour indiquer la propriété last pour les blocs
 $compt = 0;	
 	
-	if($this->GetPreference('images') == 1)
+	if($this->GetPreference('pann_images') == 1)
 	{
 		$compt++;
 		
@@ -323,9 +323,9 @@ $compt = 0;
 	$i = 0;//le compteur
 	$activation = false;//le module non activé par défaut
 	$autorisation = $this->CheckPermission('Paiements use');
+	$message = '';
 	
-	
-	if( is_object( $module ) && $this->GetPreference('pann_factures') == 1)
+	if( is_object( $module ) && $this->GetPreference('pann_paiements') == 1)
 	{
 		$compt++;
 		$tpl = $smarty->CreateTemplate($this->GetTemplateResource('view_user_paiements.tpl'), null, null, $smarty);
@@ -334,23 +334,34 @@ $compt = 0;
 		$rowarray = array();
 		$query = "SELECT ref_action, date_created, tarif, nom FROM ".cms_db_prefix()."module_paiements_produits WHERE licence =  ? AND regle = 0";
 		$dbresult = $db->Execute($query, array($record_id));
-		if($dbresult && $dbresult->RecordCount() >0)
+		if($dbresult)
 		{
-			while($row = $dbresult->FetchRow())
+			if( $dbresult->RecordCount() >0)
 			{
+				while($row = $dbresult->FetchRow())
+				{
 				
-				$onerow = new StdClass;
-				$onerow->ref_action = $row['ref_action'];
-				$onerow->tarif = $row['tarif'];
-				$onerow->nom = $row['nom'];
-				$rowarray[]= $onerow;
+					$onerow = new StdClass;
+					$onerow->ref_action = $row['ref_action'];
+					$onerow->tarif = $row['tarif'];
+					$onerow->nom = $row['nom'];
+					$rowarray[]= $onerow;
+				}
 			}
+			else
+			{
+				$message.=" Pas de paiements à régler...";
+			}
+			
+			$smarty->assign('itemsfound', $this->Lang('resultsfoundtext'));
+			$smarty->assign('itemcount', count($rowarray));
+			$smarty->assign('items', $rowarray);
 		}
-		$smarty->assign('itemsfound', $this->Lang('resultsfoundtext'));
-		$smarty->assign('itemcount', count($rowarray));
-		$smarty->assign('items', $rowarray);
-		
-		
+		else
+		{	
+			$message.="Erreur ds la requête";
+		}		
+		$tpl->assign('error_message', $message);
 		$valeur = $compt/3;
 		if(true == is_int( $valeur))
 		{
@@ -386,21 +397,32 @@ $compt = 0;
 	
 		if(is_array($details_groups) && count($details_groups) > 0 )
 		{
-			$tab = implode(', ',$details_groups);	
-			$query = "SELECT id, nom FROM ".cms_db_prefix()."module_inscriptions_inscriptions WHERE actif = 1 AND date_limite < NOW() AND groupe IN ($tab)";
+			$tab = implode(',',$details_groups);	
+			$query = "SELECT id, nom FROM ".cms_db_prefix()."module_inscriptions_inscriptions WHERE actif = 1 AND date_limite > NOW() AND groupe IN ($tab)";
 			$dbresult = $db->Execute($query);
-			if($dbresult && $dbresult->RecordCount() >0)
+			if($dbresult)
 			{
-				while($row = $dbresult->FetchRow())
+				if($dbresult->RecordCount()>0)
 				{
+					while($row = $dbresult->FetchRow())
+					{
 
-					$onerow = new StdClass;
-					$onerow->nom = $row['nom'];
-					$onerow->participe = $insc_ops->is_inscrit($row['id'], $genid);
-					$onerow->id_inscription = $row['id'];
-					$onerow->genid = $genid;
-					$rowarray[]= $onerow;
+						$onerow = new StdClass;
+						$onerow->nom = $row['nom'];
+						$onerow->participe = $insc_ops->is_inscrit($row['id'], $genid);
+						$onerow->id_inscription = $row['id'];
+						$onerow->genid = $genid;
+						$rowarray[]= $onerow;
+					}
 				}
+				else
+				{
+					$message.=" Pas d'inscriptions disponibles";
+				}
+			}
+			else
+			{
+				$message.=" Erreur ds la requête";
 			}
 			$smarty->assign('itemsfound', $this->Lang('resultsfoundtext'));
 			$smarty->assign('itemcount', count($rowarray));
@@ -408,7 +430,7 @@ $compt = 0;
 		}
 		else
 		{
-			$message = "Le membre ne fait partie d'aucun groupe";
+			$message.= "Le membre ne fait partie d'aucun groupe";
 		}
 		
 		$tpl->assign('error_message', $message);
@@ -447,28 +469,52 @@ $compt = 0;
 		if(is_array($details_groups) && count($details_groups) > 0 )
 		{
 			$tab = implode(', ',$details_groups);	
-			$query = "SELECT id, nom FROM ".cms_db_prefix()."module_presence_presence WHERE actif = 1 AND date_limite < NOW() AND groupe IN ($tab)";
+			$query = "SELECT id, nom FROM ".cms_db_prefix()."module_presence_presence WHERE actif = 1 AND date_limite > NOW() AND groupe IN ($tab)";
 			$dbresult = $db->Execute($query);
-			if($dbresult && $dbresult->RecordCount() >0)
+			if($dbresult)
 			{
-				while($row = $dbresult->FetchRow())
+				if($dbresult->RecordCount() >0)
 				{
+					while($row = $dbresult->FetchRow())
+					{
 
-					$onerow = new StdClass;
-					$onerow->nom = $row['nom'];
-					$onerow->participe = $pres_ops->has_expressed($row['id'], $genid);
-					$onerow->id_presence = $row['id'];
-					$onerow->genid = $genid;
-					$rowarray[]= $onerow;
+						$onerow = new StdClass;
+						$onerow->nom = $row['nom'];
+						$participe = $pres_ops->has_expressed($row['id'], $genid);
+						if(true == $participe)
+						{
+							$user_choice = $pres_ops->user_choice($row['id'], $genid);
+						}
+						else
+						{
+							//pas de choix effectué ! On affiche une croix...
+							$user_choice = 3;
+						}
+						//var_dump($user_choice);
+						$onerow->user_choice = $user_choice;
+						$onerow->id_presence = $row['id'];
+						$onerow->genid = $genid;
+						$rowarray[]= $onerow;
+					}
+				
+					$smarty->assign('itemsfound', $this->Lang('resultsfoundtext'));
+					$smarty->assign('itemcount', count($rowarray));
+					$smarty->assign('items', $rowarray);
 				}
+				else
+				{
+					$message.=" Pas de présences disponibles";
+				}
+				
 			}
-			$smarty->assign('itemsfound', $this->Lang('resultsfoundtext'));
-			$smarty->assign('itemcount', count($rowarray));
-			$smarty->assign('items', $rowarray);
+			else
+			{
+				$message.="Erreur ds la requête";
+			}
 		}
 		else
 		{
-			$message = "Le membre ne fait partie d'aucun groupe";
+			$message.= "Le membre ne fait partie d'aucun groupe";
 		}
 		
 			

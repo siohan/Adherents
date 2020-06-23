@@ -306,7 +306,7 @@ function member_of_groups($genid)
 			$groups = array();
 			while($row = $dbresult->FetchRow())
 			{
-				$groups[] = $row['id_group'];
+				$groups[] = (int) $row['id_group'];
 			}
 			return $groups;
 		}
