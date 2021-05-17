@@ -8,9 +8,11 @@ if (!$this->CheckPermission('Adherents use'))
 	$this->SetMessage("$designation");
 	$this->RedirectToAdminTab('adherents');
 }
-$db =& $this->GetDb();
+$db = cmsms()->GetDb();
 $asso_ops = new Asso_adherents;
+$adh_feu = new AdherentsFeu;
 $gp_ops = new groups;
+$feu = cms_utils::get_module('FrontEndUsers');
 global $themeObject;
 if( !empty($_POST) ) {
         if( isset($_POST['cancel']) ) {
@@ -22,6 +24,12 @@ if( !empty($_POST) ) {
 	if(! $genid)
 	{
 		$genid = $this->random_int(9);
+	}
+	else
+	{
+		//on récupère le feu_id
+		$details = $asso_ops->details_adherent_by_genid($genid);
+		$feu_id = details['feu_id'];
 	}
 	$edit = $_POST['edit'];
 	$actif = cms_to_bool($_POST['actif']);
@@ -38,11 +46,11 @@ if( !empty($_POST) ) {
 	$externe = 0;
 	$aujourdhui = date('Y-m-d');
 	
-	$service = new Asso_adherents;
+	
 	
 	if($edit == 1)
 	{
-		$update_adherent = $service->update_adherent($actif, $nom, $prenom, $sexe, $anniversaire, $licence,$adresse, $code_postal, $ville, $pays,$externe, $aujourdhui, $genid);
+		$update_adherent = $asso_ops->update_adherent($actif, $nom, $prenom, $sexe, $anniversaire, $licence,$adresse, $code_postal, $ville, $pays,$externe, $aujourdhui, $genid);
 		$message.="Adhérent modifié. ";
 		
 		//quelle est la valeur de la variable actif
@@ -53,44 +61,40 @@ if( !empty($_POST) ) {
 			//on supprime l'accès à FEU
 			//a-t-il un compte existant ?
 			$feu = cms_utils::get_module('FrontEndUsers');
-			//$feu_ops = new FrontEndUsersManipulator;//cms_utils::get_module('FrontEndUsers');
 			//on récupére le id de l'utilisateur
-			$uid = $feu->GetUserInfoByProperty('genid',$genid);
-			var_dump($uid);
-			
-			$del_feu = $gp_ops->delete_user_feu($uid[1]['id']);
-			if(true == $del_feu)
-			{
-				//l'utilisateur est bien supprimé de FEU
-				$message.= "Membre supprimé de FEU.";				
-			}
-			else
-			{
-				//pb pour supprimer l'utilisateur
-				$message.= "Attention, le membre tjs présent dans FEU !";
-			}
-			
-			$del_user = $gp_ops->delete_user_from_all_groups($genid);
-			if(true == $del_user)
-			{
-				$message.=" Membre supprimé de tous les groupes du module Adherents";
-			}
+			$feu->SetUserDisabled($feu_id,$state=1);
 			
 		}
 		
 	}
 	else
 	{
-		$add_adherent = $service->add_adherent($genid,$actif, $nom, $prenom, $sexe, $anniversaire, $licence,$adresse, $code_postal, $ville, $pays,$externe);
+		$add_adherent = $asso_ops->add_adherent($genid,$actif, $nom, $prenom, $sexe, $anniversaire, $licence,$adresse, $code_postal, $ville, $pays,$externe);
 		if(true === $add_adherent)
 		{
 			$message.=" Adhérent inséré. ";
-			//on insère automatiquement le nouveau ds le gp par défaut 
-			$id_gp = $gp_ops->assign_to_adherent($genid);
-			if(false !== $id_gp)
-			{
-				$message.=" Inscrit dans le groupe adhérent.";
-			}
+			//on crée ce nouvel utilisateur ds FEU
+			$day = date('j');
+			$month = date('n');
+			$year = date('Y')+5;
+			$expires = mktime(0,0,0,$month, $day,$year);
+			//on créé un mot de passe
+			$mot1 = $this->random_string(7);
+			$motdepasse = 'A'.$mot1.'1';
+			
+			$nom = mb_convert_encoding($nom, "UTF-8", "Windows-1252");
+			$nom = stripslashes($nom);
+			$nom = str_replace("&#39;", "", $nom);
+			$nom = str_replace(" ", "",$nom);
+	
+			
+			$prenom = str_replace("&#39", "",$prenom);
+			$prenom = $asso_ops->clean_name($prenom);
+			$nom_complet = strtolower($prenom. ''.$nom);
+			
+			$add_user = $feu->AddUser($nom_complet, $motdepasse,$expires);
+			$uid = $add_user[1];
+			$adh_feu->feu_id($genid, $uid);
 		}
 		
 	}

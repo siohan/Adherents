@@ -1,6 +1,6 @@
 <div class="dashboard-box{if true==$last} last{/if}">
 	<nav class="dashboard-inner cf">
-		<h3 class="dashboard-icon groups"><i class="fa fa-camera"></i> Photo</h3>
+		<h3 class="dashboard-icon groups">Photo</h3>
 	{if $extension !=''}
 
 	{$photo}

@@ -8,7 +8,7 @@ if (!$this->CheckPermission('Adherents use'))
 }
 //debug_display($_POST, 'parameters');
 $cont_ops = new contact;
-$db =& $this->GetDb();
+$db = cmsms()->GetDb();
 global $themeObject;
 if(!empty($_POST))
 {
@@ -61,6 +61,53 @@ if(!empty($_POST))
 		else
 		{
 			$add = $cont_ops->add_contact($genid, $type_contact,$contact,$description);
+			//ici on regarde s'il s'agit de l'ajout d'une nouvelle adresse email
+			if($type_contact == 1)
+			{
+				//on va récupérer les groupes auxquels l'utilisateur appartient
+				$gp_ops = new groups;
+				$membership = $gp_ops->member_of_groups($genid);
+				
+				//on regarde déjà si l'utilisateur est inscrit dans le module feu
+				$feu = \cms_utils::get_module('FrontEndUsers');
+				$member_feu = $feu->GetUserInfoByProperty($genid); //on récupère son id ds FEU
+				$inscrit = 0;//par défaut on dit qu'il n'est pas inscrit ds le module FEU
+				if(is_int($member_feu))
+				{
+					$inscrit = 1;//l'utilisateur a bien un numéo ds FEU
+				}
+				
+				//on va désormais boucler sur les groupes
+				foreach($membership as $value)
+				{
+					//on va d'abord récupérer le nom de chq groupe depuis le module adherents
+					$details_gp = $gp_ops->details_groupe($value);
+					$nom_gp = $details_gp['nom']; //voilà le nom du group ds Adherents
+					//on regarde donc s'il existe dans le module FEU
+					
+					$feu_gp = $feu->GetGroupId($nom_gp);
+					//deux cas : si c'est un int le groupe existe sinon il faut le créer
+					if(is_int($feu_gp))
+					{
+						//le groupe existe
+						//l'utilisateur est-il ds FEU ? $inscrit
+						if($inscrit == 0)
+						{
+							//il faut inscrire l'utilisateur puis l'assigner à ce groupe ensuite.
+						} 
+						else
+						{
+							//l'utilisateur est ds FEU, on l'assigne à ce groupe
+							$feu->AssignUserToGroup($member_feu, $feu_gp);
+						}
+					}
+					else
+					{
+						//le groupe n'existe pas, il faut le créer. Puis insérer l'utilisateur
+						
+					}
+				}
+			}
 		}
 	}
 	//on redirige en fin de script

@@ -3,7 +3,8 @@ if (!isset($gCms)) exit;
 //debug_display($params, 'Parameters');
 $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
-$username = $feu->GetUserProperty('genid');
+$adh_feu = new AdherentsFeu;
+$username =$adh_feu->get_genid($userid);
 
 if(!empty($_POST))
 {
@@ -12,7 +13,7 @@ if(!empty($_POST))
 		//redir
 		//$this->Redirect($id, "view_contacts", $returnid, array("genid"=>$genid));
 	}
-	debug_display($_POST, 'Parameters');
+	//debug_display($_POST, 'Parameters');
 	$smarty->assign('validation', 'true');
 	
 	$error = 0;

@@ -31,6 +31,32 @@ class contact
 		
 		
 	}
+	
+	
+	//récupère les détails d'un contact à partir de son genid
+	function details_contact_by_genid($record_id)
+	{
+		global $gCms;
+		$db = cmsms()->GetDb();
+		$query = "SELECT id, genid, type_contact, contact, description FROM ".cms_db_prefix()."module_adherents_contacts WHERE genid = ?";
+		$dbresult = $db->Execute($query, array($record_id));
+		if($dbresult && $dbresult->RecordCount() >0)
+		{
+			$details = array();
+			while($row = $dbresult->fetchRow())
+			{
+				$details['id'] = $row['id'];
+				$details['genid'] = $row['genid'];
+				$details['type_contact'] = $row['type_contact'];
+				$details['contact'] = $row['contact'];
+				$details['description'] = $row['description'];
+			}
+			return $details;
+		}
+		
+		
+	}
+	
 	function delete_contact($record_id)
 	{
 		global $gCms;

@@ -8,7 +8,7 @@ if(!$this->CheckPermission('Adherents use'))
 	return;
 }
 //debug_display($_POST, 'Parameters');
-$db =& $this->GetDb();
+$db = cmsms()->GetDb();
 global $themeObject;
 $gp_ops = new groups;
 $adh_feu = new AdherentsFeu;
@@ -24,11 +24,13 @@ if(isset($_POST['record_id']) && $_POST['record_id'] >0)
 include 'include/action.navigation.php';
 $parms = array();
 $aujourdhui = date('Y-m-d');
-$any = array("0"=>"Tous");
+
 $liste_groupes = $gp_ops->liste_groupes_dropdown();
-$liste_groupes = array_merge($any, $liste_groupes);
-//var_dump($liste_groupes);
+$liste_groupes += [ "0" => "Tous" ];
+
+
 $smarty->assign('liste_groupes', $liste_groupes);
+
 $smarty->assign('group', $group);
 //$ping = new Ping();
 $act = 1;//par defaut on affiche les actifs (= 1 )

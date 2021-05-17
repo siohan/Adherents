@@ -13,7 +13,10 @@ if( isset($params['cancel']) )
     	$this->RedirectToAdminTab('adherents');
     	return;
 }
-$db =& $this->GetDb();
+$db =cmsms()->GetDb();
+$feu = \cms_utils::get_module('FrontEndUsers');
+$gp_ops = new groups;
+$adh_ops = new AdherentsFeu;
 //debug_display($params, 'Parameters');
 if(!empty($_POST))
 {
@@ -27,8 +30,11 @@ if(!empty($_POST))
 	$edit = 0;
 	if (isset($_POST['record_id']) && $_POST['record_id'] !='')
 	{
-		$record_id = $_POST['record_id'];
+		$record_id = $_POST['record_id'];//c'est le numéro du group dans le module Adherents
 		$edit = 1;
+		$details = $gp_ops->details_groupe($record_id); //on récupère les details du groupe d'abord
+		$uid = $details['feu_gid']; 
+		
 	}
 	if(isset($_POST['nom']) && $_POST['nom'] != '')
 	{
@@ -71,10 +77,11 @@ if(!empty($_POST))
 	
 	if($error < 1)
 	{
-		$gp_ops = new groups;
+		
 		if($edit == 0)
 		{
 			$add_gp = $gp_ops->add_group($nom, $description, $actif, $public, $auto_subscription, $admin_valid,$pageid_aftervalid);
+			$id_group = $db->Insert_ID();//le id depuis la table adherents_groupes
 			if(true == is_int($add_gp) && $public == 1)
 			{
 				$gp_ops->create_tag($add_gp);
@@ -82,6 +89,24 @@ if(!empty($_POST))
 			if(true ==is_int($add_gp) && $auto_subscription == 1)
 			{
 				$gp_ops->create_tag_auto($add_gp);
+			}
+			if(true == is_int($add_gp))
+			{
+				//on crée aussi le groupe dans FEU
+				
+				$add_gp = $feu->AddGroup($nom, $description);
+				if(true ==$add_gp[0])
+				{
+					//on met le num de ce nouveau groupe ds la table adherents_groupes
+					$adh_ops->feu_gid($id_group,$add_gp[1]);
+					$message.= " Groupe ajouté";
+					//il faut rattacher les propriétés FEU par défaut
+					$adh_ops->AddPropertyRelations($add_gp[1]);
+				}
+				else
+				{
+					$message.= $add_gp[1];
+				}
 			}
 			
 		}
@@ -100,6 +125,8 @@ if(!empty($_POST))
 			{
 				$gp_ops->create_tag_auto($record_id);
 			}
+			//on modifie aussi le group dans FEU
+			$maj_gp = $feu->SetGroup($uid,$nom,$description);
 			
 		}
 	}

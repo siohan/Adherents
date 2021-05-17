@@ -83,4 +83,6 @@ href=\"http://www.gnu.org/licenses/licenses.html#GPL\" target=\"_blank\">consult
 la licence GNU GPL</a>.</p>
 ';
 $lang['type_liste_adherents'] = "Gabarit pour liste des membres";
+$lang['type_Coordonnees'] = 'Coordonnées';
+$lang['type_Adherents'] = 'Adhérents';
 ?>

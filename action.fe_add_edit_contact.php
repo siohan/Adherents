@@ -99,16 +99,9 @@ else
 {
 	//debug_display($params, 'Parameters');
 	require_once(dirname(__FILE__).'/include/fe_menu.php');
-	if(isset($params['genid']) && $params['genid'] != '')
-	{
-		$genid = $params['genid'];
-	}
-	else
-	{
-		//on renvoie à une erreur
-	}
+	
 
-	$liste_types_contact = array("Tél"=>0,"Mail"=>1, "Tél portable"=>2);
+	$liste_types_contact = array("0"=>"Tél","1"=>"Mail","2"=>"Tél portable");
 	//valeurs par défaut//Default values
 	$edit = 0;
 	$record_id = 0;
@@ -116,7 +109,7 @@ else
 	$contact = "";
 	$description = "";
 
-	if(isset($params['record_id']) && $params['record_id'] != '')
+	if(isset($params['record_id']) && $params['record_id'] != '')//c'est le id de la table contacts !
 	{
 		$record_id = $params['record_id'];
 		$cont_ops = new contact;
@@ -140,7 +133,7 @@ else
 	
 }
 $tpl = $smarty->CreateTemplate($this->GetTemplateResource('fe_add_edit_contact.tpl', null, null, $smarty));
-$tpl->assign('genid', $genid);
+$tpl->assign('genid', $username);
 $tpl->assign('record_id', $record_id);
 $tpl->assign('liste_types_contact', $liste_types_contact);
 $tpl->assign('type_contact', $type_contact);

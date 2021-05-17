@@ -51,7 +51,8 @@ $flds = "
 	pays C(255),
 	role C(255),
 	externe I(1) DEFAULT 0,
-	image C(4)";
+	image C(4),
+	feu_id I(11)";
 	$sqlarray = $dict->CreateTableSQL( cms_db_prefix()."module_adherents_adherents", $flds, $taboptarray);
 	$dict->ExecuteSQLArray($sqlarray);			
 //
@@ -86,7 +87,8 @@ $flds = "
 	admin_valid I(1) DEFAULT 1,
 	tag C(255),
 	tag_subscription C(255), 
-	pageid_aftervalid C(255)";
+	pageid_aftervalid C(255),
+	feu_gid I(11)";
 	$sqlarray = $dict->CreateTableSQL( cms_db_prefix()."module_adherents_groupes", $flds, $taboptarray);
 	$dict->ExecuteSQLArray($sqlarray);			
 //
@@ -123,7 +125,31 @@ $flds = "
 // mysql-specific, but ignored by other database
 $taboptarray = array( 'mysql' => 'ENGINE=MyISAM' );
 */
-$dict = NewDataDictionary( $db );
+//on ajoute les propriétés par défaut des groupes du module FEU
+$feu = \cms_utils::get_module('FrontEndUsers');
+
+$name = "email";
+$prompt = "Ton email";
+$type = 2;//0 = text; 1 = checkbox; 2 = email;3 = textarea; 4,5 = count(options)?;6 = image;7= radiobuttons; 8= date
+$length = 80;
+$maxlength = 255;		
+$add_prop1 = $feu->AddPropertyDefn($name, $prompt, $type, $length,$maxlength,$attribs = '', $force_unique = false, $encrypt = 0 );
+
+//On fait la même chose pour la deuxième propriété 
+$name = "nom";
+$prompt = "Ton nom";
+$type = 0;
+$length = 80;
+$maxlength = 255;		
+$add_prop2 = $feu->AddPropertyDefn($name, $prompt, $type, $length,$maxlength,$attribs = '', $force_unique = false, $encrypt = 0 );
+
+// On fait la même chose pour la troisième propriété 
+$name = "genid";
+$prompt = "Ton ID";
+$type = 0;
+$length = 10;
+$maxlength = 15;		
+$add_prop3 = $feu->AddPropertyDefn($name, $prompt, $type, $length,$maxlength,$attribs = '', $force_unique = false, $encrypt = 0 );
 
 		
 //			

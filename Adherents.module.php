@@ -2,7 +2,7 @@
 
 #-------------------------------------------------------------------------
 # Module : Adherents - 
-# Version : 0.4, Sc
+# Version : 0.5, Sc
 # Auteur : AssoSimple
 #-------------------------------------------------------------------------
 /**
@@ -19,7 +19,7 @@ class Adherents extends CMSModule
   
   function GetName() { return 'Adherents'; }   
   function GetFriendlyName() { return $this->Lang('friendlyname'); }   
-  function GetVersion() { return '0.4'; }  
+  function GetVersion() { return '0.5'; }  
   function GetHelp() { return $this->Lang('help'); }   
   function GetAuthor() { return 'AssoSimple'; } 
   function GetAuthorEmail() { return 'contact@asso-simple.fr'; }

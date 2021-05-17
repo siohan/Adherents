@@ -22,18 +22,9 @@ if(isset($params['record_id']) && $params['record_id'] !='')
 	$user_email = $cont->email_address($params['record_id']);
 	
 	$details = $asso_ops->details_adherent_by_genid($params['record_id']);
+	$feu_id = $details['feu_id'];
 	$nom = $details['nom'];
-	$nom = mb_convert_encoding($nom, "UTF-8", "Windows-1252");
-	$nom = stripslashes($nom);
-	$nom = str_replace("&#39;", "", $nom);
-	$nom = str_replace(" ", "",$nom);
-	
-	$prenom = $details['prenom'];
-	$prenom = str_replace("&#39", "",$prenom);
-	$prenom = $asso_ops->clean_name($prenom);
-
-	$nom_complet = strtolower($prenom. ''.$nom);
-	
+	$prenom = $details['prenom'];	
 }
 else
 {
@@ -46,34 +37,15 @@ else
 if($error<1)
 {
 
-	$day = date('j');
-	$month = date('n');
-	$year = date('Y')+5;
-	$expires = mktime(0,0,0,$month, $day,$year);
-	//on créé un mot de passe
-	$mot1 = $this->random_string(7);
-	$motdepasse = 'A'.$mot1.'1';
-
-	//qqs variables pour le mail
-	$smarty->assign('prenom_joueur', $prenom);
-	$smarty->assign('nom_joueur' , $nom);
-	$smarty->assign('nom_complet', $nom_complet);
-	//$motdepasse = 'UxzqsUIM1';
-	$smarty->assign('motdepasse', $motdepasse);
 	
-	
-	$add_user = $feu->AddUser($nom_complet, $motdepasse,$expires);
-	
-	if(true == $add_user)
-	{
-		//on récupère le userid ($uid)
-		$uid = $feu->GetUserId($nom_complet);
-		//on force le changement de mot de passe ?
-		$uid = (int) $uid;
-		$feu->SetUserPropertyFull('email',$user_email, $uid);
-		$feu->SetUserPropertyFull('nom', $nom_complet,$uid);
-		$feu->SetUserPropertyFull('genid',$params['record_id'], $uid);
-
+		//on récupère le nom
+		$nom_complet = $feu->GetUserName($feu_id);
+		
+		$mot1 = $this->random_string(7);
+		$motdepasse = 'A'.$mot1.'1';
+		//on modifie le mot de passe originel ds FEU
+		$new_password = $feu->SetUserPassword($feu_id, $motdepasse);
+		var_dump($new_password);
 		/* On essaie d'envoyer un message à l'utilisateur pour lui dire qu'il est enregistré */	
 
 		$admin_email = $this->GetPreference('admin_email'); 
@@ -100,15 +72,15 @@ if($error<1)
 		$cmsmailer->SetSubject($subject);
 
 	        if( !$cmsmailer->Send() ) 
-		{			
-	            	return false;
-			//$mess_ops->not_sent_emails($message_id, $recipients);
+			{			
+	            return false;
+				
 	        }
-	}
-	else
-	{
-		$designation.= "Une erreur est apparue lors de la création du compte";
-	}
+	        else
+	        {
+	        	$designation.= "Un email a été envoyé !";
+	        }
+	
 	
 	$this->SetMessage($designation);
 	

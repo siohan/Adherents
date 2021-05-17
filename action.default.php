@@ -11,7 +11,7 @@ if(isset($params['display']) && $params['display'] =='liste') //pour afficher de
 	//echo $display;
 	$this->Redirect($id, 'adherents', $returnid, array("record_id"=>$params['record_id']));
 }
-elseif($params['display'] == 'crea')
+elseif(isset($params['display']) && $params['display'] == 'crea')
 {
 	//ajout d'un nouvel adhérent depuis le frontend
 	//on redirige
@@ -26,13 +26,13 @@ elseif($params['display'] == 'crea')
 	}
 	
 }
-elseif($params['display'] == 'activate')
+elseif(isset($params['display']) && $params['display'] == 'activate')
 {
 	$this->Redirect($id, 'feu_activate', $returnid, array("record_id"=>$params['record_id'], "id_inscription"=>$params['id_inscription'], "id_group"=>$params['id_group']));
 }
 elseif((isset($params['display']) && $params['display'] != 'liste') || !isset($params['display']))
 {
-	$display = $params['display'];
+	//$display = $params['display'];
 	$feu = cms_utils::get_module('FrontEndUsers');
 	$userid = $feu->LoggedInId();
 	if($userid =='' || true == is_null($userid))
@@ -42,8 +42,8 @@ elseif((isset($params['display']) && $params['display'] != 'liste') || !isset($p
 	else
 	{
 		$properties = $feu->GetUserProperties($userid);
-	//	$email = $feu->LoggedInEmail();
-		$username = $feu->GetUserProperty('genid');//($userid);
+		$adh_feu = new AdherentsFeu;
+		$username = $adh_feu->get_genid($userid);
 	}
 //	var_dump($userid);
 

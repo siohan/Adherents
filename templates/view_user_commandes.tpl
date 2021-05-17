@@ -15,7 +15,7 @@
 								<p><a href="{cms_action_url module=Commandes action=view_client_orders record_id=$genid}">Voir tous les articles</a></p>
 							{/if}
 								
-							{else}<p class="red">Vous n'êtes pas autorisé à voir ce contenu...</p>{/if}
-					{else}<p class="red">Le module Commandes n'est pas activé !</p>{/if}
+							{else}<p><strong>Vous n'êtes pas autorisé à voir ce contenu...</strong></p>{/if}
+					{else}<p><strong>Le module Commandes n'est pas activé !</strong></p>{/if}
 		</nav>
 </div>

@@ -14,8 +14,7 @@
 											<input type="submit" name="submit" value="Marquer comme totalement réglé">
 								 {form_end}
 								</p>	
-							{elseif $itemcount == 0}<p class="green">{$error_message}</p>
-							{else}<p class="red">{$error_message}</p>{/if}
+							{/if}
 								
 							{else}<p class="information"><strong>Vous n'êtes pas autorisé à voir ce contenu...</strong></p>{/if}
 					{else}

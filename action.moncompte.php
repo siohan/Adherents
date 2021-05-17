@@ -2,8 +2,11 @@
 if(!isset($gCms) ) exit;
 $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
-$username = $feu->GetUserProperty('genid');
-//$username = $feu->GetUserName($userid);
+//$username = $feu->GetUserProperty('genid');
+$adh_feu = new AdherentsFeu;
+$username =$adh_feu->get_genid($userid);
+var_dump($username);
+//$username = (int) $params['genid'];//c'est le genid du module adherents
 
 
 //um menu ?
@@ -21,7 +24,7 @@ if( is_object( $ping ))
 	//mon spid
 	//un lien pour récupérer mes parties spid ? Go !
 
-	$db =& $this->GetDb();
+	$db = cmsms()->GetDb();
 	//on fait les requetes pour extraire les infos dont on a besoin dans la page d'accueil de l'espace privé
 	//un lien de retour à l'accueil du compte
 	$smarty->assign('Retour',

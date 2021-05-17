@@ -48,7 +48,7 @@ if(FALSE !== $groupes)
 			$onerow->description = $row['description'];
 			$onerow->date_debut =  $row['date_debut'];
 			$inscrit = $insc_ops->is_inscrit($row['id'], $username);
-			var_dump($inscrit);
+			//var_dump($inscrit);
 			
 			$onerow->is_inscrit = $inscrit;
 

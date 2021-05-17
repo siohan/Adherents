@@ -39,7 +39,7 @@ $dbresult= $db->Execute($query);
 				
 				//$onerow->nom = $row['nom'];
 				$onerow->description = $row['description'];
-				$onerow->nb_users = $this->CreateLink($id, 'view_group_users',$returnid,'Voir les '.$nb.' utilisateurs', array("group"=>$row['id']));
+				$onerow->nb_users = $nb;
 				if($actif == 1)
 				{
 					$onerow->actif = $this->CreateLink($id, 'chercher_adherents_spid', $returnid,$themeObject->DisplayImage('icons/system/true.gif', $this->Lang('true'), '', '', 'systemicon'), array("obj"=>"desactivate_group", "record_id"=>$row['id']));

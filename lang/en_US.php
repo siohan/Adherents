@@ -25,4 +25,6 @@ $lang['help'] = '<h3>Que fait ce module ?</h3>
 <h3>Copyright et Licence</h3>
 <p>Copyright &copy; 2014, Claude Siohan <a href="mailto:claude@agi-webconseil.fr">claude@agi-webconseil.fr</a>. Tous droits réservés.</p>
 ';
+$lang['type_Coordonnees'] = 'Coordonnées';
+$lang['type_Adherents'] = 'Members';
 ?>

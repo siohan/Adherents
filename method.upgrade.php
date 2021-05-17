@@ -409,6 +409,132 @@ switch($current_version)
 		$this->SetPreference('pageid_subscription', '');
 	}
 	
+	case "0.4" :
+	case "0.4.0.1" :
+	{
+		
+		$gp_ops = new groups;
+		$adh_ops = new AdherentsFeu;
+		$asso_ops = new Asso_adherents;
+		
+		//on crée un nouveau champ ds la table adherents_groupes
+		//: feu_gid QUI VA STOCKER LE NUMÉRO DU GROUPE DE FEU
+		$dict = NewDataDictionary( $db );
+		$flds = "feu_gid I(11) ";
+		$sqlarray = $dict->AddColumnSQL( cms_db_prefix()."module_adherents_groupes", $flds);
+		$dict->ExecuteSQLArray($sqlarray);
+		
+		$query = "SELECT id, nom, description FROM ".cms_db_prefix()."module_adherents_groupes";
+		$dbresult = $db->Execute($query);
+		if($dbresult && $dbresult->RecordCount() >0)
+		{
+			$feu = \cms_utils::get_module('FrontEndUsers');
+			while($row = $dbresult->FetchRow())
+			{
+				$group_exists = $feu->GetGroupId($row['nom']);//int
+
+				if(FALSE === $group_exists || true == is_null($group_exists)) //le groupe n'existe pas ds FEU
+				{
+					$create_gp = $feu->AddGroup($row['nom'], $row['description']);//returne true et le int ou false et mess erreur
+					var_dump($create_gp);
+					if(true == $create_gp[0])
+					{
+						$maj = $adh_ops->feu_gid($row['id'],$create_gp[1]);
+						//il faut aussi ajouter les propriétés par défaut à ce groupe
+						$adh_ops->AddPropertyRelations($create_gp[1]);
+					}
+				}
+				else
+				{
+					//on met le groupid de FEU ds la base adherents
+					$adh_ops->feu_gid($row['id'],$group_exists);
+				}
+			}
+		}
+		
+		//on crée un nouveau champ  qui va stocker l'uid de FEU ds Adherents_adherents
+		/*
+		$dict = NewDataDictionary( $db );
+		$flds = "feu_id I(11) ";
+		$sqlarray = $dict->AddColumnSQL( cms_db_prefix()."module_adherents_adherents", $flds);
+		$dict->ExecuteSQLArray($sqlarray);
+		*/
+		//deuxième requete, on "verse" les utilisateurs vers FEU
+		$query = "SELECT genid, nom, prenom FROM ".cms_db_prefix()."module_adherents_adherents";
+		$dbresult = $db->Execute($query);
+		if($dbresult && $dbresult->RecordCount()>0)
+		{
+			while($row = $dbresult->FetchRow())
+			{
+				//on prend le genid pour savoir si l'utilisateur est déjà inscrit ds feu
+				//ou le nom complet
+				
+				$nom = $row['nom'];
+				$nom = mb_convert_encoding($nom, "UTF-8", "Windows-1252");
+				$nom = stripslashes($nom);
+				$nom = str_replace("&#39;", "", $nom);
+				$nom = str_replace(" ", "",$nom);
+	
+				$prenom = $row['prenom'];
+				$prenom = str_replace("&#39", "",$prenom);
+				$prenom = $asso_ops->clean_name($prenom);
+				$nom_complet = strtolower($prenom. ''.$nom);
+				
+				$user = $feu->GetUserID($nom_complet);
+				if(!is_int($user)) //l'utilisateur n'est pas ds FEU
+				{
+					
+					$day = date('j');
+					$month = date('n');
+					$year = date('Y')+5;
+					$expires = mktime(0,0,0,$month, $day,$year);
+					
+					$mot1 = $this->random_string(7);
+					$motdepasse = 'A'.$mot1.'1';
+					
+					$add_user = $feu->AddUser($nom_complet, $motdepasse,$expires);
+					$uid = $add_user[1];
+					$adh_ops->feu_id($row['genid'], $uid);
+				}
+				else
+				{
+					//l'utilisateur est dans FEU on ajoute son feu_id
+					$adh_ops->feu_id($row['genid'], $user);
+				}
+			}
+		}
+		//troisème chose : il faut ajouter les appartenances de chaque utilisateur	
+		
+		$query = "SELECT genid, nom, prenom FROM ".cms_db_prefix()."module_adherents_adherents WHERE actif = 1";
+		$dbresult = $db->Execute($query);
+		if($dbresult && $dbresult->RecordCount()>0)
+		{
+			while($row = $dbresult->FetchRow())
+			{
+				$user_groups = $gp_ops->member_of_groups($row['genid']);//false ou array avec int
+	
+				if(false !== $user_groups)
+				{
+					$feu_user = $adh_ops->GetUserInfoByProperty($row['genid']);
+					
+					if(false != $feu_user)
+					{
+					
+						//on boucle sur la variable $user_groups
+						foreach( $user_groups AS $value)
+						{
+							//il faut chercher le nom des groupes ds le module adherents
+							$details = $gp_ops->details_groupe($value);
+							$nom_gp = $details['nom'];
+							$assign = $feu->AssignUserToGroup( $feu_user, $value );
+						}
+					}
+				}
+			}
+		}	
+	}
+	
+	
 
 }
 // put mention into the admin log

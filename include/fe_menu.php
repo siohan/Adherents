@@ -5,7 +5,8 @@ if(isset($params['record_id']) && $params['record_id'] != '')
 	$username = $params['record_id'];
 }
 */
-
+$adh_feu = new AdherentsFeu;
+$username =$adh_feu->get_genid($userid);
 //debug_display($params, 'Parameters');
 if($this->GetPreference('feu_commandes') == 1)
 {

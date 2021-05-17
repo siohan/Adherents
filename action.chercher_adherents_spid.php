@@ -8,10 +8,11 @@ if(!$this->CheckPermission('Adherents use'))
 	return;
 }
 //debug_display($params,'Parameters');
-$db =& $this->GetDb();
+$db =cmsms()->GetDb();
 global $themeObject;
 $aujourdhui = date('Y-m-d');
 $class_ops = new Asso_adherents;
+$ass_ops = new AdherentsFeu;
 $group_ops = new groups;
 $feu = cms_utils::get_module('FrontEndUsers');
 //$feu_ops = new FrontEndUsersManipulator;
@@ -139,21 +140,26 @@ switch($obj)
 	case "delete_group" :
 		$del_group = $group_ops->delete_group($record_id);
 		$del_group_belongs = $group_ops->delete_group_belongs($record_id);
-		$this->Redirect($id, 'defaultadmin',$returnid, array("active_tab"=>"groups"));
+		$this->Redirect($id, 'defaultadmin',$returnid, array("active_tab"=>"group"));
 	break;
 	
 	case "activate" :
 		$class_ops->activate($genid);
-		$group_ops->assign_to_adherent($genid);
-		$this->SetMessage('Adhérent activé, ajouté au groupe des adhérents');
+		$uid = $ass_ops->GetUserInfoByProperty($genid);
+		var_dump($uid);
+		$feu->SetUserDisabled($uid,$state=0);
+		//$group_ops->assign_to_adherent($genid);
+		$this->SetMessage('Adhérent activé');
 		$this->Redirect($id, 'defaultadmin', $returnid);
 	break;
 	
 	case "desactivate" : 
 		$class_ops->desactivate($genid);
-		$group_ops->delete_user_from_all_groups($genid);
-		$group_ops->delete_user_feu($genid);
-		$this->SetMessage('Adhérent désactivé, retiré de tous les groupes et accès espace privé supprimé');
+		$uid = $ass_ops->GetUserInfoByProperty($genid);
+		$feu->SetUserDisabled($uid,$state=1);
+		//$group_ops->delete_user_from_all_groups($genid);
+		//$group_ops->delete_user_feu($genid);
+		$this->SetMessage('Adhérent désactivé');//, retiré de tous les groupes et accès espace privé supprimé');
 		$this->Redirect($id, 'defaultadmin', $returnid);
 	break;
 	

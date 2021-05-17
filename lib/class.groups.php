@@ -17,7 +17,7 @@ class groups
 function details_groupe($record_id)
 {
 	$db = cmsms()->GetDb();
-	$query = "SELECT id,nom, description, actif, public, auto_subscription, admin_valid, tag, tag_subscription, pageid_aftervalid FROM ".cms_db_prefix()."module_adherents_groupes WHERE id = ?";
+	$query = "SELECT id,nom, description, actif, public, auto_subscription, admin_valid, tag, tag_subscription, pageid_aftervalid, feu_gid FROM ".cms_db_prefix()."module_adherents_groupes WHERE id = ?";
 	$dbresult = $db->Execute($query, array($record_id));
 	$details_groupe = array();
 	if($dbresult && $dbresult->RecordCount()>0)
@@ -34,6 +34,7 @@ function details_groupe($record_id)
 			$details_groupe['tag'] = $row['tag'];
 			$details_groupe['tag_subscription'] = $row['tag_subscription'];
 			$details_groupe['pageid_aftervalid'] = $row['pageid_aftervalid'];
+			$details_groupe['feu_gid'] = $row['feu_gid'];
 		}
 		return $details_groupe;
 	}
@@ -306,7 +307,7 @@ function member_of_groups($genid)
 			$groups = array();
 			while($row = $dbresult->FetchRow())
 			{
-				$groups[] = (int) $row['id_group'];
+				$groups[] = $row['id_group'];
 			}
 			return $groups;
 		}
@@ -320,6 +321,7 @@ function member_of_groups($genid)
 		return false;
 	}
 }
+
 //détermine si un utilisateur appartient à un groupe particulier
 function is_member($genid, $id_group)
 {

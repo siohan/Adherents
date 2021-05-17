@@ -1,7 +1,7 @@
 <?php
 if (!isset($gCms)) exit;
 
-$db =& $this->GetDb();
+$db = cmsms()->GetDb();
 global $themeObject;
 $final_message = '';
 $success = 1;
@@ -13,7 +13,7 @@ if( !empty($_POST) )
             $this->RedirectToAdminTab();
         }
 	$error = 0;
-	//debug_display($_POST, 'Parameters');
+	debug_display($_POST, 'Parameters');
 	if(isset($_POST['id_group']) && $_POST['id_group'] >0)
 	{
 		$record_id = $_POST['id_group'];
@@ -45,6 +45,7 @@ if( !empty($_POST) )
 		//on fait une redir
 		$final_message.= "Les emails ne correspondent pas !!";
 	}
+	$portable = '';
 	if(isset($_POST['portable']) && $_POST['portable'] !='')
 	{
 		$portable = $_POST['portable'];
@@ -142,7 +143,7 @@ if( !empty($_POST) )
 }
 else
 {
-	//debug_display($params, 'Parameters');
+	debug_display($params, 'Parameters');
 	
 	//on fait qqs vérifs avant d'afficher le formulaire
 	//les valeurs des champs par défaut

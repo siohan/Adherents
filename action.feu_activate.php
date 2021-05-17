@@ -1,13 +1,14 @@
 <?php
 if (!isset($gCms)) exit;
-//debug_display($params, 'Parameters');
+debug_display($params, 'Parameters');
 
-$db =& $this->GetDb();
+$db = cmsms()->GetDb();
 global $themeObject;
 $asso_ops = new Asso_adherents;
 $gp_ops = new groups;
 $feu = cms_utils::get_module('FrontEndUsers');
 $insc = cms_utils::get_module('Inscriptions');
+$insc_ops = new T2t_inscriptions;
 $cont_ops = new contact;
 $redir = false;
 $error = 0;
@@ -20,7 +21,7 @@ if(isset($params['record_id']) && $params['record_id'] != '')
 	{
 		$message_final.= "Votre compte a éré activé avec succès ! ";
 		//on inclus le user ds FEU
-			$genid = $params['record_id'];
+		$genid = $params['record_id'];
 		$email = $cont_ops->email_address($genid);		
 		
 		$details = $asso_ops->details_adherent_by_genid($params['record_id']);
@@ -49,7 +50,7 @@ if(isset($params['record_id']) && $params['record_id'] != '')
 		
 		if(isset($params['id_inscription']) && $params['id_inscription'] > 0)
 		{
-			$id_inscription = $params['id_inscription'];
+			$id_inscription = (int) $params['id_inscription'];
 		}
 		else
 		{
@@ -63,19 +64,24 @@ if(isset($params['record_id']) && $params['record_id'] != '')
 		if(isset($params['id_group']) && $params['id_group'] > 0)
 		{
 			$id_group = (int) $params['id_group'];
+			//on inclus l'utilisateur ds le groupe concerné du module Adherents
+			$assign_user = $gp_ops->assign_user_to_group($id_group, $genid);
 			//on va maintenant chercher le nom du groupe
 			$details = $gp_ops->details_groupe($id_group);
 			
 			$admin_valid = $details['admin_valid'];
-			$pageid_aftervalid = $details['pageid_aftervalid'];
+			$pageid_aftervalid = $details['pageid_aftervalid'];// c'est la page où on redirige le membre authentifié
 			
 			$gid = $feu->GetGroupId($details['nom']);
 			$gid = (int) $gid;
-			$member_id = (int) $member_id;
-			//var_dump($gid);
-			//var_dump($member_id);
+			//$member_id = (int) $member_id;
+			var_dump($gid);
+			var_dump($member_id);
 			/* on peut maintenant assigner cet utilisateur au groupe */
 			$assign_gp = $feu->AssignUserToGroup($member_id,$gid);
+			
+			//on valide les éventuelles commandes passées (module Inscriptions)
+			$valid_insc = $insc_ops->set_to_checked($genid,$id_inscriptions);
 			if(true == $assign_gp)
 			{
 				$message_final.=" <br />Vous avez été ajouté au groupe FEU";

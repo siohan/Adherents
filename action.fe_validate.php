@@ -5,7 +5,7 @@ $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
 $username = $feu->GetUserProperty('genid');
 
-$db =& $this->GetDb();
+$db = cmsms()->GetDb();
 debug_display($params, 'Parameters');
 if(isset($params['record_id']) && $params['record_id'] != '')
 {

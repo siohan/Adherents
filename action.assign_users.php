@@ -15,7 +15,7 @@ $designation = '';
 $record_id = '';
 $rowarray = array();
 
-	//le record_id est le numéro du groupe
+	
 	if(!isset($params['record_id']) || $params['record_id'] == '')
 	{
 		$this->SetMessage("parametres manquants");
@@ -27,7 +27,7 @@ $rowarray = array();
 	}
 
 	
-$db = $this->GetDb();
+$db = cmsms()->GetDb();
 $query = "SELECT j.genid, CONCAT_WS(' ',j.nom, j.prenom ) AS joueur FROM ".cms_db_prefix()."module_adherents_adherents AS j WHERE actif = 1 ORDER BY nom ASC ";
 //echo $query;
 $dbresult = $db->Execute($query);
