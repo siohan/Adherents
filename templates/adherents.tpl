@@ -23,7 +23,8 @@ $('#filter_btn').click(function(){
 });
 //]]>
 </script>
-
+{if true == $checked}
+<p class="red"> Des utilisateurs ne sont pas encore validés {cms_help key="help_checked" title='Utilisateurs validés'}</p>{/if}
 <fieldset id="filter_zone"><!-- style="display: none;"> -->
    <legend>Filtre</legend>
    {form_start}
@@ -36,13 +37,13 @@ $('#filter_btn').click(function(){
    {form_end}
 </fieldset>
 <div class="pageoptions"><p class="pageoptions">{if $alert == "1"}<p class="warning">{$link_alert}</p>{elseif $alert == "2"}<p class="warning">{$link_alert}</p>{/if}{$itemcount}&nbsp;{$itemsfound}.&nbsp;&nbsp;| <a href="{module_action_url action=edit_adherent}">{admin_icon icon='newobject.gif'}Ajouter</a> | {if $act ==0}<a href="{module_action_url action=defaultadmin actif=1}">Actifs</a>{else} <a href="{module_action_url action=defaultadmin actif=0}">Inactifs</a>{/if} </p></div>
-<p class="information">FEU : présent(ou non) dans le module d'authentification (voir aide sur le module)</p>
+
 {if $itemcount > 0}
 {$form2start}
 	<table border="0" cellspacing="0" cellpadding="0" class="pagetable tablesorter">
 	 <thead>
 		<tr>
-			<th>Genid</th>
+			<th>Voir</th>
 			<th>Trombine</th>
 			<th>Nom</th>
 			<th>Prénom</th> 
@@ -54,7 +55,7 @@ $('#filter_btn').click(function(){
 			<th>Ville</th>
 			<th>Email ?</th>
 			<th>Portable ?</th>
-			<th>FEU ?</th>
+			<th>Validé ?</th>
 			<th><input type="checkbox" id="selectall" name="selectall"></th>
 			
 		</tr>
@@ -66,7 +67,7 @@ $('#filter_btn').click(function(){
 	{else}
 	 <tr>
 	{/if}		
-		<td>{$entry->gen}</td>
+		<td><a href="{cms_action_url action=view_adherent_details record_id=$entry->genid}">{admin_icon icon="view.gif"}</a></td>
 		<td>{$entry->thumbnail}</td>
 		<td>{$entry->nom}</td>
 		<td>{$entry->prenom}</td>
@@ -78,7 +79,7 @@ $('#filter_btn').click(function(){
 		<td>{$entry->ville}</td>
 		<td>{$entry->has_email}</td>
 		<td>{$entry->has_mobile}</td>
-		<td>{$entry->has_feu_account}</td>
+		<td>{if $entry->checked == 1}{admin_icon icon="true.gif"}{else}<a href="{cms_action_url action=push_customer record_id=$entry->genid}" alt"Envoi des identifiants">{admin_icon icon="warning.gif"}</a>{/if}</td>
 		<td><input type="checkbox" name="{$actionid}sel[]" value="{$entry->genid}" class="select"></td>
 	   </tr>
 	{/foreach}

@@ -5,6 +5,7 @@ $feu = cms_utils::get_module('FrontEndUsers');
 $userid = $feu->LoggedInId();
 $adh_feu = new AdherentsFeu;
 $username =$adh_feu->get_genid($userid);
+$licence = '';
 
 if(!empty($_POST))
 {
@@ -61,7 +62,7 @@ if(!empty($_POST))
 	{
 		$service = new Asso_adherents;		
 		$update_adherent = $service->fe_edit_adherent($username,$anniversaire,$adresse,$code_postal,$ville);
-		var_dump($update_adherent);
+		
 		if(false == $update_adherent)
 		{
 			$success = false;
@@ -83,7 +84,7 @@ else
 	//debug_display($params, 'Parameters');
 	require_once(dirname(__FILE__).'/include/fe_menu.php');
 
-	$db =& $this->GetDb();
+	$db = cmmsms()->GetDb();
 	global $themeObject;
 	$licence = '';
 	$genid = '';

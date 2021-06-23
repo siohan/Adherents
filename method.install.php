@@ -1,7 +1,7 @@
 <?php
 #-------------------------------------------------------------------------
 # Module: Adherents
-# Version: 0.3.5, AssoSimple
+# Version: 0.5, AssoSimple
 # Method: Install
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2008 by Ted Kulp (wishy@cmsmadesimple.org)
@@ -52,7 +52,8 @@ $flds = "
 	role C(255),
 	externe I(1) DEFAULT 0,
 	image C(4),
-	feu_id I(11)";
+	feu_id I(11),
+	checked I(1) DEFAULT 1";
 	$sqlarray = $dict->CreateTableSQL( cms_db_prefix()."module_adherents_adherents", $flds, $taboptarray);
 	$dict->ExecuteSQLArray($sqlarray);			
 //
@@ -167,9 +168,7 @@ if( file_exists( $fn ) )
 	$template = file_get_contents( $fn );
 	$this->SetTemplate('newactivationemail_Sample',$template);
 }
-//on créé le premier groupe adherents
-$insert_sql = "INSERT INTO ".cms_db_prefix()."module_adherents_groupes (`nom`, `description`, `actif`) VALUES (?, ?, ?)";
-$db->execute($insert_sql, array('adherents', 'Les adhérents actifs du club', '1'));
+
 
 $this->SetPreference('admin_email', 'root@localhost.com');
 $this->SetPreference('email_activation_subject', 'Ton compte est actif');

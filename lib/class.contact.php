@@ -133,7 +133,7 @@ class contact
 	function email_address($genid)
 	{
 		$db = cmsms()->GetDb();
-		$query = "SELECT contact FROM ".cms_db_prefix()."module_adherents_contacts WHERE genid = ? AND type_contact = 1";
+		$query = "SELECT contact FROM ".cms_db_prefix()."module_adherents_contacts WHERE genid = ? AND type_contact = 1 LIMIT 1";
 		$dbresult = $db->Execute($query, array($genid));
 		if($dbresult && $dbresult->RecordCount()>0)
 		{

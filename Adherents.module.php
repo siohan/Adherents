@@ -92,6 +92,7 @@ class Adherents extends CMSModule
 	$this->SetParameterType('reponse', CLEAN_INT);
 	$this->SetParameterType('affichage', CLEAN_INT);
 	$this->SetParameterType('letter', CLEAN_STRING);
+	//$this->SetParameterType('valid', CLEAN_INT);
 	
 	
 	//form parameters

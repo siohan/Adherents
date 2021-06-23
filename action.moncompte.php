@@ -5,7 +5,7 @@ $userid = $feu->LoggedInId();
 //$username = $feu->GetUserProperty('genid');
 $adh_feu = new AdherentsFeu;
 $username =$adh_feu->get_genid($userid);
-var_dump($username);
+//var_dump($username);
 //$username = (int) $params['genid'];//c'est le genid du module adherents
 
 

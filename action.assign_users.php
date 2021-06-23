@@ -15,7 +15,7 @@ $designation = '';
 $record_id = '';
 $rowarray = array();
 
-	
+	//record_id est le id du groupe
 	if(!isset($params['record_id']) || $params['record_id'] == '')
 	{
 		$this->SetMessage("parametres manquants");

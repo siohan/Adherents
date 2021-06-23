@@ -95,18 +95,25 @@ if(!empty($_POST))
 				//on crée aussi le groupe dans FEU
 				
 				$add_gp = $feu->AddGroup($nom, $description);
+				var_dump($add_gp);
 				if(true ==$add_gp[0])
 				{
 					//on met le num de ce nouveau groupe ds la table adherents_groupes
 					$adh_ops->feu_gid($id_group,$add_gp[1]);
 					$message.= " Groupe ajouté";
-					//il faut rattacher les propriétés FEU par défaut
-					$adh_ops->AddPropertyRelations($add_gp[1]);
+					$add_props = $adh_ops->propertiesExist();
+					var_dump($add_props);//on vérifie que les propriétés existent bel et bien
+					//il faut rattacher les propriétés FEU par défaut si elles existent
+					if($add_props <1)
+					{
+						$adh_ops->AddPropertyRelations($add_gp[1]);
+					}
 				}
 				else
 				{
 					$message.= $add_gp[1];
 				}
+				
 			}
 			
 		}

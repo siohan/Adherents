@@ -8,7 +8,7 @@ if (!$this->CheckPermission('Adherents use'))
 }
 
 $result= array ();
-$query = "SELECT * FROM ".cms_db_prefix()."module_adherents_groupes";
+$query = "SELECT * FROM ".cms_db_prefix()."module_adherents_groupes ORDER BY nom ASC";
 $feu = \cms_utils::get_module('FrontEndUsers');
 $dbresult= $db->Execute($query);
 	

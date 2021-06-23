@@ -20,6 +20,10 @@ elseif(isset($params['display']) && $params['display'] == 'crea')
 	{
 		$this->Redirect($id, 'feu_edit_adherent', $returnid, array("id_group"=>$params['id_group'], "id_inscription"=>$params['id_inscription']));
 	}
+	elseif(isset($params['record_id']))
+	{
+		$this->Redirect($id, 'assign_user_to_group', $returnid, array("record_id"=>$params['record_id']));
+	}
 	else
 	{
 		echo "Erreur !!";
@@ -29,6 +33,10 @@ elseif(isset($params['display']) && $params['display'] == 'crea')
 elseif(isset($params['display']) && $params['display'] == 'activate')
 {
 	$this->Redirect($id, 'feu_activate', $returnid, array("record_id"=>$params['record_id'], "id_inscription"=>$params['id_inscription'], "id_group"=>$params['id_group']));
+}
+elseif(isset($params['display']) && $params['display'] == 'password')
+{
+	$this->Redirect($id, 'reset_password', $returnid, array("genid"=>$params['genid'], "feu_id"=>$params['feu_id']));
 }
 elseif((isset($params['display']) && $params['display'] != 'liste') || !isset($params['display']))
 {

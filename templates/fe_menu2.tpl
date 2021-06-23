@@ -1,4 +1,3 @@
-
 <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
       <a class="navbar-brand mr-1" href="{cms_action_url action=default display=default record_id=$username}">Bonjour {$prenom}</a>

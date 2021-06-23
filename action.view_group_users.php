@@ -19,13 +19,6 @@ if(isset($params['group']) && $params['group'] != '')
 {
 	$group = $params['group'];
 	$details = $gp_ops->details_groupe($group);
-	$smarty->assign('nom_groupe', $details['nom']);
-	if(true == $details['auto_subscription'])
-	{
-		$feu_accept = true;
-		$group_exists = $feu->GetGroupId($details['nom']);
-		//var_dump($group_exists);
-	}
 	$group = $params['group'];
 	$query.=" AND be.id_group = ?";
 }
@@ -53,33 +46,7 @@ if($dbresult && $dbresult->RecordCount() >0)
 		$actif = $row['actif'];
 		$genid = (int) $row['genid'];
 		$user_exists = false;
-		if(true == $feu_accept)
-		{
-			$user_exists = $feu->GetUserInfoByProperty('genid', $genid);
-			if(true == $user_exists[0])
-			{
-				$uid = (int) $user_exists[1]["id"];
-				$onerow->has_feu_account = $themeObject->DisplayImage('icons/system/true.gif', $this->Lang('delete'), '', '', 'systemicon');
-				//l'utilisateur est déjà ds FEU, est-il membre de ce groupe ?
-					// l'utilisateur est-il déjà ds le groupe en question ?
-					$is_member = $feu->MemberOfGroup($uid, $group_exists);
-					if(false == $is_member)
-					{
-						//on ajoute l'utilisateur au groupe
-						$onerow->has_gp_account = $themeObject->DisplayImage('icons/system/false.gif', $this->Lang('false'), '', '', 'systemicon'); 
-					}
-					else
-					{
-						$onerow->has_gp_account = $themeObject->DisplayImage('icons/system/true.gif', $this->Lang('true'), '', '', 'systemicon');
-					}
-			}
-			else
-			{
-					//on crée l'utilisateur
-				$onerow->has_feu_account = $this->CreateLink($id, 'push_customer', $returnid,$themeObject->DisplayImage('icons/system/false.gif', $this->Lang('false'), '', '', 'systemicon'), array("record_id"=>$genid)); 
-				
-			}
-		}
+		
 		
 		$has_email = $contact_ops->has_email($row['genid']);
 		if(TRUE === $has_email)

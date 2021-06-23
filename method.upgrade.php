@@ -1,7 +1,7 @@
 <?php
 #-------------------------------------------------------------------------
 # Module: Adhérents
-# Version: 0.3.5
+# Version: 0.5
 # Method: Upgrade
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2008 by Ted Kulp (wishy@cmsmadesimple.org)
@@ -419,6 +419,7 @@ switch($current_version)
 		
 		//on crée un nouveau champ ds la table adherents_groupes
 		//: feu_gid QUI VA STOCKER LE NUMÉRO DU GROUPE DE FEU
+		$feu = \cms_utils::get_module('FrontEndUsers');
 		$dict = NewDataDictionary( $db );
 		$flds = "feu_gid I(11) ";
 		$sqlarray = $dict->AddColumnSQL( cms_db_prefix()."module_adherents_groupes", $flds);
@@ -428,7 +429,7 @@ switch($current_version)
 		$dbresult = $db->Execute($query);
 		if($dbresult && $dbresult->RecordCount() >0)
 		{
-			$feu = \cms_utils::get_module('FrontEndUsers');
+			
 			while($row = $dbresult->FetchRow())
 			{
 				$group_exists = $feu->GetGroupId($row['nom']);//int
@@ -453,12 +454,12 @@ switch($current_version)
 		}
 		
 		//on crée un nouveau champ  qui va stocker l'uid de FEU ds Adherents_adherents
-		/*
+		
 		$dict = NewDataDictionary( $db );
-		$flds = "feu_id I(11) ";
+		$flds = "feu_id I(11),checked I(1) DEFAULT 1 ";
 		$sqlarray = $dict->AddColumnSQL( cms_db_prefix()."module_adherents_adherents", $flds);
 		$dict->ExecuteSQLArray($sqlarray);
-		*/
+		
 		//deuxième requete, on "verse" les utilisateurs vers FEU
 		$query = "SELECT genid, nom, prenom FROM ".cms_db_prefix()."module_adherents_adherents";
 		$dbresult = $db->Execute($query);

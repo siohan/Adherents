@@ -12,6 +12,7 @@ $db = cmsms()->GetDb();
 global $themeObject;
 $gp_ops = new groups;
 $adh_feu = new AdherentsFeu;
+$asso_ops = new Asso_adherents;
 $group = '';
 if(isset($_POST['record_id']) && $_POST['record_id'] >0)
 {
@@ -28,6 +29,9 @@ $aujourdhui = date('Y-m-d');
 $liste_groupes = $gp_ops->liste_groupes_dropdown();
 $liste_groupes += [ "0" => "Tous" ];
 
+//on vérifie si des utilisateurs ne sont pas encore vérifiés (checked = 0)
+$checked = $asso_ops->not_already_checked();
+$smarty->assign('checked', $checked);
 
 $smarty->assign('liste_groupes', $liste_groupes);
 
@@ -41,13 +45,13 @@ if(isset($_POST['record_id']) && $_POST['record_id'] != '0')
 {
 	$group = $_POST['record_id'];
 	$req = 1;
-	$query = "SELECT adh.id, adh.licence, adh.nom, adh.prenom, adh.actif,adh.genid, adh.anniversaire, adh.sexe, adh.certif, adh.validation, adh.adresse, adh.code_postal, adh.ville, adh.maj, adh.image FROM ".cms_db_prefix()."module_adherents_adherents AS adh, ".cms_db_prefix()."module_adherents_groupes_belongs AS be WHERE adh.genid = be.genid AND be.id_group = ?";//" WHERE actif = 1";
+	$query = "SELECT adh.id, adh.licence, adh.nom, adh.prenom, adh.actif,adh.genid, adh.anniversaire, adh.sexe, adh.certif, adh.validation, adh.adresse, adh.code_postal, adh.ville, adh.maj, adh.image, adh.checked FROM ".cms_db_prefix()."module_adherents_adherents AS adh, ".cms_db_prefix()."module_adherents_groupes_belongs AS be WHERE adh.genid = be.genid AND be.id_group = ?";//" WHERE actif = 1";
 	$parms['id_group'] = $group;
 }
 else
 {
 	$req = 2;
-	$query = "SELECT id, genid, licence, nom, prenom, actif, anniversaire, sexe, certif, validation, adresse, code_postal, ville, maj, image FROM ".cms_db_prefix()."module_adherents_adherents AS adh";
+	$query = "SELECT id, genid, licence, nom, prenom, actif, anniversaire, sexe, certif, validation, adresse, code_postal, ville, maj, image, checked FROM ".cms_db_prefix()."module_adherents_adherents AS adh";
 }
 
 
@@ -134,6 +138,7 @@ if($dbresult && $dbresult->RecordCount() >0)
 		{
 			$onerow->actif = $this->CreateLink($id, 'chercher_adherents_spid',$returnid,$themeObject->DisplayImage('icons/system/false.gif', $this->Lang('false'), '', '', 'systemicon'), array("obj"=>"activate", "genid"=>$row['genid']));
 		}
+		$onerow->checked = $row['checked'];
 		$onerow->activated = $actif;
 		$onerow->sexe= $row['sexe'];
 		$onerow->certif= $row['certif'];

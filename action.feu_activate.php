@@ -1,11 +1,12 @@
 <?php
 if (!isset($gCms)) exit;
-debug_display($params, 'Parameters');
+//debug_display($params, 'Parameters');
 
 $db = cmsms()->GetDb();
 global $themeObject;
 $asso_ops = new Asso_adherents;
 $gp_ops = new groups;
+$adhFeu = new AdherentsFeu;
 $feu = cms_utils::get_module('FrontEndUsers');
 $insc = cms_utils::get_module('Inscriptions');
 $insc_ops = new T2t_inscriptions;
@@ -19,7 +20,7 @@ if(isset($params['record_id']) && $params['record_id'] != '')
 	$activ = $asso_ops->activate($params['record_id']);
 	if(true == $activ)
 	{
-		$message_final.= "Votre compte a éré activé avec succès ! ";
+		$message_final.= "Votre compte a été activé avec succès ! ";
 		//on inclus le user ds FEU
 		$genid = $params['record_id'];
 		$email = $cont_ops->email_address($genid);		
@@ -43,11 +44,12 @@ if(isset($params['record_id']) && $params['record_id'] != '')
 		$member_id = $feu->GetUserID($nom_complet);
 		if(!$member_id)
 		{
-			$add_user = $feu->AddUser($nom_complet, $motdepasse,$expires);
-			//var_dump($add_user);
+			$add_user = $feu->AddUser($nom_complet, $motdepasse,$expires);//renvoit (true, $uid, l'id du user ds FEU ou FALSE)
+			$member_id = $add_user[1];
 			$message_final.=" <br />Utilisateur ajouté au module d'authentification(FEU)";
 		}
-		
+		//il faut aussi mettre le feu_id ds le module adhérents
+		$feu_id = $adhFeu->feu_id($genid, $member_id);
 		if(isset($params['id_inscription']) && $params['id_inscription'] > 0)
 		{
 			$id_inscription = (int) $params['id_inscription'];
@@ -57,8 +59,7 @@ if(isset($params['record_id']) && $params['record_id'] != '')
 			$error++;
 		}
 		
-		//on force le changement de mot de passe ?
-	//	$feu->ForcePasswordChange($member_id, $flag = TRUE);	
+		
 		
 		//on regarde si l'utilisateur appartient aux groupes
 		if(isset($params['id_group']) && $params['id_group'] > 0)
@@ -74,10 +75,8 @@ if(isset($params['record_id']) && $params['record_id'] != '')
 			
 			$gid = $feu->GetGroupId($details['nom']);
 			$gid = (int) $gid;
-			//$member_id = (int) $member_id;
-			var_dump($gid);
-			var_dump($member_id);
-			/* on peut maintenant assigner cet utilisateur au groupe */
+			
+			/* on peut maintenant assigner cet utilisateur au groupe ds FEU */
 			$assign_gp = $feu->AssignUserToGroup($member_id,$gid);
 			
 			//on valide les éventuelles commandes passées (module Inscriptions)
@@ -134,6 +133,10 @@ if(isset($params['record_id']) && $params['record_id'] != '')
 					//$mess_ops->not_sent_emails($message_id, $recipients);
 			        }
 				
+			}
+			else
+			{
+				$unchecked = $asso_ops->set_to_unchecked($genid);//on a besoin que l'admin vérifie, on met le statut a unchecked (check = 0)
 			}
 			
 		}

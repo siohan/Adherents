@@ -65,65 +65,7 @@ switch($obj)
 		
 		$this->RedirectToAdminTab('feu');
 	break;
-	case "send_another_email" :
-	
 		
-		//on supprime le mot de passe précédent
-		
-		//maintenant, on le recréé !
-		$day = date('j');
-		$month = date('n');
-		$year = date('Y')+5;
-		$expires = mktime(0,0,0,$month, $day,$year);
-		//on créé un mot de passe
-		$mot1 = $this->random_string(8);
-		$motdepasse = $mot1.'1';
-		//qqs variables pour le mail
-		$smarty->assign('prenom_joueur', $prenom);
-		$smarty->assign('nom_joueur' , $nom);
-		$smarty->assign('genid', $genid);
-		//$motdepasse = 'UxzqsUIM1';
-		$smarty->assign('motdepasse', $motdepasse);
-
-		//$add_user = $feu->AddUser($licence, $motdepasse,$expires);
-		$add_user = $feu->AddUser($licence, $motdepasse,$expires);
-
-		//on récupère le userid ($uid)
-		$uid = $feu->GetUserId($username);
-		//on force le changement de mot de passe ?
-		$feu->ForcePasswordChange($uid, $flag = TRUE);	
-		$gid = $feu->GetGroupId('adherents');
-		/* on peut maintenant assigner cet utilisateur au groupe */
-		$feu->AssignUserToGroup($uid,$gid);
-		/* on remplit les propriétés de lutilisateur */
-		$feu->SetUserPropertyFull('email',$user_email, $uid);
-		$feu->SetUserPropertyFull('nom', $nom_complet,$uid);
-		$feu->SetUserPropertyFull('genid', $genid,$uid);
-
-		/* On essaie d'envoyer un message à l'utilisateur pour lui dire qu'il est enregistré */	
-
-		$admin_email = $this->GetPreference('admin_email'); 
-		//echo $to;
-		$subject = $this->GetPreference('email_activation_subject');
-		$message = $this->GetTemplate('newactivationemail_Sample');
-		$body = $this->ProcessTemplateFromData($message);
-		$headers = "From: ".$admin_email."\n";
-		$headers .= "Reply-To: ".$admin_email."\n";
-		$headers .= "Content-Type: text/html; charset=\"utf-8\"";
-		/*
-		$headers = 'From: claude.siohan@gmail.com' . "\r\n" . 'Reply-To: claude.siohan@gmail.com' . "\r\n" . 'X-Mailer: PHP/' . phpversion(); 
-		*/
-		$designation.= 'Compte actif pour '.$prenom;
-		if(mail($user_email, utf8_encode($subject), $body, $headers))
-		{
-
-			$designation.= ' Email envoyé !';
-
-		}
-		
-		$this->Redirect($id, 'defaultadmin',$returnid, array("activetab"=>"feu"));
-	break;
-	
 	
 	case "delete_user_from_group" :
 		$supp_user_from_group = $group_ops->delete_user_from_group($record_id,$genid);
@@ -173,14 +115,14 @@ switch($obj)
 	{
 		$group_ops->activate_group($record_id);
 		$this->SetMessage('Groupe activé');
-		$this->Redirect($id, 'defaultadmin', $returnid, array("active_tab"=>"groups"));
+		$this->Redirect($id, 'view_group_details', $returnid, array("active_tab"=>"groups", "group"=>$record_id));
 	}
 	//Désactive un groupe
 	case "desactivate_group" :
 	{
 		$group_ops->desactivate_group($record_id);
 		$this->SetMessage('Groupe désactivé, non public, tags effacés');
-		$this->Redirect($id, 'defaultadmin', $returnid, array("active_tab"=>"groups"));
+		$$this->Redirect($id, 'view_group_details', $returnid, array("active_tab"=>"groups", "group"=>$record_id));
 	}
 	//Publie : rend un groupe public ->tag à prévoir en conséquence
 	case "publish_group" :
@@ -204,7 +146,7 @@ switch($obj)
 			$message = "Erreur ! Le groupe n'est pas public !";
 		}
 		$this->SetMessage($message);
-		$this->Redirect($id, 'defaultadmin', $returnid, array("active_tab"=>"groups"));
+		$this->Redirect($id, 'view_group_details', $returnid, array("active_tab"=>"groups", "group"=>$record_id));
 	}
 	
 	//dépublie un groupe et supprime le tag en conséquence
@@ -229,7 +171,7 @@ switch($obj)
 			$message = "Erreur ! Le groupe est toujours public !";
 		}
 		$this->SetMessage($message);
-		$this->Redirect($id, 'defaultadmin', $returnid, array("active_tab"=>"groups"));
+		$this->Redirect($id, 'view_group_details', $returnid, array("active_tab"=>"groups", "group"=>$record_id));
 	}
 	
 	//Permet l'auto-enregistrement des utilisateurs avec génération d'un tag
@@ -254,7 +196,7 @@ switch($obj)
 			$message = "Erreur ! L'auto-enregistrement n'a pas fonctionné !";
 		}
 		$this->SetMessage($message);
-		$this->Redirect($id, 'defaultadmin', $returnid, array("active_tab"=>"groups"));
+		$this->Redirect($id, 'view_group_details', $returnid, array("active_tab"=>"groups", "group"=>$record_id));
 	}
 	
 	//empeche l'auto-enregistrement dans un groupe
@@ -280,7 +222,20 @@ switch($obj)
 			$message = "Erreur ! L'auto-enregistrement n'a pas fonctionné !";
 		}
 		$this->SetMessage($message);
-		$this->Redirect($id, 'defaultadmin', $returnid, array("active_tab"=>"groups"));
+		$this->Redirect($id, 'view_group_details', $returnid, array("active_tab"=>"groups", "group"=>$record_id));
+	}
+	case "admin_valid" :
+	{
+		if(isset($params['valid']) && $params['valid'] != '')
+		{
+			$valid = $params['valid'];
+		}
+		if(isset($params['record_id']) && $params['record_id'] != '')
+		{
+			$record_id = $params['record_id'];
+		}
+		$admin_valid = $group_ops->set_admin_valid($record_id, $valid);
+		$this->Redirect($id, 'view_group_details', $returnid, array("active_tab"=>"groups", "group"=>$record_id));
 	}
 }
 

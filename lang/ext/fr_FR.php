@@ -26,7 +26,7 @@ $lang['help_public_group'] = 'Mettez Oui si vous souhaitez afficher ce groupe da
 $lang['help_admin_valid'] = 'Si Oui l\'admin valide chaque inscription au groupe. Si Non, les codes sont automatiquement envoyés par email et le nouveau membre peut se logguer dans son espace privé.';
 $lang['help_auto_enregistrement'] = 'Si Oui tout le monde peut s\'enregistrer depuis le frontal. Si non, seul l\'admin peut enregistrer les utilisateurs';
 $lang['help_pageid_aftervalid'] = 'Indiquez l\'alias de la page où rediriger vos nouveaux inscrits. Si nul pas de redirection.';
-
+$lang['help_checked'] = 'Des utilisateurs ont fait une demande d\'appartenance à un groupe nécéssitant la validation de l\'admin. La validation enverra les identifiants de l\'espace prié à l\'utilisateur';
 
 
 $lang['help'] = '<h3>Que fait ce module ?</h3>

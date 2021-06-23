@@ -17,7 +17,7 @@ class Asso_adherents
 function details_adherent($record_id)
 {
 	$db = cmsms()->getDb();
-	$query  = "SELECT id, genid,licence, actif, nom, prenom, sexe, cat, certif, validation, adresse, code_postal, anniversaire, ville, pays, externe, maj, feu_id FROM ".cms_db_prefix()."module_adherents_adherents WHERE id = ?";
+	$query  = "SELECT id, genid,licence, actif, nom, prenom, sexe, cat, certif, validation, adresse, code_postal, anniversaire, ville, pays, externe, maj, feu_id, checked FROM ".cms_db_prefix()."module_adherents_adherents WHERE id = ?";
 	$dbresult = $db->Execute($query, array($record_id));
 	if($dbresult)
 	{
@@ -41,7 +41,8 @@ function details_adherent($record_id)
 			$details_adherent['anniversaire'] = $row['anniversaire'];
 			$details_adherent['externe'] = $row['externe'];
 			$details_adherent['maj'] = $row['maj'];
-			$details_adherent['feu_id'] = $row['feu_id'];			
+			$details_adherent['feu_id'] = $row['feu_id'];
+			$details_adherent['checked'] = $row['checked'];			
 		}		
 		return $details_adherent;	
 			
@@ -54,7 +55,7 @@ function details_adherent($record_id)
 function details_adherent_by_genid($record_id)
 {
 	$db = cmsms()->GetDb();
-	$query  = "SELECT id, genid,licence, actif, nom, prenom, sexe, cat, certif, validation, adresse, code_postal, anniversaire, ville, pays, externe, maj, feu_id FROM ".cms_db_prefix()."module_adherents_adherents WHERE genid = ?";
+	$query  = "SELECT id, genid,licence, actif, nom, prenom, sexe, cat, certif, validation, adresse, code_postal, anniversaire, ville, pays, externe, maj, feu_id, checked FROM ".cms_db_prefix()."module_adherents_adherents WHERE genid = ?";
 	$dbresult = $db->Execute($query, array($record_id));
 	if($dbresult)
 	{
@@ -78,7 +79,8 @@ function details_adherent_by_genid($record_id)
 			$details_adherent['anniversaire'] = $row['anniversaire'];
 			$details_adherent['externe'] = $row['externe'];
 			$details_adherent['maj'] = $row['maj'];	
-			$details_adherent['feu_id'] = $row['feu_id'];			
+			$details_adherent['feu_id'] = $row['feu_id'];
+			$details_adherent['checked'] = $row['checked'];				
 		}		
 		return $details_adherent;	
 			
@@ -122,12 +124,12 @@ function random_int($car) {
 	return $string;
   }
 
-function add_adherent($genid,$actif, $nom, $prenom, $sexe, $anniversaire, $licence,$adresse, $code_postal, $ville, $pays,$externe )
+function add_adherent($genid,$actif, $nom, $prenom, $sexe, $anniversaire, $licence,$adresse, $code_postal, $ville, $pays,$externe)
 {
 	
 	$db = cmsms()->GetDb();
 	$maj = date('Y-m-d');
-	$query = "INSERT INTO ".cms_db_prefix()."module_adherents_adherents (genid,actif, nom, prenom, sexe, anniversaire, licence, adresse, code_postal, ville, pays, externe, maj) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	$query = "INSERT INTO ".cms_db_prefix()."module_adherents_adherents (genid,actif, nom, prenom, sexe, anniversaire, licence, adresse, code_postal, ville, pays, externe, maj) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	$dbresult = $db->Execute($query, array($genid, $actif, $nom, $prenom, $sexe, $anniversaire, $licence,$adresse, $code_postal, $ville, $pays,$externe, $maj));
 	if($dbresult)
 	{
@@ -135,7 +137,7 @@ function add_adherent($genid,$actif, $nom, $prenom, $sexe, $anniversaire, $licen
 	}
 	else
 	{
-		echo $db->ErrorMsg();
+		return false;
 	}
 	
 
@@ -336,6 +338,67 @@ function liste_adherents()
 			return false;
 		}
 		
+	}
+	//Vérifie si le feu_id et le genid correspondent 
+	function check_genid_feu_id($genid, $feu_id)
+	{
+		$db = cmsms()->GetDb();
+		$query = "SELECT * FROM ".cms_db_prefix()."module_adherents_adherents WHERE genid = ? AND feu_id = ?";
+		$dbresult = $db->Execute($query, array($genid, $feu_id));
+		if($dbresult && $dbresult->RecordCount() >0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	//vérifie un membre en mettant son statut à checked (envoi des identifiants)
+	function set_to_checked($genid)
+	{
+		$db = cmsms()->GetDb();
+		$query = "UPDATE ".cms_db_prefix()."module_adherents_adherents SET checked = 1 WHERE genid = ?";
+		$dbresult = $db->Execute($query, array($genid));
+		if($dbresult && $dbresult->RecordCount() >0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	//met le statut d'un utilisateur a unchecked
+	
+	function set_to_unchecked($genid)
+	{
+		$db = cmsms()->GetDb();
+		$query = "UPDATE ".cms_db_prefix()."module_adherents_adherents SET checked = 0 WHERE genid = ?";
+		$dbresult = $db->Execute($query, array($genid));
+		if($dbresult && $dbresult->RecordCount() >0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	//vérifie si des utilisateurs ne sont vérifiés (checked = 0)
+	function not_already_checked()
+	{
+		$db = cmsms()->GetDb();
+		$query = "SELECT * FROM ".cms_db_prefix()."module_adherents_adherents WHERE checked = 0 AND actif = 1";
+		$dbresult = $db->Execute($query);
+		if($dbresult && $dbresult->RecordCount() >0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 #
 #

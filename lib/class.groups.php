@@ -493,6 +493,23 @@ function ko_auto($record_id)
 		return false;
 	}
 }
+//admin_valid
+
+function set_admin_valid($record_id, $valid)
+{
+	$db = cmsms()->GetDb();
+	$query = "UPDATE ".cms_db_prefix()."module_adherents_groupes SET  admin_valid = ?  WHERE id = ?";
+	$dbresult = $db->Execute($query, array($valid,$record_id));
+	if($dbresult)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 #
 #
 #

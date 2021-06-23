@@ -1,15 +1,15 @@
 <?php
 if( !isset($gCms) ) exit;
 //echo "Cool !";
-debug_display($params, 'Parameters');
+//debug_display($params, 'Parameters');
 $designation = '';//le message de fin....
 $feu = cms_utils::get_module('FrontEndUsers');
-//$feu = new FrontEndUsers();
+
 $error = 0;//on instancie un compteur d'erreurs
 // variables à contrôler :  l'email , la licence
 $asso_ops = new Asso_adherents;
 $cont = new contact;
-if(isset($params['record_id']) && $params['record_id'] !='')
+if(isset($params['record_id']) && $params['record_id'] !='')//ici c'est le genid de l'utilisateur
 {
 	//on vérifie d'abord que le membre a bien une adresse email
 	$email = $cont->has_email($params['record_id']);
@@ -45,7 +45,7 @@ if($error<1)
 		$motdepasse = 'A'.$mot1.'1';
 		//on modifie le mot de passe originel ds FEU
 		$new_password = $feu->SetUserPassword($feu_id, $motdepasse);
-		var_dump($new_password);
+		
 		/* On essaie d'envoyer un message à l'utilisateur pour lui dire qu'il est enregistré */	
 
 		$admin_email = $this->GetPreference('admin_email'); 
@@ -66,6 +66,7 @@ if($error<1)
 		$cmsmailer = new \cms_mailer();
 		$cmsmailer->reset();
 		$cmsmailer->AddAddress($user_email);
+		//$cmsmailer->AddBCC( $admin_email);
 		$cmsmailer->IsHTML(true);
 		$cmsmailer->SetPriority($priority);
 		$cmsmailer->SetBody($output);

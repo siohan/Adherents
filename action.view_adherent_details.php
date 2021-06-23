@@ -85,15 +85,15 @@ if (!$this->CheckPermission('Adherents use'))
 	$tpl->display();
 	
 	//Pour les groupes
-	
+	$i = 0;
 	$query = "SELECT id, nom FROM ".cms_db_prefix()."module_adherents_groupes WHERE actif = 1";
 	$dbresult = $db->Execute($query);
-	if($dbresult && $dbresult->RecordCount() >0)
+	if($dbresult)
 	{
 		$tpl = $smarty->CreateTemplate($this->GetTemplateResource('view_list_groups.tpl'), null, null, $smarty);
 		$tpl->assign('liste_groups', $liste_groups);
 		$tpl->assign('genid', $record_id);
-		$i = 0;
+		
 		while($row = $dbresult->FetchRow())
 		{
 			$i++;
@@ -465,9 +465,7 @@ $compt = 0;
 			$message = "Le membre ne fait partie d'aucun groupe";
 		}
 		
-			
-	}
-	$tpl->assign('error_message', $message);
+		$tpl->assign('error_message', $message);
 	$valeur = $compt/3;
 	if(true == is_int( $valeur))
 	{
@@ -476,7 +474,9 @@ $compt = 0;
 	$tpl->assign('activation', $activation);
 	$tpl->assign('autorisation', $autorisation);
 	
-	$tpl->display();
+	$tpl->display();	
+	}
+	
 	
 #
 #EOF

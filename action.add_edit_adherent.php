@@ -13,7 +13,7 @@ if( isset($params['cancel']) )
 	$this->RedirectToAdminTab('adherents');
 	return;
 }
-$db =& $this->GetDb();
+$db = cmsms()->GetDb();
 global $themeObject;
 $licence = '';
 $edit = 0;
